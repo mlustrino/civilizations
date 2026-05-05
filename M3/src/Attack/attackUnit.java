@@ -3,7 +3,7 @@ package Attack;
 import variables.*;
 import militaryUnit.*;
 
-public class attackUnit implements Variables,MilitaryUnit{
+abstract class attackUnit implements Variables,MilitaryUnit{
 	private int armor;
 	private int initialArmor;
 	private int baseDamage;
