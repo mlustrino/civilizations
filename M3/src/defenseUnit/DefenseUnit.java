@@ -5,7 +5,7 @@ import variables.*;
 
 abstract class DefenseUnit implements MilitaryUnit, Variables {
 	private int armor;
-	private int initalArmor;
+	private int initialArmor;
 	private int baseDamage;
 	private int experience;
 	private boolean sanctified;
@@ -14,6 +14,10 @@ abstract class DefenseUnit implements MilitaryUnit, Variables {
 		super();
 		this.armor = armor;
 		this.baseDamage = baseDamage;
+		this.initialArmor = armor;
+		this.experience = 0;
+		this.sanctified = false;
+		
 	}
 	
 	
