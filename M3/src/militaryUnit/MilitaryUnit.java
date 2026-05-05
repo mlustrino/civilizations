@@ -1,6 +1,6 @@
 package militaryUnit;
 
-interface MilitaryUnit{
+public interface MilitaryUnit{
 	abstract int attack();
 	
 	abstract void takeDamage(int receivedDamage);
