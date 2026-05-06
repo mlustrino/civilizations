@@ -7,9 +7,6 @@ public class ArrowTower extends DefenseUnit {
 	}
 	
 
-
-	
-
 	public int attack() {
 		int damage_attack_does = getBaseDamage() + getBaseDamage() * (getExperience() * PLUS_ATTACK_UNIT_PER_EXPERIENCE_POINT) / 100;
 		if (isSanctified()) {

@@ -18,12 +18,6 @@ abstract class DefenseUnit implements MilitaryUnit, Variables {
 	    this.sanctified = false;
 	}
 	
-	public String toString() {
-		return "DefenseUnit [armor=" + armor + ", initialArmor=" + initialArmor + ", baseDamage=" + baseDamage
-				+ ", experience=" + experience + ", sanctified=" + sanctified + "]";
-	}
-	
-	
 
 	// SETTERS Y GETTERS
 
