@@ -13,6 +13,8 @@ abstract class SpecialUnit implements MilitaryUnit, Variables {
 		super();
 		this.armor = armor;
 		this.baseDamage = baseDamage;
+		this.initialArmor = armor;
+		this.experience = 0;
 	}
 	
 	
