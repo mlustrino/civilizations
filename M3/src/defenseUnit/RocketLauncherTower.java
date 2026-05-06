@@ -7,50 +7,34 @@ class RocketLauncherTower extends DefenseUnit {
 	}
 	
 	public int attack() {
-		return 0;
-	}
-
-	public void takeDamage(int receivedDamage) {
-		
-	}
-
-	public int getActualArmor() {
-		return 0;
+		int damage_attack_does = getBaseDamage() + getBaseDamage() * (getExperience() * PLUS_ATTACK_UNIT_PER_EXPERIENCE_POINT) / 100;
+		if (isSanctified()) {
+			damage_attack_does += getBaseDamage() * PLUS_ATTACK_UNIT_SANCTIFIED / 100;
+		} 
+		return damage_attack_does;
 	}
 
 	public int getFoodCost() {
-		return 0;
+		return FOOD_COST_ROCKETLAUNCHERTOWER;
 	}
 
 	public int getWoodCost() {
-		return 0;
+		return WOOD_COST_ROCKETLAUNCHERTOWER;
 	}
 
 	public int getIronCost() {
-		return 0;
+		return IRON_COST_ROCKETLAUNCHERTOWER;
 	}
 
 	public int getManaCost() {
-		return 0;
+		return MANA_COST_ROCKETLAUNCHERTOWER;
 	}
 
 	public int getChanceGeneratingWaste() {
-		return 0;
+		return CHANCE_GENERATNG_WASTE_ROCKETLAUNCHERTOWER;
 	}
 
 	public int getChanceAttackAgain() {
-		return 0;
-	}
-
-	public void resetArmor() {
-		
-	}
-
-	public void setExperience(int n) {
-		
-	}
-
-	public int getExperience() {
-		return 0;
+		return CHANCE_ATTACK_AGAIN_ROCKETLAUNCHERTOWER;
 	}
 }
