@@ -1,6 +1,6 @@
 package defenseUnit;
 
-class Catapult extends DefenseUnit {
+public class Catapult extends DefenseUnit {
 
 	public Catapult(int armor, int baseDamage) {
 		super(armor, baseDamage);

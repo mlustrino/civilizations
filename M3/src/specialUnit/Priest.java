@@ -1,6 +1,6 @@
 package specialUnit;
 
-class Priest extends SpecialUnit {
+public class Priest extends SpecialUnit {
 
 	public Priest(int armor, int baseDamage) {
 		super(armor, baseDamage);

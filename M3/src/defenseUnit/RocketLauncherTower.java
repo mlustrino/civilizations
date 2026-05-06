@@ -1,6 +1,6 @@
 package defenseUnit;
 
-class RocketLauncherTower extends DefenseUnit {
+public class RocketLauncherTower extends DefenseUnit {
 
 	public RocketLauncherTower(int armor, int baseDamage) {
 		super(armor, baseDamage);
