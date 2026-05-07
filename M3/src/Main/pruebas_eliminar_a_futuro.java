@@ -42,7 +42,10 @@ public class pruebas_eliminar_a_futuro {
 			System.out.println(costes[i]);
 		}
 		b1.initInitialArmies();
+		//System.out.println(Arrays.toString(civilizationArmy));
+		
 		System.out.println(Arrays.deepToString(b1.getInitialArmies())); // Para leer arrays sin bucles
+		System.out.println(b1.getCivilizationArmy().size());
 
 	}
 
