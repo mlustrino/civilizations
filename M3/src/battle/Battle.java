@@ -13,7 +13,7 @@ import specialUnit.Priest;
 public class Battle {
 	private ArrayList<MilitaryUnit> civilizationArmy;
 	private ArrayList<MilitaryUnit> enemyArmy;
-	private ArrayList [][] armies;
+	private ArrayList<MilitaryUnit> [][] armies;
 	private String battleDevelopment;
 	private int [][] initialCostFleet;
 	private int initialNumberUnitsCivilization, initialNumberUnitsEnemy;
@@ -82,7 +82,20 @@ public class Battle {
 		}
 			
 		this.battleDevelopment = "";
+		
 		this.initialCostFleet = new int [2][3];
+		for (MilitaryUnit unit : civilizationArmy) {
+			initialCostFleet[0][0] += unit.getFoodCost(); //Comida
+			initialCostFleet[0][1] += unit.getWoodCost(); //Madera
+			initialCostFleet[0][2] += unit.getIronCost(); //Hierro
+		}
+		
+		for (MilitaryUnit unit : enemyArmy) {
+			initialCostFleet[1][0] += unit.getFoodCost(); //Comida
+			initialCostFleet[1][1] += unit.getWoodCost(); //Madera
+			initialCostFleet[1][2] += unit.getIronCost(); //Hierro
+		}
+		
 		this.initialNumberUnitsCivilization = getCivilizationArmy().size();
 		this.initialNumberUnitsEnemy = getEnemyArmy().size();
 		
@@ -107,6 +120,22 @@ public class Battle {
 	public ArrayList<MilitaryUnit> getEnemyArmy() {
 		return enemyArmy;
 	}
+	
+	public int getInitialNumberUnitsCivilization() {
+		return initialNumberUnitsCivilization;
+	}
+
+	public int getInitialNumberUnitsEnemy() {
+		return initialNumberUnitsEnemy;
+	}
+	
+	public ArrayList<MilitaryUnit>[][] getArmies() {
+		return armies;
+	}
+	
+	public int[][] getInitialArmies() {
+		return initialArmies;
+	}
 
 	// Metodos de la clase Battle
 	public String getBattleReport(int battles) {
@@ -117,28 +146,40 @@ public class Battle {
 		return battleDevelopment;
 	}
 	
-	public void initInitialArmies() {
-		initialArmies = new int [2][9]; // Falta darle los valores de los ejercitos
-
-	}
+	public void initInitialArmies() { // Esto nos da la cantidad de tropas que tenemos de cada tipo en cada ejercito initialArmies [0] es nuestro ejercito y de [1] es el enemigo
+		initialArmies = new int [2][9];
+		for (int i = 0; i < 9; i++) {
+			initialArmies[0][i] = armies[0][i].size();
+			initialArmies[1][i] = armies[1][i].size();
+		}
+ 	}
 	
 	public void updateResourcesLooses() {
 		resourcesLooses = new int [2][4];
 	}
 	
-	public int fleetResourceCost(ArrayList<MilitaryUnit> army) {
-		
-		return 0;
+	public int[] fleetResourceCost(ArrayList<MilitaryUnit> army) { // Devolvemos un array con los costes del ejercito
+		int[] costes = new int[3];
+		for (int i = 0; i < army.size();i++) {
+			costes[0] += army.get(i).getFoodCost(); // Comida, Madera, Hierro
+			costes[1] += army.get(i).getWoodCost();
+			costes[2] += army.get(i).getIronCost();
+		}
+		return costes;
 	}
 	
-	public int initialFleetNumber(ArrayList<MilitaryUnit> army) {
-		
-		return 0;
+	public int initialFleetNumber(ArrayList<MilitaryUnit> army) { // Nos devuelve un array en el que en cada posicion te dice la cantidad de cada unidad que hay en el ejercito
+		return army.size();
 	}
 	
-	public int remainderPercentageFleet(ArrayList<MilitaryUnit> army) {
-		
-		return 0;
+	public float remainderPercentageFleet(ArrayList<MilitaryUnit> army) { // Este metodo nos devuelve el porcentaje restante de nuestro ejercito respecto al inicial
+		float porcentaje;
+		if (army == civilizationArmy) { 
+			porcentaje = army.size() * 100 / initialNumberUnitsCivilization;
+		} else {
+			porcentaje = army.size() * 100 / initialNumberUnitsEnemy;
+		}
+		return porcentaje;
 	}
 	
 	public int getGroupDefender(ArrayList<MilitaryUnit> army) {
@@ -157,7 +198,9 @@ public class Battle {
 	}
 	
 	public void resetArmyArmor() {
-		
+		for (int i = 0; i < civilizationArmy.size();i++) {
+			civilizationArmy.get(i).resetArmor();;
+		}
 	}
 	
 	

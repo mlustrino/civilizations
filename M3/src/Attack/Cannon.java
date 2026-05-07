@@ -15,7 +15,7 @@ public class Cannon extends attackUnit{
 		int damage_attack_does = getBaseDamage() + getBaseDamage() * (getExperience() * PLUS_ATTACK_UNIT_PER_EXPERIENCE_POINT) / 100;
 		if (isSanctified()) {
 			damage_attack_does += getBaseDamage() * PLUS_ATTACK_UNIT_SANCTIFIED / 100;
-		} 
+		}
 		return damage_attack_does;
 	}
 
