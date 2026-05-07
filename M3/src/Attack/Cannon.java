@@ -1,68 +1,46 @@
 package Attack;
 
+
 public class Cannon extends attackUnit{
 	
-	private Cannon(int armor,int baseDamage) {
+	public Cannon(int armor,int baseDamage) {
 		super(armor,baseDamage);
 	}
 	
-	private Cannon() {
-		super(8000,700);
+	public Cannon() {
+		super(ARMOR_CANNON,BASE_DAMAGE_CANNON);
 	}
 	
 	public int attack() {
-		return 0;
-	}
-
-	public void takeDamage(int receivedDamage) {
-		
-	}
-
-	public int getActualArmor() {
-		return 0;
+		int damage_attack_does = getBaseDamage() + getBaseDamage() * (getExperience() * PLUS_ATTACK_UNIT_PER_EXPERIENCE_POINT) / 100;
+		if (isSanctified()) {
+			damage_attack_does += getBaseDamage() * PLUS_ATTACK_UNIT_SANCTIFIED / 100;
+		} 
+		return damage_attack_does;
 	}
 
 	public int getFoodCost() {
-
-		return 0;
+		return FOOD_COST_CANNON;
 	}
 
 	public int getWoodCost() {
-		
-		return 0;
+		return WOOD_COST_CANNON;
 	}
 
 	public int getIronCost() {
-
-		return 0;
+		return IRON_COST_CANNON;
 	}
 
 	public int getManaCost() {
-		
-		return 0;
+		return MANA_COST_CANNON;
 	}
 
 	public int getChanceGeneratingWaste() {
-
-		return 0;
+		return CHANCE_GENERATNG_WASTE_CANNON;
 	}
 
 	public int getChanceAttackAgain() {
-		
-		return 0;
-	}
-
-	public void resetArmor() {
-		
-	}
-
-	public void setExperience(int n) {
-		
-	}
-
-	public int getExperience() {
-
-		return 0;
+		return CHANCE_ATTACK_AGAIN_CANNON;
 	}
 	
 }

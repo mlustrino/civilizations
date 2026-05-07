@@ -2,67 +2,44 @@ package Attack;
 
 public class Crosswob extends attackUnit{
 	
-	private Crosswob(int armor,int baseDamage) {
+	public Crosswob(int armor,int baseDamage) {
 		super(armor,baseDamage);
 	}
 	
-	private Crosswob() {
-		super(6000,1000);
+	public Crosswob() {
+		super(ARMOR_CROSSBOW,BASE_DAMAGE_CROSSBOW);
 	}
 	
 	public int attack() {
-		return 0;
-	}
-
-	public void takeDamage(int receivedDamage) {
-		
-	}
-
-	public int getActualArmor() {
-		return 0;
+		int damage_attack_does = getBaseDamage() + getBaseDamage() * (getExperience() * PLUS_ATTACK_UNIT_PER_EXPERIENCE_POINT) / 100;
+		if (isSanctified()) {
+			damage_attack_does += getBaseDamage() * PLUS_ATTACK_UNIT_SANCTIFIED / 100;
+		} 
+		return damage_attack_does;
 	}
 
 	public int getFoodCost() {
-
-		return 0;
+		return FOOD_COST_CROSSBOW;
 	}
 
 	public int getWoodCost() {
-		
-		return 0;
+		return WOOD_COST_CROSSBOW;
 	}
 
 	public int getIronCost() {
-
-		return 0;
+		return IRON_COST_CROSSBOW;
 	}
 
 	public int getManaCost() {
-		
-		return 0;
+		return MANA_COST_CROSSBOW;
 	}
 
 	public int getChanceGeneratingWaste() {
-
-		return 0;
+		return CHANCE_GENERATNG_WASTE_CROSSBOW;
 	}
 
 	public int getChanceAttackAgain() {
-		
-		return 0;
-	}
-
-	public void resetArmor() {
-		
-	}
-
-	public void setExperience(int n) {
-		
-	}
-
-	public int getExperience() {
-
-		return 0;
+		return CHANCE_ATTACK_AGAIN_CROSSBOW;
 	}
 	
 }
