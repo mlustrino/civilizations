@@ -3,7 +3,7 @@ package Attack;
 import variables.*;
 import militaryUnit.*;
 
-public class attackUnit implements Variables,MilitaryUnit{
+abstract class attackUnit implements Variables,MilitaryUnit{
 	private int armor;
 	private int initialArmor;
 	private int baseDamage;
@@ -20,59 +20,35 @@ public class attackUnit implements Variables,MilitaryUnit{
 		this.sanctified = false;
 	}
 
-	public int attack() {
-		return 0;
+	// SETTERS Y GETTERS
+
+	public int getBaseDamage() {
+		return baseDamage;
+	}
+	
+	public boolean isSanctified() {
+		return sanctified;
 	}
 
+	// METODOS
 	public void takeDamage(int receivedDamage) {
-		
+		this.armor = this.armor - receivedDamage;
 	}
 
 	public int getActualArmor() {
-		return 0;
-	}
-
-	public int getFoodCost() {
-
-		return 0;
-	}
-
-	public int getWoodCost() {
-		
-		return 0;
-	}
-
-	public int getIronCost() {
-
-		return 0;
-	}
-
-	public int getManaCost() {
-		
-		return 0;
-	}
-
-	public int getChanceGeneratingWaste() {
-
-		return 0;
-	}
-
-	public int getChanceAttackAgain() {
-		
-		return 0;
+		return this.armor;
 	}
 
 	public void resetArmor() {
-		
+		this.armor = initialArmor;
 	}
 
 	public void setExperience(int n) {
-		
+		this.experience = n;
 	}
 
 	public int getExperience() {
-
-		return 0;
+		return experience;
 	}
 	
 }
