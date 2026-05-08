@@ -26,7 +26,7 @@ public class Civilization implements Variables {
     
 	// Technology
 	private int technologyDefense ;
-	private int technologyAtack ;
+	private int technologyAttack ;
 	
 	// Recursos
 	private int wood;
@@ -45,7 +45,7 @@ public class Civilization implements Variables {
 	private int battles;
 	
 	// ArrayList Armas
-	private ArrayList<MilitaryUnit>[] army = new ArrayList[9];
+	private ArrayList<MilitaryUnit>[] army;
 	
 		
 	private int upgradeDefenseTechnologyWoodCost; 
@@ -69,6 +69,7 @@ public class Civilization implements Variables {
 		this.food = food;
 		this.mana = mana;
 		initArrayArmy();
+		recalcularTechnologyCosts();
 	}
 
 	public Civilization() {
@@ -86,21 +87,30 @@ public class Civilization implements Variables {
 		}
 	}
 
-	
+	/*
+	 * 
+	 * Método que ejecutaremos cada vez que el nivel de tecnología de defensa o ataque suba.
+	 * 
+	 * Requeriments: 
+	 * Tenemos que tener en cuenta, que cada vez que subimos un nivel de tecnología, la siguiente actualización será un porcentaje establecido más caro.
+	 * 
+	 * **/
 	private void recalcularTechnologyCosts() {
 		upgradeDefenseTechnologyWoodCost = 
 				UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
 		upgradeDefenseTechnologyIronCost = 
 				UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST + technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST;
 		upgradeAttackTechnologyWoodCost =
-				UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + technologyAtack * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
+				UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + technologyAttack * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
 		upgradeAttackTechnologyIronCost = 
-				UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + technologyAtack * UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST;
+				UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + technologyAttack * UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST;
 			
 	}	
 	
 
 	/**
+	 * CREACIÓN EDIFICIOS
+	 * 
 	 * Con estos métodos podemos crear una nueva iglesia o una nueva torre mágica.
 	 * En caso de no tener recursos suficientes, lanzaremos una excepción del tipo ResourceException, 
 	 * que comentaremos más adelante.
@@ -196,29 +206,11 @@ public class Civilization implements Variables {
 		
 		wood -= upgradeAttackTechnologyWoodCost;
 		iron -= upgradeAttackTechnologyIronCost;
-		technologyAtack++;
+		technologyAttack++;
 		recalcularTechnologyCosts();
 		
 	}
 	
-	
-	
-
-
-    /**
-     * Deducts the cost of a single unit from current resources.
-     * Does NOT check for sufficiency – caller must have already validated.
-     * 
-     * Resta el costo de una unidad de los recursos actuales.
-     * NO verifica la suficiencia; quien llama a la función debe haber validado previamente los recursos.
-     */
-    private void deductUnitCost(MilitaryUnit unit) {
-        food -= unit.getFoodCost();
-        wood -= unit.getWoodCost();
-        iron -= unit.getIronCost();
-        mana -= unit.getManaCost();
-    }
-
     /**
      * Returns how many units of this type we can afford with current resources.
      * Considers only non-zero costs to avoid division-by-zero.
@@ -258,39 +250,40 @@ public class Civilization implements Variables {
 
 			switch (idx_army) {
 				case IDX_ARMY_SWORDSMAN :
-					army[IDX_ARMY_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAtack));
+					army[IDX_ARMY_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAttack));
 					break;
 	
 				case IDX_ARMY_SPEARMAN :
-					army[IDX_ARMY_SPEARMAN].add(new Spearman(technologyDefense,technologyAtack));
+					army[IDX_ARMY_SPEARMAN].add(new Spearman(technologyDefense,technologyAttack));
 					break;
 	
 				case IDX_ARMY_CROSSBOW :
-					army[IDX_ARMY_CROSSBOW].add(new Crosswob(technologyDefense,technologyAtack));
+					army[IDX_ARMY_CROSSBOW].add(new Crosswob(technologyDefense,technologyAttack));
 					break;
 	
 				case IDX_ARMY_CANNON :
-					army[IDX_ARMY_CANNON].add(new Cannon(technologyDefense,technologyAtack));
+					army[IDX_ARMY_CANNON].add(new Cannon(technologyDefense,technologyAttack));
 					break;
 	
 				case IDX_ARMY_ARROWTOWER :
-					army[IDX_ARMY_ARROWTOWER].add(new ArrowTower(technologyDefense,technologyAtack));
+					army[IDX_ARMY_ARROWTOWER].add(new ArrowTower(technologyDefense,technologyAttack));
 					break;
 	
 				case IDX_ARMY_CATAPULT :
-					army[IDX_ARMY_CATAPULT].add(new Catapult(technologyDefense,technologyAtack));
+					army[IDX_ARMY_CATAPULT].add(new Catapult(technologyDefense,technologyAttack));
 					break;
 	
 				case IDX_ARMY_ROCKETLAUNCHER :
-					army[IDX_ARMY_ROCKETLAUNCHER].add(new RocketLauncherTower(technologyDefense,technologyAtack));
+					army[IDX_ARMY_ROCKETLAUNCHER].add(new RocketLauncherTower(technologyDefense,technologyAttack));
 					break;
 	
 				case IDX_ARMY_MAGICIAN :
-					army[IDX_ARMY_MAGICIAN].add(new Magician(0,technologyAtack));
+					army[IDX_ARMY_MAGICIAN].add(new Magician(0,technologyAttack));
 					break;
 	
 				case IDX_ARMY_PRIEST :
-					army[IDX_ARMY_PRIEST].add(new Priest(technologyDefense,technologyAtack));
+//					army[IDX_ARMY_PRIEST].add(new Priest(technologyDefense,technologyAttack));
+					army[IDX_ARMY_PRIEST].add(new Priest(0,0));
 					break;
 			}
 			
@@ -353,15 +346,84 @@ public class Civilization implements Variables {
         
 		createUnits(n, IDX_ARMY_PRIEST, "Sacerdotes " + extraInfo, FOOD_COST_PRIEST, WOOD_COST_PRIEST,IRON_COST_PRIEST, MANA_COST_PRIEST);
 	}
+	
+	
+	
 
-	/*
-	 * Este método nos servirá para mostrar una visión del estado de nuestro planeta por consola, 
+	
+    // =========================================================================
+    // GENERACIÓN DE RECURSOS ( Llamada desde TimerTask)
+    // =========================================================================
+
+    /**
+     * Generar recursos para cada secuencia de tiempo (one minute of game time).
+     * Base values are taken from {@link Variables}; buildings add a bonus.
+     */
+    public void generateResources() {
+        food += CIVILIZATION_FOOD_GENERATED + (farm      * CIVILIZATION_FOOD_GENERATED_PER_FARM);
+        wood += CIVILIZATION_WOOD_GENERATED + (carpentry * CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY);
+        iron += CIVILIZATION_IRON_GENERATED + (smithy    * CIVILIZATION_IRON_GENERATED_PER_SMITHY);
+        mana += magicTower * CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER;
+    }
+	
+    
+    
+    
+
+    // =========================================================================
+    // STATS DISPLAY
+    // =========================================================================
+
+    /**
+     * Prints a formatted snapshot of the civilization's current state to stdout.
+     * Mirrors the sample output shown in the project document.
+     *	Este método nos servirá para mostrar una visión del estado de nuestro planeta por consola, 
 	 * una posible salida cuando llamamos a este método podría ser:
-	 * */
-	public void printStats() {
-		
-	}
+     */
+    public void printStats() {
+        System.out.println();
+        System.out.println("***************************CIVILIZATION STATS***************************");
+        System.out.println("--------------------------------------------------TECHNOLOGY----------------------------------------");
+        System.out.printf("  %-10s %-10s%n", "Attack", "Defense");
+        System.out.printf("  %-10d %-10d%n", technologyAttack, technologyDefense);
 
+        System.out.println("---------------------------------------------------BUILDINGS----------------------------------------");
+        System.out.printf("  %-8s %-8s %-12s %-14s %-10s%n",
+                "Farm", "Smithy", "Carpentry", "Magic Tower", "Church");
+        System.out.printf("  %-8d %-8d %-12d %-14d %-10d%n",
+                farm, smithy, carpentry, magicTower, church);
+
+        System.out.println("----------------------------------------------------DEFENSES----------------------------------------");
+        System.out.printf("  %-14s %-12s %-22s%n",
+                "Arrow Tower", "Catapult", "Rocket Launcher");
+        System.out.printf("  %-14d %-12d %-22d%n",
+                army[IDX_ARMY_ARROWTOWER].size(), army[IDX_ARMY_CATAPULT].size(), army[IDX_ARMY_ROCKETLAUNCHER].size());
+
+        System.out.println("------------------------------------------------ATTACK UNITS----------------------------------------");
+        System.out.printf("  %-12s %-12s %-12s %-10s%n",
+                "Swordsman", "Spearman", "Crossbow", "Cannon");
+        System.out.printf("  %-12d %-12d %-12d %-10d%n",
+                army[IDX_ARMY_SWORDSMAN].size(), army[IDX_ARMY_SPEARMAN].size(),
+                army[IDX_ARMY_CROSSBOW].size(), army[IDX_ARMY_CANNON].size());
+
+        System.out.println("----------------------------------------------SPECIAL UNITS----------------------------------------");
+        System.out.printf("  %-12s %-12s%n", "Magician", "Priest");
+        System.out.printf("  %-12d %-12d%n",
+                army[IDX_ARMY_MAGICIAN].size(), army[IDX_ARMY_PRIEST].size());
+
+        System.out.println("---------------------------------------------------RESOURCES----------------------------------------");
+        System.out.printf("  %-10s %-10s %-10s %-10s%n", "Food", "Wood", "Iron", "Mana");
+        System.out.printf("  %-10d %-10d %-10d %-10d%n", food, wood, iron, mana);
+
+        System.out.println("----------------------------------------GENERATION RESOURCES----------------------------------------");
+        int genFood = CIVILIZATION_FOOD_GENERATED + (farm      * CIVILIZATION_FOOD_GENERATED_PER_FARM);
+        int genWood = CIVILIZATION_WOOD_GENERATED + (carpentry * CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY);
+        int genIron = CIVILIZATION_IRON_GENERATED + (smithy    * CIVILIZATION_IRON_GENERATED_PER_SMITHY);
+        int genMana = magicTower * CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER;
+        System.out.printf("  %-10s %-10s %-10s %-10s%n", "Food", "Wood", "Iron", "Mana");
+        System.out.printf("  %-10d %-10d %-10d %-10d%n", genFood, genWood, genIron, genMana);
+        System.out.println();
+    }
 
 	
 }
