@@ -1,0 +1,367 @@
+package civilizations;
+
+import java.util.ArrayList;
+import militaryUnit.*;
+import specialUnit.Magician;
+import specialUnit.Priest;
+import variables.Variables;
+import defenseUnit.*;
+import Attack.*;
+import exceptions.*;
+
+public class Civilization implements Variables {
+	
+	
+    public static final int IDX_ARMY_SWORDSMAN = 0;
+    public static final int IDX_ARMY_SPEARMAN = 1;
+    public static final int IDX_ARMY_CROSSBOW = 2;
+    public static final int IDX_ARMY_CANNON = 3;
+    public static final int IDX_ARMY_ARROWTOWER = 4;
+    public static final int IDX_ARMY_CATAPULT = 5;
+    public static final int IDX_ARMY_ROCKETLAUNCHER = 6;
+    public static final int IDX_ARMY_MAGICIAN = 7;
+    public static final int IDX_ARMY_PRIEST = 8;
+    
+    public static final int ARMY_LENGTH = 9;
+    
+	// Technology
+	private int technologyDefense ;
+	private int technologyAtack ;
+	
+	// Recursos
+	private int wood;
+	private int iron;
+	private int food;
+	private int mana;
+	
+	// Construcciones
+	private int magicTower;
+	private int church;
+	private int farm;
+	private int smithy;
+	private int carpentry;
+	
+	// Battle counter
+	private int battles;
+	
+	// ArrayList Armas
+	private ArrayList<MilitaryUnit>[] army = new ArrayList[9];
+	
+		
+	private int upgradeDefenseTechnologyWoodCost; 
+	private int upgradeAttackTechnologyWoodCost;
+	private int upgradeDefenseTechnologyIronCost; 
+	private int upgradeAttackTechnologyIronCost;    
+//	
+//	private int upgradeDefenseTechFoodCost;
+//    private int upgradeDefenseTechWoodCost;
+//    private int upgradeDefenseTechIronCost;
+//
+//    private int upgradeAttackTechFoodCost;
+//    private int upgradeAttackTechWoodCost;
+//    private int upgradeAttackTechIronCost;
+	
+
+	public Civilization(int wood, int iron, int food, int mana) {
+		super();
+		this.wood = wood;
+		this.iron = iron;
+		this.food = food;
+		this.mana = mana;
+		initArrayArmy();
+	}
+
+	public Civilization() {
+		this(0,0,0,0);
+	}
+
+	
+	/*
+	 * Inicializamos arrayList de armas
+	 * */
+	private void initArrayArmy() {
+		for (int i = 0; i < ARMY_LENGTH; i++) {
+			army[i] = new ArrayList<>();	
+			
+		}
+	}
+
+	
+	private void recalcularTechnologyCosts() {
+		upgradeDefenseTechnologyWoodCost = 
+				UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
+		upgradeDefenseTechnologyIronCost = 
+				UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST + technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST;
+		upgradeAttackTechnologyWoodCost =
+				UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + technologyAtack * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
+		upgradeAttackTechnologyIronCost = 
+				UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + technologyAtack * UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST;
+			
+	}	
+	
+
+	/**
+	 * Con estos métodos podemos crear una nueva iglesia o una nueva torre mágica.
+	 * En caso de no tener recursos suficientes, lanzaremos una excepción del tipo ResourceException, 
+	 * que comentaremos más adelante.
+	 * */
+	public void newChurch() throws ResourceException{
+		if (food < FOOD_COST_CHURCH || wood < WOOD_COST_CHURCH || iron < IRON_COST_CHURCH) {
+			throw new ResourceException("iglesia", FOOD_COST_CHURCH, WOOD_COST_CHURCH, IRON_COST_CHURCH, food, wood, iron);
+		}
+		food -= FOOD_COST_CHURCH;
+		wood -= WOOD_COST_CHURCH;
+		iron -= IRON_COST_CHURCH;
+		church++;		
+	}
+	
+	public void newMagicTower() throws ResourceException{
+		if (food < FOOD_COST_MAGICTOWER || wood < WOOD_COST_MAGICTOWER || iron < IRON_COST_MAGICTOWER) {
+			throw new ResourceException("Torre del mago",  FOOD_COST_MAGICTOWER, WOOD_COST_MAGICTOWER, IRON_COST_MAGICTOWER, food, wood, iron);
+
+			
+		}		
+		food -= FOOD_COST_MAGICTOWER;
+		wood -= WOOD_COST_MAGICTOWER;
+		iron -= IRON_COST_MAGICTOWER;
+		magicTower++;		
+	}
+		
+	public void newFarm() throws ResourceException{
+		if (food < FOOD_COST_FARM || wood < WOOD_COST_FARM || iron < IRON_COST_FARM) {
+			throw new ResourceException("granja", FOOD_COST_FARM, WOOD_COST_FARM, IRON_COST_FARM, food, wood, iron);
+		}		
+		food -= FOOD_COST_FARM;
+		wood -= WOOD_COST_FARM;
+		iron -= IRON_COST_FARM;
+		farm++;		
+	}
+	public void newCarpentry() throws ResourceException{
+		if (food < FOOD_COST_CARPENTRY || wood < WOOD_COST_CARPENTRY || iron < IRON_COST_CARPENTRY) {
+			throw new ResourceException("carpinteria",  FOOD_COST_CARPENTRY, WOOD_COST_CARPENTRY, IRON_COST_CARPENTRY, food, wood, iron);
+		}		
+		food -= FOOD_COST_CARPENTRY;
+		wood -= WOOD_COST_CARPENTRY;
+		iron -= IRON_COST_CARPENTRY;
+		carpentry++;		
+	}
+	public void newSmithy()  throws ResourceException{
+		if (food < FOOD_COST_SMITHY || wood < WOOD_COST_SMITHY || iron < IRON_COST_SMITHY) {
+			throw new ResourceException("herreria",  FOOD_COST_SMITHY, WOOD_COST_SMITHY, IRON_COST_SMITHY, food, wood, iron);
+		}		
+		food -= FOOD_COST_SMITHY;
+		wood -= WOOD_COST_SMITHY;
+		iron -= IRON_COST_SMITHY;
+		smithy++;		
+	}
+	
+	
+	/**
+	 * Con estos métodos, pretendemos actualizar nuestras tecnologías de ataque/defensa, 
+	 * pero antes tendremos que comprobar que tenemos recursos suficientes para actualizar dicha tecnología. 
+	 * En caso de no tener recursos suficientes, lanzaremos una excepción del tipo ResourceException, que comentaremos más adelante.
+	 * Tenemos que tener en cuenta, que cada vez que subimos un nivel de tecnología, la siguiente actualización será un porcentaje establecido más caro.
+	 * 
+	 * Por ejemplo, si pasar del nivel 1 de defensa al nivel 2 de defensa costase 100 de Hierro, y el porcentaje establecido de incremento de precio fuese un 10%, 
+	 * pasar del nivel 2 al nivel 3 nos costaría 110 de hierro. 
+	 * Estos valores estaría previamente indicados en las características upgradeDefenseTechnologyIronCost, upgradeAttackTechnologyIronCost, upgradeDefenseTechnologyWoodCost, upgradeAttackTechnologyWoodCost = 0;
+
+	 * 
+	 * 1 _ Controlar que tenemos recursos suficientes - ResourceException
+	 * 2 _ Actualizar los valores de recursos, recurso - costoRecurso
+	 * 3 _ Aumentar de nivel incrementa un 10% para el siguiente nivel. 
+	 * * Formula: baseCost + currentLevel * plusCost 
+	 * */
+	public void upgradeTechnologyDefense() throws ResourceException {
+		if (wood < upgradeDefenseTechnologyWoodCost || iron < upgradeDefenseTechnologyWoodCost) {
+//			throw new ResourceException("Defense Technology",technologyDefense,technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyWoodCost, wood, iron);
+			throw new ResourceException(String.format("La Defense Technology no puede aumentar de nivel de %d a %d."
+					+ "Se necesitan Wood=%d, Iron=%d. \n"
+					+ "Recursos disponibles: Wood=%d, Iron=%d.", technologyDefense, technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyIronCost, wood, iron));
+		}
+		
+		wood -= upgradeDefenseTechnologyWoodCost;
+		iron -= upgradeDefenseTechnologyIronCost;
+		technologyDefense++;
+		recalcularTechnologyCosts();
+		
+	}
+
+	public void upgradeTechnologyAttack() throws ResourceException{
+		if (wood < upgradeAttackTechnologyWoodCost || iron < upgradeAttackTechnologyIronCost) {
+			throw new ResourceException(String.format("Attack Technology no puede aumentar de nivel de %d a %d."
+					+ "Se necesitan Wood=%d, Iron=%d. \n"
+					+ "Recursos disponibles: Wood=%d, Iron=%d.", technologyDefense, technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyIronCost, wood, iron));
+		}
+		
+		wood -= upgradeAttackTechnologyWoodCost;
+		iron -= upgradeAttackTechnologyIronCost;
+		technologyAtack++;
+		recalcularTechnologyCosts();
+		
+	}
+	
+	
+	
+
+
+    /**
+     * Deducts the cost of a single unit from current resources.
+     * Does NOT check for sufficiency – caller must have already validated.
+     * 
+     * Resta el costo de una unidad de los recursos actuales.
+     * NO verifica la suficiencia; quien llama a la función debe haber validado previamente los recursos.
+     */
+    private void deductUnitCost(MilitaryUnit unit) {
+        food -= unit.getFoodCost();
+        wood -= unit.getWoodCost();
+        iron -= unit.getIronCost();
+        mana -= unit.getManaCost();
+    }
+
+    /**
+     * Returns how many units of this type we can afford with current resources.
+     * Considers only non-zero costs to avoid division-by-zero.
+     * 
+     * Devuelve cuántas unidades de este tipo podemos costear con los recursos actuales.
+     * Considera únicamente los costos distintos de cero para evitar la división por cero.
+     */
+    private int availableUnits(int foodCost, int woodCost, int ironCost, int manaCost) {
+        int max = Integer.MAX_VALUE;
+        if (foodCost > 0) max = Math.min(max, food / foodCost);
+        if (woodCost > 0) max = Math.min(max, wood / woodCost);
+        if (ironCost > 0) max = Math.min(max, iron / ironCost);
+        if (manaCost > 0) max = Math.min(max, mana / manaCost);
+        return (max == Integer.MAX_VALUE) ? Integer.MAX_VALUE : max;
+    }
+    
+    
+	/*
+	 * Estos métodos servirán para añadir nuevas unidades militares a nuestro ejército army mencionado anteriormente.
+	 * Estos métodos reciben un entero n que indica el número de unidades que queremos añadir, si no tenemos suficientes recursos para añadirlas unidades que queremos, 
+	 * lanzará una excepción del tipo ResourceException indicando el mensaje informativo. 
+	 * 
+	 * Pero se añadirán todas las unidades posibles que permitan nuestros recursos.
+	 * Es decir, si queremos añadir 10 swordsman, y sólo tenemos recursos para añadir 5, se lanzará una excepción del tipo ResourceException, pero se añadirán los 5 
+	 * swordsman que podemos generar y se nos mostrará también un mensaje informativo indicando el número de swordsman que se han añadido.
+	 * 
+	 * En el caso de crear magos, si no tenemos al menos una torre mágica, lanzaremos una excepción del tipo BuildingException.
+	 * En el casod de crear sacerdotes, si no tenemos al menos una iglesia, lanzaremos una excepción del tipo BuildingException.
+	 * 
+	 * 
+	 * */
+	public void createUnits(int n, int idx_army, String unitName, int foodCost, int woodCost, int ironCost, int manaCost) throws ResourceException {
+		int available =  availableUnits(foodCost, woodCost,ironCost, manaCost);
+		int toAdd = Math.min(n, available);
+		
+		for (int i = 0; i < toAdd; i++) {
+
+			switch (idx_army) {
+				case IDX_ARMY_SWORDSMAN :
+					army[IDX_ARMY_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAtack));
+					break;
+	
+				case IDX_ARMY_SPEARMAN :
+					army[IDX_ARMY_SPEARMAN].add(new Spearman(technologyDefense,technologyAtack));
+					break;
+	
+				case IDX_ARMY_CROSSBOW :
+					army[IDX_ARMY_CROSSBOW].add(new Crosswob(technologyDefense,technologyAtack));
+					break;
+	
+				case IDX_ARMY_CANNON :
+					army[IDX_ARMY_CANNON].add(new Cannon(technologyDefense,technologyAtack));
+					break;
+	
+				case IDX_ARMY_ARROWTOWER :
+					army[IDX_ARMY_ARROWTOWER].add(new ArrowTower(technologyDefense,technologyAtack));
+					break;
+	
+				case IDX_ARMY_CATAPULT :
+					army[IDX_ARMY_CATAPULT].add(new Catapult(technologyDefense,technologyAtack));
+					break;
+	
+				case IDX_ARMY_ROCKETLAUNCHER :
+					army[IDX_ARMY_ROCKETLAUNCHER].add(new RocketLauncherTower(technologyDefense,technologyAtack));
+					break;
+	
+				case IDX_ARMY_MAGICIAN :
+					army[IDX_ARMY_MAGICIAN].add(new Magician(0,technologyAtack));
+					break;
+	
+				case IDX_ARMY_PRIEST :
+					army[IDX_ARMY_PRIEST].add(new Priest(technologyDefense,technologyAtack));
+					break;
+			}
+			
+			food -= foodCost;
+			wood -= woodCost;
+			iron -= ironCost;
+			mana -= manaCost;
+		}
+		if (toAdd < n) {
+			throw new ResourceException(String.format("No hay recursos suficientes para crear %d %s.\n"
+					+ "Solicitadas: %d\n"
+					+ "Creadas: %d\n"
+					+ "Recursos restantes: Food=%d, Wood=%d, Iron=%d, Mana=%d.", n, unitName, n, toAdd, food, wood, iron, mana));
+		}
+	}
+	public void newSwordsman(int n) throws ResourceException {
+		createUnits(n, IDX_ARMY_SWORDSMAN, "Swordman", FOOD_COST_SWORDSMAN, WOOD_COST_SWORDSMAN,IRON_COST_SWORDSMAN, MANA_COST_SWORDSMAN);
+	}
+	
+	public void newSpearman(int n) throws ResourceException {
+		createUnits(n, IDX_ARMY_SPEARMAN, "Spearman", FOOD_COST_SPEARMAN, WOOD_COST_SPEARMAN,IRON_COST_SPEARMAN, MANA_COST_SPEARMAN);	
+	}
+	public void newCrossbow(int n) throws ResourceException {
+		createUnits(n, IDX_ARMY_CROSSBOW, "Crosswob",FOOD_COST_CROSSBOW, WOOD_COST_CROSSBOW,IRON_COST_CROSSBOW, MANA_COST_CROSSBOW);
+	}
+	public void newCannon(int n) throws ResourceException {
+		createUnits(n, IDX_ARMY_CANNON, "Cannon",FOOD_COST_CANNON, WOOD_COST_CANNON,IRON_COST_CANNON, MANA_COST_CANNON);
+	}
+	public void newArrowTower(int n) throws ResourceException {
+		createUnits(n, IDX_ARMY_ARROWTOWER, "Torre de flechas",FOOD_COST_ARROWTOWER, WOOD_COST_ARROWTOWER,IRON_COST_ARROWTOWER, MANA_COST_ARROWTOWER);
+	}
+	public void newCatapult(int n) throws ResourceException {
+		createUnits(n, IDX_ARMY_CATAPULT, "Catapultas", FOOD_COST_CATAPULT, WOOD_COST_CATAPULT,IRON_COST_CATAPULT, MANA_COST_CATAPULT);
+	}
+	public void newRocketLauncher(int n)  throws ResourceException {
+		createUnits(n, IDX_ARMY_ROCKETLAUNCHER, "Torre lanza ", FOOD_COST_ROCKETLAUNCHERTOWER, WOOD_COST_ROCKETLAUNCHERTOWER,IRON_COST_ROCKETLAUNCHERTOWER, MANA_COST_ROCKETLAUNCHERTOWER);
+	}
+	public void newMagician(int n) throws BuildingException, ResourceException {
+		if (magicTower < 1) {
+			throw new BuildingException(String.format("No se puede reclutar un mago: se requiere al menos una torre"));
+		}
+		createUnits(n, IDX_ARMY_MAGICIAN, "Magos", FOOD_COST_MAGICIAN, WOOD_COST_MAGICIAN,IRON_COST_MAGICIAN, MANA_COST_MAGICIAN);
+	}
+	public void newPriest(int n) throws BuildingException, ResourceException {
+		if (church < 1) {
+			throw new BuildingException(String.format("No se puede reclutar un Sacerdote: se requiere al menos una iglesia"));
+		}
+		
+		int currentPriests =  army[IDX_ARMY_PRIEST].size();
+		int availableSlots = church - currentPriests;
+		if (availableSlots <= 0) {
+			throw new BuildingException(String.format("No se pueden reclutar más sacerdotes: los %d espacios de la iglesia están ocupados.\n "
+					+ "Construye más iglesias para reclutar sacerdotes adicionales.", church));
+		}
+
+        int requested = Math.min(n, availableSlots);
+        
+        String extraInfo = (requested < n) 
+        		? String.format("(limitado a %d por la capacidad de la iglesia; construir más iglesias para el resto)", requested) :"";
+        
+		createUnits(n, IDX_ARMY_PRIEST, "Sacerdotes " + extraInfo, FOOD_COST_PRIEST, WOOD_COST_PRIEST,IRON_COST_PRIEST, MANA_COST_PRIEST);
+	}
+
+	/*
+	 * Este método nos servirá para mostrar una visión del estado de nuestro planeta por consola, 
+	 * una posible salida cuando llamamos a este método podría ser:
+	 * */
+	public void printStats() {
+		
+	}
+
+
+	
+}
