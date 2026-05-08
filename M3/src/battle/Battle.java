@@ -183,7 +183,6 @@ public class Battle {
 	}
 	
 	public int getGroupDefender(ArrayList<MilitaryUnit> army) {
-		
 		return 0;
 	}
 	
@@ -199,7 +198,7 @@ public class Battle {
 	
 	public void resetArmyArmor() {
 		for (int i = 0; i < civilizationArmy.size();i++) {
-			civilizationArmy.get(i).resetArmor();;
+			civilizationArmy.get(i).resetArmor();
 		}
 	}
 	
