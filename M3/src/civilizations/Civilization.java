@@ -71,6 +71,10 @@ public class Civilization implements Variables {
 		initArrayArmy();
 		recalcularTechnologyCosts();
 	}
+	
+	//Setters y getters
+	
+	
 
 	public Civilization() {
 		this(0,0,0,0);
