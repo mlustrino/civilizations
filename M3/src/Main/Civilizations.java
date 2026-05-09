@@ -97,22 +97,25 @@ class PanelInicio extends JPanel {
         g2d.drawImage(fondo_inicio.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, this);
     }
 }
-class PanelJuego extends JPanel{
+class PanelJuego extends JPanel implements Variables {
 	private BufferedImage fondo_juego;
 	private ImageIcon icono_madera, icono_comida, icono_hierro, icono_mana, icono_tech_att, icono_tech_def;
+    private Civilization civilizacion;          
+    private JLabel comida, madera, hierro, mana; 
+    private JLabel lvl_tech_attack, lvl_tech_defense; 
 	
 	
     public PanelJuego() {
     	setLayout(new BorderLayout());
-    	Civilization civilizacion = new Civilization(3000,3000,3000,3000);
+    	civilizacion = new Civilization(3000,3000,3000,3000);
         try {
             fondo_juego = ImageIO.read(new File("./M3/src/Main/img/fondo_ciudad.png"));
-            BufferedImage imgmadera = ImageIO.read(new File("./M3/src/Main/img/logo_pruebas.jpg"));
-            BufferedImage imgcomida = ImageIO.read(new File("./M3/src/Main/img/logo_pruebas.jpg"));
-            BufferedImage imghierro = ImageIO.read(new File("./M3/src/Main/img/logo_pruebas.jpg"));
-            BufferedImage imgmana = ImageIO.read(new File("./M3/src/Main/img/logo_pruebas.jpg"));
-            BufferedImage imgtechatt = ImageIO.read(new File("./M3/src/Main/img/logo_pruebas.jpg"));
-            BufferedImage imgtechdef = ImageIO.read(new File("./M3/src/Main/img/logo_pruebas.jpg"));
+            BufferedImage imgmadera = ImageIO.read(new File("./M3/src/Main/img/wood.png"));
+            BufferedImage imgcomida = ImageIO.read(new File("./M3/src/Main/img/wood.png"));
+            BufferedImage imghierro = ImageIO.read(new File("./M3/src/Main/img/wood.png"));
+            BufferedImage imgmana = ImageIO.read(new File("./M3/src/Main/img/wood.png"));
+            BufferedImage imgtechatt = ImageIO.read(new File("./M3/src/Main/img/wood.png"));
+            BufferedImage imgtechdef = ImageIO.read(new File("./M3/src/Main/img/wood.png"));
             
             
             icono_madera = new ImageIcon(imgmadera.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
@@ -129,12 +132,12 @@ class PanelJuego extends JPanel{
         JPanel panel_recursos = new JPanel();
         panel_recursos.setLayout(new GridLayout(1,5));
         
-        JLabel comida = new JLabel("Food: " + civilizacion.getFood(), icono_comida, JLabel.LEFT);
-        JLabel madera = new JLabel("Wood: " + civilizacion.getWood(), icono_madera, JLabel.LEFT);
-        JLabel hierro = new JLabel("Iron: " + civilizacion.getIron(), icono_hierro, JLabel.LEFT);
-        JLabel mana = new JLabel("Mana: " + civilizacion.getMana(), icono_mana, JLabel.LEFT);
-        JLabel lvl_tech_attack = new JLabel("Level: 3", icono_tech_att, JLabel.LEFT);
-        JLabel lvl_tech_defense = new JLabel("Level: 2", icono_tech_def, JLabel.LEFT);
+        comida = new JLabel("Food: " + civilizacion.getFood(), icono_comida, JLabel.LEFT);
+        madera = new JLabel("Wood: " + civilizacion.getWood(), icono_madera, JLabel.LEFT);
+        hierro = new JLabel("Iron: " + civilizacion.getIron(), icono_hierro, JLabel.LEFT);
+        mana = new JLabel("Mana: " + civilizacion.getMana(), icono_mana, JLabel.LEFT);
+        lvl_tech_attack = new JLabel("Att Level: " + civilizacion.getTechnologyAttack(), icono_tech_att, JLabel.LEFT);
+        lvl_tech_defense = new JLabel("Def Level: " + civilizacion.getTechnologyDefense(), icono_tech_def, JLabel.LEFT);
         
         comida.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         madera.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
@@ -184,12 +187,43 @@ class PanelJuego extends JPanel{
         JPanel panel_tech_upgrades = new JPanel();
         panel_tech_upgrades.setLayout(new GridLayout(2,1));
         
-        // JLabel comida = new JLabel("Food: 4000", icono_comida, JLabel.LEFT);
         
         JButton boton_upgrade_tech_attack = new JButton("Upgrade attack tech");
         JButton boton_upgrade_tech_defense = new JButton("Upgrade defense tech");
         
-        JLabel upgrade_attack = new JLabel("Cost:\nFood: 2000\nWood: 3000\nIron: 4000");
+        //button_inicio_start.addActionListener(new ActionListener() {
+        boton_upgrade_tech_attack.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				if (civilizacion.getFood() >= UPGRADE_BASE_ATTACK_TECHNOLOGY_FOOD_COST && civilizacion.getWood() >= UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST && civilizacion.getIron() >= UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST) {
+					civilizacion.setTechnologyAttack(civilizacion.getTechnologyAttack()+1);
+					lvl_tech_attack.setText("Level: " + civilizacion.getTechnologyAttack());
+					civilizacion.setFood(civilizacion.getFood()-UPGRADE_BASE_ATTACK_TECHNOLOGY_FOOD_COST);
+					civilizacion.setWood(civilizacion.getWood()-UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST);
+					civilizacion.setIron(civilizacion.getIron()-UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST);
+					actualizarRecursos();
+				}
+				
+			}
+		});
+        
+        boton_upgrade_tech_defense.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				if (civilizacion.getFood() >= UPGRADE_BASE_DEFENSE_TECHNOLOGY_FOOD_COST && civilizacion.getWood() >= UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST && civilizacion.getIron() >= UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST) {
+					civilizacion.setTechnologyDefense(civilizacion.getTechnologyDefense()+1);
+					lvl_tech_attack.setText("Level: " + civilizacion.getTechnologyDefense());
+					civilizacion.setFood(civilizacion.getFood()-UPGRADE_BASE_DEFENSE_TECHNOLOGY_FOOD_COST);
+					civilizacion.setWood(civilizacion.getWood()-UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST);
+					civilizacion.setIron(civilizacion.getIron()-UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST);
+					actualizarRecursos();
+				}
+				
+			}
+		});
+        
+        
+        //JLabel upgrade_attack = new JLabel("Cost:\nFood: 2000\nWood: 3000\nIron: 4000");
         
         
         
@@ -232,6 +266,15 @@ class PanelJuego extends JPanel{
         g2d.drawImage(fondo_juego.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, this);
         
         
+    }
+    
+    public void actualizarRecursos() {
+        comida.setText("Food: " + civilizacion.getFood());
+        madera.setText("Wood: " + civilizacion.getWood());
+        hierro.setText("Iron: " + civilizacion.getIron());
+        mana.setText("Mana: " + civilizacion.getMana());
+        lvl_tech_attack.setText("Att Level: " + civilizacion.getTechnologyAttack());
+        lvl_tech_defense.setText("Def Level: " + civilizacion.getTechnologyDefense());
     }
 	
 }
