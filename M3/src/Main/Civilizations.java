@@ -1,5 +1,7 @@
 package Main;
 
+import civilizations.*;
+import variables.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -101,9 +103,8 @@ class PanelJuego extends JPanel{
 	
 	
     public PanelJuego() {
-    	
     	setLayout(new BorderLayout());
-    	
+    	Civilization civilizacion = new Civilization(3000,3000,3000,3000);
         try {
             fondo_juego = ImageIO.read(new File("./M3/src/Main/img/fondo_ciudad.png"));
             BufferedImage imgmadera = ImageIO.read(new File("./M3/src/Main/img/logo_pruebas.jpg"));
@@ -128,10 +129,10 @@ class PanelJuego extends JPanel{
         JPanel panel_recursos = new JPanel();
         panel_recursos.setLayout(new GridLayout(1,5));
         
-        JLabel comida = new JLabel("Food: 4000", icono_comida, JLabel.LEFT);
-        JLabel madera = new JLabel("Wood: 5000", icono_madera, JLabel.LEFT);
-        JLabel hierro = new JLabel("Iron: 6000", icono_hierro, JLabel.LEFT);
-        JLabel mana = new JLabel("Mana: 7000", icono_mana, JLabel.LEFT);
+        JLabel comida = new JLabel("Food: " + civilizacion.getFood(), icono_comida, JLabel.LEFT);
+        JLabel madera = new JLabel("Wood: " + civilizacion.getWood(), icono_madera, JLabel.LEFT);
+        JLabel hierro = new JLabel("Iron: " + civilizacion.getIron(), icono_hierro, JLabel.LEFT);
+        JLabel mana = new JLabel("Mana: " + civilizacion.getMana(), icono_mana, JLabel.LEFT);
         JLabel lvl_tech_attack = new JLabel("Level: 3", icono_tech_att, JLabel.LEFT);
         JLabel lvl_tech_defense = new JLabel("Level: 2", icono_tech_def, JLabel.LEFT);
         
@@ -183,8 +184,14 @@ class PanelJuego extends JPanel{
         JPanel panel_tech_upgrades = new JPanel();
         panel_tech_upgrades.setLayout(new GridLayout(2,1));
         
+        // JLabel comida = new JLabel("Food: 4000", icono_comida, JLabel.LEFT);
+        
         JButton boton_upgrade_tech_attack = new JButton("Upgrade attack tech");
         JButton boton_upgrade_tech_defense = new JButton("Upgrade defense tech");
+        
+        JLabel upgrade_attack = new JLabel("Cost:\nFood: 2000\nWood: 3000\nIron: 4000");
+        
+        
         
         panel_tech_upgrades.add(boton_upgrade_tech_attack);
         panel_tech_upgrades.add(boton_upgrade_tech_defense);
