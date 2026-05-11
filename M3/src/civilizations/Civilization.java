@@ -71,6 +71,10 @@ public class Civilization implements Variables {
 		initArrayArmy();
 		recalcularTechnologyCosts();
 	}
+	
+	//Setters y getters
+	
+	
 
 	public Civilization() {
 		this(0,0,0,0);
@@ -81,9 +85,10 @@ public class Civilization implements Variables {
 	 * Inicializamos arrayList de armas
 	 * */
 	private void initArrayArmy() {
-		for (int i = 0; i < ARMY_LENGTH; i++) {
-			army[i] = new ArrayList<>();	
-			
+		army = new ArrayList[9];
+
+		for(int i = 0; i < army.length; i++) {
+		    army[i] = new ArrayList<>();
 		}
 	}
 
@@ -425,5 +430,44 @@ public class Civilization implements Variables {
         System.out.println();
     }
 
+    // =========================================================================
+    // GETTERS & SETTERS
+    // =========================================================================
+
+    public int getTechnologyDefense()    { return technologyDefense; }
+    public int getTechnologyAttack()     { return technologyAttack; }
+    public int getWood()                 { return wood; }
+    public int getIron()                 { return iron; }
+    public int getFood()                 { return food; }
+    public int getMana()                 { return mana; }
+    public int getMagicTower()           { return magicTower; }
+    public int getChurch()               { return church; }
+    public int getFarm()                 { return farm; }
+    public int getSmithy()               { return smithy; }
+    public int getCarpentry()            { return carpentry; }
+    public int getBattles()              { return battles; }
+    public ArrayList<MilitaryUnit>[] getArmy() { return army; }
+
+    public void setTechnologyDefense(int v) { this.technologyDefense = v; recalcularTechnologyCosts(); }
+    public void setTechnologyAttack(int v)  { this.technologyAttack  = v; recalcularTechnologyCosts(); }
+    public void setWood(int v)              { this.wood    = v; }
+    public void setIron(int v)              { this.iron    = v; }
+    public void setFood(int v)              { this.food    = v; }
+    public void setMana(int v)              { this.mana    = v; }
+    public void setMagicTower(int v)        { this.magicTower  = v; }
+    public void setChurch(int v)            { this.church      = v; }
+    public void setFarm(int v)              { this.farm        = v; }
+    public void setSmithy(int v)            { this.smithy      = v; }
+    public void setCarpentry(int v)         { this.carpentry   = v; }
+    public void setBattles(int v)           { this.battles     = v; }
+    public void incrementBattles()          { this.battles++;       }
+
+    public int[] getNextDefenseTechCost() {
+        return new int[]{ upgradeDefenseTechnologyWoodCost, upgradeAttackTechnologyIronCost};
+    }
+
+    public int[] getNextAttackTechCost() {
+        return new int[]{ upgradeAttackTechnologyWoodCost, upgradeAttackTechnologyIronCost };
+    }
 	
 }
