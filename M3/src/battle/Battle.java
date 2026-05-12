@@ -1,4 +1,5 @@
 package battle;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import javax.xml.catalog.Catalog;
@@ -10,7 +11,19 @@ import specialUnit.Magician;
 import specialUnit.Priest;
 
 
+
+
 public class Battle {
+	
+	public static void main(String[] args) {
+		int[] civilizationArmy = {4,9,13,37,4,9,14,10,0};
+
+		
+		int[] enemyArmy = {10,20,30,40};
+		
+		//Battle battle = new Battle(civilizationArmy,enemyArmy);
+	}
+	
 	private ArrayList<MilitaryUnit> civilizationArmy;
 	private ArrayList<MilitaryUnit> enemyArmy;
 	private ArrayList<MilitaryUnit> [][] armies;
@@ -23,7 +36,7 @@ public class Battle {
 	private int [][] initialArmies;
 	private int [] actualNumberUnitsCivilization, actualNumberUnitsEnemy;
 	
-	public Battle(ArrayList<MilitaryUnit> civilizationArmy, ArrayList<MilitaryUnit> enemyArmy) {
+	/*public Battle(ArrayList<MilitaryUnit> civilizationArmy, ArrayList<MilitaryUnit> enemyArmy) {
 		super();
 		this.civilizationArmy = civilizationArmy;
 		this.enemyArmy = enemyArmy;
@@ -36,7 +49,7 @@ public class Battle {
 		    }
 		}
 		
-		for (MilitaryUnit unit : civilizationArmy) { // Este for es para anadir las unidades de nuestra civilizacion en el arrayList de armies
+		for (MilitaryUnit unit : civilizationArmy) { // Este for es para añadir las unidades de nuestra civilizacion en el arrayList de armies
 			if (unit instanceof Swordsman) { 
 				armies[0][0].add(unit); // armies de 0 es nuestro ejercito y armies de 1 es el ejercito enemigo
 			}
@@ -110,8 +123,7 @@ public class Battle {
 		this.actualNumberUnitsCivilization = new int[9];
 		this.actualNumberUnitsEnemy = new int[4];
 	}
-	
-	
+	*/
 	
 	//Setters y getters
 	public ArrayList<MilitaryUnit> getCivilizationArmy() {
@@ -139,7 +151,7 @@ public class Battle {
 
 	// Metodos de la clase Battle
 	public String getBattleReport(int battles) {
-		return "Has librado un total de " + battles;
+		return "You have waged a total of " + battles;
 	}
 	
 	public String getBattleDevelopment() {
@@ -168,8 +180,14 @@ public class Battle {
 		return costes;
 	}
 	
-	public int initialFleetNumber(ArrayList<MilitaryUnit> army) { // Nos devuelve un array en el que en cada posicion te dice la cantidad de cada unidad que hay en el ejercito
-		return army.size();
+	public ArrayList<Integer> initialFleetNumber(ArrayList<MilitaryUnit> army) { // Nos devuelve un array en el que en cada posicion te dice la cantidad de cada unidad que hay en el ejercito
+		ArrayList<Integer> total_armies = new ArrayList<Integer>(); 
+		
+		for (int i = 0; i < army.size(); i++) {
+			
+		}
+		
+		return total_armies;
 	}
 	
 	public float remainderPercentageFleet(ArrayList<MilitaryUnit> army) { // Este metodo nos devuelve el porcentaje restante de nuestro ejercito respecto al inicial
@@ -182,11 +200,23 @@ public class Battle {
 		return porcentaje;
 	}
 	
-	public int getGroupDefender(ArrayList<MilitaryUnit> army) {
-		return 0;
+	public ArrayList<Integer> getGroupPercentageDefender(ArrayList<MilitaryUnit> army) {
+		
+		ArrayList<Integer> probabilidades = new ArrayList<Integer>();
+		
+		for (int i = 0; i < army.size(); i++) {
+			
+			// army.get(i).getActualArmor() esto se tendra que cambiar por la cantidad que hay de esa tropa
+			probabilidades.add(100 * army.get(i).getActualArmor() / initialNumberUnitsCivilization);
+		}
+		
+		return probabilidades;
+		
 	}
 	
-	public int getCivilizationGroupAttacker() {
+	
+	
+	public int getCivilizationGroupAttacker(int [] army) {
 		
 		return 0;
 	}
@@ -203,7 +233,14 @@ public class Battle {
 	}
 	
 	
-	
+	public int startArmy() { // Para saber quien empieza 
+		if (Math.random() < 0.5) {
+			return 0;
+		}
+		else {
+			return 1;
+		}
+	}
 	
 	
 }
