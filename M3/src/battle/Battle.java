@@ -184,6 +184,7 @@ public class Battle {
 		ArrayList<Integer> total_armies = new ArrayList<Integer>(); 
 		
 		for (int i = 0; i < army.size(); i++) {
+			//total_armies.add(army.get(i).length());	
 			
 		}
 		
