@@ -29,14 +29,21 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 0.8rem 2rem; /* Reducido ligeramente para mejorar el ajuste visual */
     border-bottom: 3px solid var(--gold);
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--gold);
+    display: flex;
+    align-items: center;
+    height: 50px; /* Define la altura máxima que deseas para tu zona de logo */
+}
+
+.logo img {
+    height: 100%;       /* Obliga a la imagen a adaptarse a la altura del contenedor .logo */
+    width: auto;        /* Mantiene la proporción original de la imagen sin deformarla */
+    object-fit: contain;/* Asegura que toda la imagen sea visible sin recortes */
+    max-width: 180px;   /* Límite de ancho para que no desplace el menú en pantallas medianas */
 }
 
 nav a {
@@ -50,6 +57,7 @@ nav a {
 nav a:hover {
     color: var(--gold);
 }
+
 
 /* PORTADA */
 .hero {
