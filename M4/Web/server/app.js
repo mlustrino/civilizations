@@ -15,7 +15,7 @@ const db = new MySQL();
 if (!isProxmox) {
   db.init({
     host: '127.0.0.1',
-    port: 3306,
+    port: 3307,
     user: 'root',
     password: 'root',
     database: 'escola'
