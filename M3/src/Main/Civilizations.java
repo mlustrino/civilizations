@@ -1,13 +1,13 @@
 package Main;
 
 import civilizations.*;
+import exceptions.BuildingException;
 import exceptions.ResourceException;
 import variables.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -15,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,23 +27,31 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
-public class Civilizations extends JFrame{
+public class Civilizations extends JFrame {
 
     private PanelInicio panel_inicio;
     private PanelJuego panel_juego;
+    private PanelCreacionTropas panel_creacion_tropas;
+    private BufferedImage icono_juego;
     
 	public static void main(String[] args) {
 		new Civilizations();
 	}
 	public Civilizations(){
-		setBounds(200,100,800,600);
+		try {
+			icono_juego = ImageIO.read(new File("./M3/src/Main/img/logo_civilizations.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//setBounds(200,100,800,600);
+		setBounds(0,0,800,600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Civilizations");
+		setIconImage(icono_juego);
 		
 		panel_inicio = new PanelInicio(this);
-		panel_juego = new PanelJuego();
+		panel_juego = new PanelJuego(this);
 		add(panel_inicio);
 		setVisible(true);
 	}
@@ -55,7 +62,29 @@ public class Civilizations extends JFrame{
 	    revalidate(); // El revalidate nos sirve para que el JFrame recalcule el layout, de la misma manera que repaint sirve para decirle que vuelva a pintar
 	    repaint();
 	}
+	
+	public void abrirVentanaTropas(Civilization civilizacion, PanelJuego panelJuego) {
+		new Frame_unidades(civilizacion, panelJuego);
+	}
 
+}
+
+class Frame_unidades extends JFrame {
+    private PanelCreacionTropas panel_creacion_tropas;
+    
+    public Frame_unidades(Civilization civilizacion, PanelJuego panel_juego) {
+		setTitle("Creacion de Tropas");
+        setBounds(800, 0, 750, 600);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
+        add(new PanelCreacionTropas(civilizacion, panel_juego));
+        
+        setVisible(true);
+	}
+	
+	
+    
+    
 }
 class PanelInicio extends JPanel {
 	private BufferedImage fondo_inicio;
@@ -112,15 +141,20 @@ class PanelJuego extends JPanel implements Variables {
     private JLabel coste_tech_attack, coste_tech_defense;
     private JLabel label_food_gen, label_wood_gen, label_iron_gen, label_mana_gen;
     private JLabel cant_farm, cant_carpentry, cant_smithy, cant_magictower, cant_church;
-    private JTextField cantidad_textfield;
+    private JLabel enemy_swordsman, enemy_spearman, enemy_crossbow, enemy_cannon;
+    private JLabel civilization_swordsman, civilization_spearman, civilization_crossbow, civilization_cannon;
+    private JLabel civilization_arrowtower, civilization_catapult, civilization_rocketlauncher;
+    private JLabel civilization_magician, civilization_priest;
     private Timer timer;
 	
 	
-    public PanelJuego() {
+    public PanelJuego(Civilizations ventana) {
     	setLayout(new BorderLayout());
     	civilizacion = new Civilization(3000,3000,3000,3000);
         try {
+        	// Imagenes que usaremos en la interficie grafica
             fondo_juego = ImageIO.read(new File("./M3/src/Main/img/fondo_ciudad.png"));
+            
             BufferedImage imgmadera = ImageIO.read(new File("./M3/src/Main/img/wood.png"));
             BufferedImage imgcomida = ImageIO.read(new File("./M3/src/Main/img/bread.png"));
             BufferedImage imghierro = ImageIO.read(new File("./M3/src/Main/img/iron.png"));
@@ -135,10 +169,13 @@ class PanelJuego extends JPanel implements Variables {
             icono_mana = new ImageIcon(imgmana.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
             icono_tech_att = new ImageIcon(imgtechatt.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
             icono_tech_def = new ImageIcon(imgtechdef.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+                        
+            
             
         } catch (IOException e) {
             System.out.println("No se pudo cargar la imagen: " + e.getMessage());
         }
+        
         // Panel de los recursos (madera, hierro, etc.)
         JPanel panel_recursos = new JPanel();
         panel_recursos.setLayout(new GridLayout(1,5));
@@ -178,7 +215,6 @@ class PanelJuego extends JPanel implements Variables {
         JButton cons_torre_magica = new JButton("Build a magic tower");
         JButton cons_iglesia = new JButton("Build a church");
         
-        //boton_upgrade_tech_attack.addActionListener(new ActionListener() {
         cons_granja.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
@@ -265,7 +301,6 @@ class PanelJuego extends JPanel implements Variables {
         Dimension size_button = new Dimension(150,50);
         panel_construccion.setPreferredSize(size_button);
         
-        
         panel_construccion.add(cons_granja);
         panel_construccion.add(cons_carpinteria);
         panel_construccion.add(cons_herreria);
@@ -286,25 +321,24 @@ class PanelJuego extends JPanel implements Variables {
         
         
         JButton boton_upgrade_tech_attack = new JButton("Upgrade attack tech");
-        coste_tech_attack = new JLabel("Food: " + UPGRADE_BASE_ATTACK_TECHNOLOGY_FOOD_COST + " Wood: " + UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + " Iron: " + UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST);
+        coste_tech_attack = new JLabel("Wood: " + UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + " Iron: " + UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST);
         JButton boton_upgrade_tech_defense = new JButton("Upgrade defense tech");
-        coste_tech_defense = new JLabel("Food: " + UPGRADE_BASE_DEFENSE_TECHNOLOGY_FOOD_COST + " Wood: " + UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + " Iron: " + UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST);
+        coste_tech_defense = new JLabel("Wood: " + UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + " Iron: " + UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST);
         
         //button_inicio_start.addActionListener(new ActionListener() {
         boton_upgrade_tech_attack.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-		        if (civilizacion.getFood() >= calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_FOOD_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_FOOD_COST) &&
-		                civilizacion.getWood() >= calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST) &&
-		                civilizacion.getIron() >= calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST)) {
-		        	
-					civilizacion.setFood(civilizacion.getFood()-calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_FOOD_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_FOOD_COST));
-					civilizacion.setWood(civilizacion.getWood()-calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST));
-					civilizacion.setIron(civilizacion.getIron()-calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST));
-					civilizacion.setTechnologyAttack(civilizacion.getTechnologyAttack()+1);
-					lvl_tech_attack.setText("Level: " + civilizacion.getTechnologyAttack());
+				try {
+					civilizacion.upgradeTechnologyAttack();
 					actualizarRecursos();
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+                    "Not enough resources to upgrade Technology Attack!\n" + e1, 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
 				}
+				
 				
 			}
 		});
@@ -312,23 +346,20 @@ class PanelJuego extends JPanel implements Variables {
         boton_upgrade_tech_defense.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-		        if (civilizacion.getFood() >= calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_FOOD_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_FOOD_COST) &&
-		                civilizacion.getWood() >= calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_WOOD_COST) &&
-		                civilizacion.getIron() >= calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_IRON_COST)) {
-		        	
-					civilizacion.setFood(civilizacion.getFood()-calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_FOOD_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_FOOD_COST));
-					civilizacion.setWood(civilizacion.getWood()-calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_WOOD_COST));
-					civilizacion.setIron(civilizacion.getIron()-calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_IRON_COST));
-					civilizacion.setTechnologyDefense(civilizacion.getTechnologyDefense()+1);
-					lvl_tech_attack.setText("Level: " + civilizacion.getTechnologyDefense());
+				try {
+					civilizacion.upgradeTechnologyDefense();
 					actualizarRecursos();
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+                    "Not enough resources to upgrade Technology Defense!\n" + e1, 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
 				}
+				
 				
 			}
 		});
         
-        
-        //JLabel upgrade_attack = new JLabel("Cost:\nFood: 2000\nWood: 3000\nIron: 4000");
         
         
         
@@ -377,95 +408,55 @@ class PanelJuego extends JPanel implements Variables {
         
         add(panel_tech,BorderLayout.EAST);
         
-        JPanel panel_creacion_tropas = new JPanel();
-        panel_creacion_tropas.setLayout(new GridLayout(4,1));
-        panel_creacion_tropas.setOpaque(false);
+        enemy_swordsman = new JLabel("Swordsman: ");
+        enemy_spearman =  new JLabel("Spearman: ");
+        enemy_crossbow = new JLabel("Crossbow: ");
+        enemy_cannon = new JLabel("Cannon: ");
         
-        // *********************TROPAS DE ATAQUE****************************
-        JPanel panel_ofensivas = new JPanel();
-        panel_ofensivas.setLayout(new GridLayout(5, 1)); 
-        panel_ofensivas.setOpaque(false);
-        JLabel ataque = new JLabel("Tropas ofensivas");
-        ataque.setHorizontalAlignment(JLabel.CENTER);
-        ataque.setForeground(Color.WHITE);
-        
-        JButton button_cannon = new JButton("Cannon");
-        JButton button_crossbow = new JButton("Crossbow");
-        JButton button_spearman = new JButton("Spearman");
-        JButton button_swordsman = new JButton("Swordsman");
-        
-        button_cannon.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				try {
-					int cantidad = Integer.parseInt(cantidad_textfield.getText());
-					civilizacion.newCannon(cantidad);
-					actualizarRecursos();
-					//System.out.println(Arrays.deepToString(civilizacion.getArmy()));
-				} catch (ResourceException e1) {
-		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Cannon!\n" + e1, 
-		                    "Error", 
-		                    JOptionPane.ERROR_MESSAGE);
-				}
-				
-			}
-		});
-        //boton_upgrade_tech_defense.addActionListener(new ActionListener() {
+        civilization_swordsman = new JLabel("Swordsman: " + civilizacion.getArmy()[0].size());
+        civilization_spearman = new JLabel("Spearman: " + civilizacion.getArmy()[1].size());
+        civilization_crossbow = new JLabel("Crossbow: " + civilizacion.getArmy()[2].size());
+        civilization_cannon = new JLabel("Cannon: " + civilizacion.getArmy()[3].size());
+        civilization_arrowtower = new JLabel("Arrow Tower: " + civilizacion.getArmy()[4].size());
+        civilization_catapult = new JLabel("Catapult: " + civilizacion.getArmy()[5].size());
+        civilization_rocketlauncher = new JLabel("Rocket Tower: " + civilizacion.getArmy()[6].size());
+        civilization_magician = new JLabel("Magician: " + civilizacion.getArmy()[7].size());
+        civilization_priest = new JLabel("Priest: " + civilizacion.getArmy()[8].size());
         
         
+        JPanel panel_info_tropas = new JPanel();
+        panel_info_tropas.setLayout(new GridLayout(16,1));
+        
+        JButton boton_crear_tropas = new JButton("Crear Tropas"); 
+        boton_crear_tropas.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	ventana.abrirVentanaTropas(civilizacion, PanelJuego.this);
+            }
+        });
+        
+        panel_info_tropas.add(new JLabel("Tropas enemigas")); //AQUI
+        panel_info_tropas.add(enemy_swordsman);
+        panel_info_tropas.add(enemy_spearman);
+        panel_info_tropas.add(enemy_crossbow);
+        panel_info_tropas.add(enemy_cannon);
+        
+        panel_info_tropas.add(new JLabel("Tus tropas"));
+        panel_info_tropas.add(civilization_swordsman);
+        panel_info_tropas.add(civilization_spearman);
+        panel_info_tropas.add(civilization_crossbow);
+        panel_info_tropas.add(civilization_cannon);
+        panel_info_tropas.add(civilization_arrowtower);
+        panel_info_tropas.add(civilization_catapult);
+        panel_info_tropas.add(civilization_rocketlauncher);
+        panel_info_tropas.add(civilization_magician);
+        panel_info_tropas.add(civilization_priest);
         
         
-        panel_ofensivas.add(ataque);
-        panel_ofensivas.add(button_cannon);
-        panel_ofensivas.add(button_crossbow);
-        panel_ofensivas.add(button_spearman);
-        panel_ofensivas.add(button_swordsman);
         
-     // *********************TROPAS DE DEFENSA****************************
-        JPanel panel_defensivas = new JPanel();
-        panel_defensivas.setLayout(new GridLayout(4, 1)); 
-        panel_defensivas.setOpaque(false);
-        JLabel defensa = new JLabel("Tropas defensivas");
-        defensa.setHorizontalAlignment(JLabel.CENTER);
-        defensa.setForeground(Color.WHITE);
-        
-        JButton button_arrowtower = new JButton("Arrow Tower");
-        JButton button_catapult = new JButton("Catapult");
-        JButton button_rocket = new JButton("Rocket Launcher Tower");
-        
-        panel_defensivas.add(defensa);
-        panel_defensivas.add(button_arrowtower);
-        panel_defensivas.add(button_catapult);
-        panel_defensivas.add(button_rocket);
-
-     // *********************TROPAS ESPECIALES****************************
-        JPanel panel_especiales = new JPanel();
-        panel_especiales.setLayout(new GridLayout(3, 1)); 
-        panel_especiales.setOpaque(false);
-        JLabel especiales = new JLabel("Tropas especiales");
-        especiales.setHorizontalAlignment(JLabel.CENTER);
-        especiales.setForeground(Color.WHITE);
-        
-        JButton button_magician = new JButton("Magician");
-        JButton button_priest = new JButton("Priest");
-        
-        panel_especiales.add(especiales);
-        panel_especiales.add(button_magician);
-        panel_especiales.add(button_priest);
-        
-        JPanel crear = new JPanel();
-        JLabel cantidad_tropas = new JLabel("Cantidad: ");
-        cantidad_textfield = new JTextField("1");
-        crear.add(cantidad_tropas);
-        crear.add(cantidad_textfield);
-
-        panel_creacion_tropas.add(panel_ofensivas);
-        panel_creacion_tropas.add(panel_defensivas);
-        panel_creacion_tropas.add(panel_especiales);
-        panel_creacion_tropas.add(crear);
-
-        add(panel_creacion_tropas, BorderLayout.WEST);
+        panel_info_tropas.add(boton_crear_tropas);
+        add(panel_info_tropas, BorderLayout.WEST);
+        //add(boton_crear_tropas, BorderLayout.WEST);
+       
         
         startTimer();
         
@@ -522,18 +513,419 @@ class PanelJuego extends JPanel implements Variables {
         cant_magictower.setText("Magic Tower: " + civilizacion.getMagicTower());
         cant_church.setText("Church: " + civilizacion.getChurch());
         
+        civilization_swordsman.setText("Swordsmans: " + civilizacion.getArmy()[0].size());
+        civilization_spearman.setText("Spearman: " + civilizacion.getArmy()[1].size());
+        civilization_crossbow.setText("Crossbow: " + civilizacion.getArmy()[2].size());
+        civilization_cannon.setText("Cannon: " + civilizacion.getArmy()[3].size());
+        civilization_arrowtower.setText("Arrow Tower: " + civilizacion.getArmy()[4].size());
+        civilization_catapult.setText("Catapult: " + civilizacion.getArmy()[5].size());
+        civilization_rocketlauncher.setText("Rocket Tower: " + civilizacion.getArmy()[6].size());
+        civilization_magician.setText("Magician: " + civilizacion.getArmy()[7].size());
+        civilization_priest.setText("Priest: " + civilizacion.getArmy()[8].size());
+        
+        
         coste_tech_attack.setText(
-                "Food: " + calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_FOOD_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_FOOD_COST) +
-                " Wood: " + calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST) +
+                "Wood: " + calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST) +
                 " Iron: " + calcularCosteAtaque(UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST, UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST));
         
         coste_tech_defense.setText(
-                "Food: " + calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_FOOD_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_FOOD_COST) +
-                " Wood: " + calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_WOOD_COST) +
+                "Wood: " + calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_WOOD_COST) +
                 " Iron: " + calcularCosteDefensa(UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST, UPGRADE_PLUS_DEFENSE_TECHNOLOGY_IRON_COST));
         
         lvl_tech_attack.setText("Att Level: " + civilizacion.getTechnologyAttack());
         lvl_tech_defense.setText("Def Level: " + civilizacion.getTechnologyDefense());
     }
+	
+}
+
+class PanelCreacionTropas extends JPanel implements Variables {
+	private ImageIcon icono_cannon, icono_crossbow, icono_spearman, icono_swordsman, icono_arrowtower, icono_catapult ,icono_rocketlaunchertower, icono_magician, icono_priest;
+    private JTextField cantidad_textfield;
+    private Civilization civilizacion;
+    private PanelJuego paneljuego;
+	
+    public PanelCreacionTropas(Civilization civilizacion, PanelJuego paneljuego) {
+    	this.civilizacion = civilizacion;
+        this.paneljuego = paneljuego;
+        setLayout(new BorderLayout());
+        
+        try {
+			BufferedImage imgcannon = ImageIO.read(new File("./M3/src/Main/img/Cannon.png"));
+	        BufferedImage imgcrossbow = ImageIO.read(new File("./M3/src/Main/img/Crossbow.png"));
+	        BufferedImage imgspearman = ImageIO.read(new File("./M3/src/Main/img/Spearman.png"));
+	        BufferedImage imgswordsman = ImageIO.read(new File("./M3/src/Main/img/Swordsman.png"));
+	        BufferedImage imgarrowtower = ImageIO.read(new File("./M3/src/Main/img/ArrowTower.png"));
+	        BufferedImage imgcatapult = ImageIO.read(new File("./M3/src/Main/img/Cattapult.png"));
+	        BufferedImage imgrocket = ImageIO.read(new File("./M3/src/Main/img/RocketLauncherTower.png"));
+	        BufferedImage imgmagician = ImageIO.read(new File("./M3/src/Main/img/Mage.png"));
+	        BufferedImage imgpriest = ImageIO.read(new File("./M3/src/Main/img/Priest.png"));
+	        
+            icono_cannon = new ImageIcon(imgcannon.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_crossbow = new ImageIcon(imgcrossbow.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_spearman = new ImageIcon(imgspearman.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_swordsman = new ImageIcon(imgswordsman.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_arrowtower = new ImageIcon(imgarrowtower.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_catapult = new ImageIcon(imgcatapult.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_rocketlaunchertower = new ImageIcon(imgrocket.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_magician = new ImageIcon(imgmagician.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_priest = new ImageIcon(imgpriest.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            
+            
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+        JPanel panel_creacion_tropas = new JPanel();
+        panel_creacion_tropas.setLayout(new GridLayout(1,3,15,0)); // 15 es la cantida de pixeles que se dejan entre columnas, 0 seria entre filas
+        panel_creacion_tropas.setOpaque(false);
+        
+        // *********************TROPAS DE ATAQUE****************************
+        JPanel panel_ofensivas = new JPanel();
+        panel_ofensivas.setLayout(new GridLayout(9, 1,0,5)); 
+        panel_ofensivas.setOpaque(false);
+        panel_ofensivas.setPreferredSize(new Dimension(200,500));
+        
+        JLabel ataque = new JLabel("Tropas ofensivas");
+        ataque.setHorizontalAlignment(JLabel.CENTER);
+        ataque.setForeground(Color.WHITE);
+        
+        JButton button_cannon = new JButton("Cannon");
+        JButton button_crossbow = new JButton("Crossbow");
+        JButton button_spearman = new JButton("Spearman");
+        JButton button_swordsman = new JButton("Swordsman");
+        
+        button_cannon.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cantidad = Integer.parseInt(cantidad_textfield.getText());	
+					
+					int totalFood = cantidad * FOOD_COST_CANNON;
+		            int totalWood = cantidad * WOOD_COST_CANNON;
+		            int totalIron = cantidad * IRON_COST_CANNON;
+		            int totalMana = cantidad * MANA_COST_CANNON;
+					
+					civilizacion.newCannon(cantidad);
+					paneljuego.actualizarRecursos();
+					
+		            JOptionPane.showMessageDialog(null, 
+		                    "Created units: "+ cantidad + " Cannons\nResources you used:\nFood: " + totalFood + " Wood: " + totalWood + " Iron: " + totalIron + " Mana: " + totalMana, 
+		                    "Unidad creada", 
+		                    JOptionPane.INFORMATION_MESSAGE);
+		            
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "Not enough resources to build a Cannon!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+        
+        button_crossbow.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cantidad = Integer.parseInt(cantidad_textfield.getText());
+					
+					int totalFood = cantidad * FOOD_COST_CROSSBOW;
+		            int totalWood = cantidad * WOOD_COST_CROSSBOW;
+		            int totalIron = cantidad * IRON_COST_CROSSBOW;
+		            int totalMana = cantidad * MANA_COST_CROSSBOW;
+		            
+					civilizacion.newCrossbow(cantidad);
+					paneljuego.actualizarRecursos();
+					
+		            JOptionPane.showMessageDialog(null, 
+		                    "Created units: "+ cantidad + " Crossbows\nResources you used:\nFood: " + totalFood + " Wood: " + totalWood + " Iron: " + totalIron + " Mana: " + totalMana, 
+		                    "Unidad creada", 
+		                    JOptionPane.INFORMATION_MESSAGE);
+					
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "Not enough resources to build a Crossbow!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+        
+        button_spearman.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cantidad = Integer.parseInt(cantidad_textfield.getText());
+					
+					int totalFood = cantidad * FOOD_COST_SPEARMAN;
+		            int totalWood = cantidad * WOOD_COST_SPEARMAN;
+		            int totalIron = cantidad * IRON_COST_SPEARMAN;
+		            int totalMana = cantidad * MANA_COST_SPEARMAN;
+		            
+					civilizacion.newSpearman(cantidad);
+					paneljuego.actualizarRecursos();
+					
+		            JOptionPane.showMessageDialog(null, 
+		                    "Created units: "+ cantidad + " Spearman\nResources you used:\nFood: " + totalFood + " Wood: " + totalWood + " Iron: " + totalIron + " Mana: " + totalMana, 
+		                    "Unidad creada", 
+		                    JOptionPane.INFORMATION_MESSAGE);
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "Not enough resources to build a Spearman!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+        
+        button_swordsman.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cantidad = Integer.parseInt(cantidad_textfield.getText());
+					
+					int totalFood = cantidad * FOOD_COST_SWORDSMAN;
+		            int totalWood = cantidad * WOOD_COST_SWORDSMAN;
+		            int totalIron = cantidad * IRON_COST_SWORDSMAN;
+		            int totalMana = cantidad * MANA_COST_SWORDSMAN;
+		            
+					civilizacion.newSwordsman(cantidad);
+					paneljuego.actualizarRecursos();
+					
+		            JOptionPane.showMessageDialog(null, 
+		                    "Created units: "+ cantidad + " Swordsman\nResources you used:\nFood: " + totalFood + " Wood: " + totalWood + " Iron: " + totalIron + " Mana: " + totalMana, 
+		                    "Unidad creada", 
+		                    JOptionPane.INFORMATION_MESSAGE);
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "Not enough resources to build a Swordsman!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+        
+        panel_ofensivas.add(ataque);
+        panel_ofensivas.add(new JLabel(icono_cannon));
+        panel_ofensivas.add(button_cannon);
+        panel_ofensivas.add(new JLabel(icono_crossbow));
+        panel_ofensivas.add(button_crossbow);
+        panel_ofensivas.add(new JLabel(icono_spearman));
+        panel_ofensivas.add(button_spearman);
+        panel_ofensivas.add(new JLabel(icono_swordsman));
+        panel_ofensivas.add(button_swordsman);
+        
+     // *********************TROPAS DE DEFENSA****************************
+        JPanel panel_defensivas = new JPanel();
+        panel_defensivas.setLayout(new GridLayout(9, 1,0,5)); 
+        panel_defensivas.setOpaque(false);
+        panel_defensivas.setPreferredSize(new Dimension(200,500));
+        
+        JLabel defensa = new JLabel("Tropas defensivas");
+        defensa.setHorizontalAlignment(JLabel.CENTER);
+        defensa.setForeground(Color.WHITE);
+        
+        JButton button_arrowtower = new JButton("Arrow Tower");
+        JButton button_catapult = new JButton("Catapult");
+        JButton button_rocket = new JButton("Rocket Launcher Tower");
+        
+        button_arrowtower.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cantidad = Integer.parseInt(cantidad_textfield.getText());
+					
+					int totalFood = cantidad * FOOD_COST_ARROWTOWER;
+		            int totalWood = cantidad * WOOD_COST_ARROWTOWER;
+		            int totalIron = cantidad * IRON_COST_ARROWTOWER;
+		            int totalMana = cantidad * MANA_COST_ARROWTOWER;
+		            
+					civilizacion.newArrowTower(cantidad);
+					paneljuego.actualizarRecursos();
+					
+		            JOptionPane.showMessageDialog(null, 
+		                    "Created units: "+ cantidad + " Arrow Tower\nResources you used:\nFood: " + totalFood + " Wood: " + totalWood + " Iron: " + totalIron + " Mana: " + totalMana, 
+		                    "Unidad creada", 
+		                    JOptionPane.INFORMATION_MESSAGE);
+		            
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "Not enough resources to build a Arrow Tower!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+        
+        button_catapult.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cantidad = Integer.parseInt(cantidad_textfield.getText());
+					
+					int totalFood = cantidad * FOOD_COST_CATAPULT;
+		            int totalWood = cantidad * WOOD_COST_CATAPULT;
+		            int totalIron = cantidad * IRON_COST_CATAPULT;
+		            int totalMana = cantidad * MANA_COST_CATAPULT;
+		            
+					civilizacion.newCatapult(cantidad);
+					paneljuego.actualizarRecursos();
+					
+		            JOptionPane.showMessageDialog(null, 
+		                    "Created units: "+ cantidad + " Catapult\nResources you used:\nFood: " + totalFood + " Wood: " + totalWood + " Iron: " + totalIron + " Mana: " + totalMana, 
+		                    "Unidad creada", 
+		                    JOptionPane.INFORMATION_MESSAGE);
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "Not enough resources to build a Catapult!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+        
+        button_rocket.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cantidad = Integer.parseInt(cantidad_textfield.getText());
+					
+					int totalFood = cantidad * FOOD_COST_ROCKETLAUNCHERTOWER;
+		            int totalWood = cantidad * WOOD_COST_ROCKETLAUNCHERTOWER;
+		            int totalIron = cantidad * IRON_COST_ROCKETLAUNCHERTOWER;
+		            int totalMana = cantidad * MANA_COST_ROCKETLAUNCHERTOWER;
+		            
+					civilizacion.newRocketLauncher(cantidad);
+					paneljuego.actualizarRecursos();
+					
+		            JOptionPane.showMessageDialog(null, 
+		                    "Created units: "+ cantidad + " Rocket Launcher Tower\nResources you used:\nFood: " + totalFood + " Wood: " + totalWood + " Iron: " + totalIron + " Mana: " + totalMana, 
+		                    "Unidad creada", 
+		                    JOptionPane.INFORMATION_MESSAGE);
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "Not enough resources to build a Rocket Launcher Tower!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+        
+        panel_defensivas.add(defensa);
+        panel_defensivas.add(new JLabel(icono_arrowtower));
+        panel_defensivas.add(button_arrowtower);
+        panel_defensivas.add(new JLabel(icono_catapult));
+        panel_defensivas.add(button_catapult);
+        panel_defensivas.add(new JLabel(icono_rocketlaunchertower));
+        panel_defensivas.add(button_rocket);
+
+     // *********************TROPAS ESPECIALES****************************
+        JPanel panel_especiales = new JPanel();
+        panel_especiales.setLayout(new GridLayout(9, 1,0,5)); 
+        panel_especiales.setOpaque(false);
+        panel_especiales.setPreferredSize(new Dimension(200,500));
+        
+        JLabel especiales = new JLabel("Tropas especiales");
+        especiales.setHorizontalAlignment(JLabel.CENTER);
+        especiales.setForeground(Color.WHITE);
+        
+        JButton button_magician = new JButton("Magician");
+        JButton button_priest = new JButton("Priest");
+        
+        button_magician.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cantidad = Integer.parseInt(cantidad_textfield.getText());
+					
+					int totalFood = cantidad * FOOD_COST_MAGICIAN;
+		            int totalWood = cantidad * WOOD_COST_MAGICIAN;
+		            int totalIron = cantidad * IRON_COST_MAGICIAN;
+		            int totalMana = cantidad * MANA_COST_MAGICIAN;
+		            
+					civilizacion.newMagician(cantidad);
+					paneljuego.actualizarRecursos();
+					
+		            JOptionPane.showMessageDialog(null, 
+		                    "Created units: "+ cantidad + " Magician\nResources you used:\nFood: " + totalFood + " Wood: " + totalWood + " Iron: " + totalIron + " Mana: " + totalMana, 
+		                    "Unidad creada", 
+		                    JOptionPane.INFORMATION_MESSAGE);
+				} catch (BuildingException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "You need to build a Magic Tower first!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "Not enough resources to build a Magician!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+        
+        button_priest.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int cantidad = Integer.parseInt(cantidad_textfield.getText());
+					
+					int totalFood = cantidad * FOOD_COST_PRIEST;
+		            int totalWood = cantidad * WOOD_COST_PRIEST;
+		            int totalIron = cantidad * IRON_COST_PRIEST;
+		            int totalMana = cantidad * MANA_COST_PRIEST;
+		            
+					civilizacion.newPriest(cantidad);
+					paneljuego.actualizarRecursos();
+					
+		            JOptionPane.showMessageDialog(null, 
+		                    "Created units: "+ cantidad + " Priest\nResources you used:\nFood: " + totalFood + " Wood: " + totalWood + " Iron: " + totalIron + " Mana: " + totalMana, 
+		                    "Unidad creada", 
+		                    JOptionPane.INFORMATION_MESSAGE);
+				} catch (BuildingException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "You need to build a church first!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				} catch (ResourceException e1) {
+		            JOptionPane.showMessageDialog(null, 
+		                    "Not enough resources to build a Priest!\n" + e1, 
+		                    "Error", 
+		                    JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+        
+        panel_especiales.add(especiales);
+        panel_especiales.add(new JLabel(icono_magician));
+        panel_especiales.add(button_magician);
+        panel_especiales.add(new JLabel(icono_priest));
+        panel_especiales.add(button_priest);
+        
+        JPanel crear = new JPanel();
+        JLabel cantidad_tropas = new JLabel("Cantidad: ");
+        cantidad_textfield = new JTextField("1", 5); // El 5 es para limitar el ancho
+        crear.add(cantidad_tropas);
+        crear.add(cantidad_textfield);
+        
+
+        panel_creacion_tropas.add(panel_ofensivas);
+        panel_creacion_tropas.add(panel_defensivas);
+        panel_creacion_tropas.add(panel_especiales);
+
+        add(panel_creacion_tropas, BorderLayout.CENTER);
+        add(crear, BorderLayout.SOUTH);
+        
+        
+	}
+	
 	
 }
