@@ -36,7 +36,7 @@ public class Battle {
 	private int [][] initialArmies;
 	private int [] actualNumberUnitsCivilization, actualNumberUnitsEnemy;
 	
-	/*public Battle(ArrayList<MilitaryUnit> civilizationArmy, ArrayList<MilitaryUnit> enemyArmy) {
+	public Battle(ArrayList<MilitaryUnit> civilizationArmy, ArrayList<MilitaryUnit> enemyArmy) {
 		super();
 		this.civilizationArmy = civilizationArmy;
 		this.enemyArmy = enemyArmy;
@@ -123,7 +123,7 @@ public class Battle {
 		this.actualNumberUnitsCivilization = new int[9];
 		this.actualNumberUnitsEnemy = new int[4];
 	}
-	*/
+	
 	
 	//Setters y getters
 	public ArrayList<MilitaryUnit> getCivilizationArmy() {

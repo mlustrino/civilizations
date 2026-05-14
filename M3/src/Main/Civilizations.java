@@ -30,7 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-public class Civilizations extends JFrame{
+public class Civilizations extends JFrame implements Variables{
 
     private PanelInicio panel_inicio;
     private PanelJuego panel_juego;
@@ -54,6 +54,22 @@ public class Civilizations extends JFrame{
 	    add(panel_juego);
 	    revalidate(); // El revalidate nos sirve para que el JFrame recalcule el layout, de la misma manera que repaint sirve para decirle que vuelva a pintar
 	    repaint();
+	}
+	
+	public void createEnemyArmy(){
+		int wood_enemy = WOOD_BASE_ENEMY_ARMY;
+		int food_enemy = FOOD_BASE_ENEMY_ARMY;
+		int iron_enemy = IRON_BASE_ENEMY_ARMY;
+		
+		//while
+		
+	}
+	
+	public String Viewthreat() {
+		
+		
+		return null;
+		
 	}
 
 }
