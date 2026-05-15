@@ -3,6 +3,8 @@ package Main;
 import civilizations.*;
 import exceptions.BuildingException;
 import exceptions.ResourceException;
+import militaryUnit.MilitaryUnit;
+import civilizations.*;
 import variables.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,6 +30,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import Attack.Cannon;
+import Attack.Crosswob;
+import Attack.Spearman;
+import Attack.Swordsman;
+import battle.Battle;
 
 public class Civilizations extends JFrame {
 
@@ -49,6 +58,7 @@ public class Civilizations extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Civilizations");
 		setIconImage(icono_juego);
+		System.out.println("hola");
 		
 		panel_inicio = new PanelInicio(this);
 		panel_juego = new PanelJuego(this);
@@ -145,10 +155,12 @@ class PanelJuego extends JPanel implements Variables {
     private JLabel civilization_swordsman, civilization_spearman, civilization_crossbow, civilization_cannon;
     private JLabel civilization_arrowtower, civilization_catapult, civilization_rocketlauncher;
     private JLabel civilization_magician, civilization_priest;
-    private Timer timer;
+    private Timer timer, timer_batalla;
 	
 	
     public PanelJuego(Civilizations ventana) {
+    	
+    	
     	setLayout(new BorderLayout());
     	civilizacion = new Civilization(3000,3000,3000,3000);
         try {
@@ -456,9 +468,13 @@ class PanelJuego extends JPanel implements Variables {
         panel_info_tropas.add(boton_crear_tropas);
         add(panel_info_tropas, BorderLayout.WEST);
         //add(boton_crear_tropas, BorderLayout.WEST);
+        
+        
        
         
         startTimer();
+        battleStarts();
+        
         
         setFocusable(true);
         
@@ -478,6 +494,96 @@ class PanelJuego extends JPanel implements Variables {
 		};
 		//timer.schedule(task_recursos, 60000, 60000); // cada 60 segundos
 		timer.schedule(task_recursos, 1000, 1000);
+    }
+    
+    
+    private void battleStarts() { // Metodo para empezar la batalla
+    	timer_batalla = new Timer();
+    	TimerTask task_batalla = new TimerTask() {
+			
+			public void run() {				
+				ArrayList<MilitaryUnit> enemyArmy = createEnemyArmy();
+				
+				ArrayList<MilitaryUnit> civilizationArmy = new ArrayList<>();
+				for (int i = 0; i < civilizacion.getArmy().length; i++) {
+				    for (int j = 0; j < civilizacion.getArmy()[i].size(); j++) {
+				        civilizationArmy.add(civilizacion.getArmy()[i].get(j));
+				    }
+				}
+				Battle batalla = new Battle(civilizationArmy, enemyArmy);
+				new Frame_batalla(civilizacion, batalla);
+				
+			}
+		};
+		timer_batalla.schedule(task_batalla, 30000, 30000); // Cada 30 segundos
+    }
+    
+    private ArrayList<MilitaryUnit> createEnemyArmy() { 
+    	ArrayList<MilitaryUnit> enemyArmy = new ArrayList<>();
+    	
+        int ironAvailable = IRON_BASE_ENEMY_ARMY + (civilizacion.getBattles() * ENEMY_FLEET_INCREASE * IRON_BASE_ENEMY_ARMY / 100);
+        int woodAvailable = WOOD_BASE_ENEMY_ARMY + (civilizacion.getBattles() * ENEMY_FLEET_INCREASE * WOOD_BASE_ENEMY_ARMY / 100);
+        int foodAvailable = FOOD_BASE_ENEMY_ARMY + (civilizacion.getBattles() * ENEMY_FLEET_INCREASE * FOOD_BASE_ENEMY_ARMY / 100);
+        
+        while (ironAvailable >= IRON_COST_SWORDSMAN && woodAvailable >= WOOD_COST_SWORDSMAN && foodAvailable >= FOOD_COST_SWORDSMAN) {
+        	
+        	int num_random = (int) (Math.random()*100);
+        	        	
+        	if(num_random <= 35) { // Crea Swordsman
+                if (foodAvailable >= FOOD_COST_SWORDSMAN && woodAvailable >= WOOD_COST_SWORDSMAN && ironAvailable >= IRON_COST_SWORDSMAN) {
+                	
+            		enemyArmy.add(new Swordsman());
+            		
+            		foodAvailable -= FOOD_COST_SWORDSMAN;
+            		woodAvailable -= WOOD_COST_SWORDSMAN;
+            		ironAvailable -= IRON_COST_SWORDSMAN;
+                } 
+        	
+        	} else if (num_random <= 60) { // Crea spearman
+        		if (foodAvailable >= FOOD_COST_SPEARMAN && woodAvailable >= WOOD_COST_SPEARMAN && ironAvailable >= IRON_COST_SPEARMAN) {
+            		enemyArmy.add(new Spearman());
+            		foodAvailable -= FOOD_COST_SPEARMAN;
+            		woodAvailable -= WOOD_COST_SPEARMAN;
+            		ironAvailable -= IRON_COST_SPEARMAN;
+        		} else {
+            		enemyArmy.add(new Swordsman());
+            		
+            		foodAvailable -= FOOD_COST_SWORDSMAN;
+            		woodAvailable -= WOOD_COST_SWORDSMAN;
+            		ironAvailable -= IRON_COST_SWORDSMAN;
+        		}
+        	} else if (num_random <= 80) { // Crea Crossbow
+        		if (foodAvailable >= FOOD_COST_CROSSBOW && woodAvailable >= WOOD_COST_CROSSBOW && ironAvailable >= IRON_COST_CROSSBOW) {
+            		enemyArmy.add(new Crosswob());
+            		foodAvailable -= FOOD_COST_CROSSBOW;
+            		woodAvailable -= WOOD_COST_CROSSBOW;
+            		ironAvailable -= IRON_COST_CROSSBOW;
+        		} else {
+            		enemyArmy.add(new Swordsman());
+            		
+            		foodAvailable -= FOOD_COST_SWORDSMAN;
+            		woodAvailable -= WOOD_COST_SWORDSMAN;
+            		ironAvailable -= IRON_COST_SWORDSMAN;
+        		}
+        	} else if (num_random <= 100) { // Crea cannon
+        		if (foodAvailable >= FOOD_COST_CANNON && woodAvailable >= WOOD_COST_CANNON && ironAvailable >= IRON_COST_CANNON) {
+            		enemyArmy.add(new Cannon());
+            		foodAvailable -= FOOD_COST_CANNON;
+            		woodAvailable -= WOOD_COST_CANNON;
+            		ironAvailable -= IRON_COST_CANNON;
+        		} else {
+            		enemyArmy.add(new Swordsman());
+            		
+            		foodAvailable -= FOOD_COST_SWORDSMAN;
+            		woodAvailable -= WOOD_COST_SWORDSMAN;
+            		ironAvailable -= IRON_COST_SWORDSMAN;
+        		}
+        	}
+        	
+        }
+        
+        return enemyArmy;
+    	
     }
     
     protected void paintComponent(Graphics g2d) { 
@@ -928,4 +1034,71 @@ class PanelCreacionTropas extends JPanel implements Variables {
 	}
 	
 	
+}
+
+class Frame_batalla extends JFrame {
+    private PanelBatalla panel_batalla;
+    private Battle batalla;
+    
+    public Frame_batalla(Civilization civilizacion, Battle batalla) {
+    	this.batalla = batalla;
+    	
+    	setTitle("¡ALERTA: Batalla Inminente!");
+        setBounds(400, 200, 800, 600);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
+        this.panel_batalla = new PanelBatalla(civilizacion, batalla);
+        add(this.panel_batalla);
+        
+        setVisible(true);
+	}
+	
+	
+    
+    
+}
+
+class PanelBatalla extends JPanel implements Variables {
+	private BufferedImage fondo_batalla;
+	private JLabel porcentaje_ejercito_civilization, porcentaje_ejercito_enemigo;
+	private Battle batalla;
+	
+	public PanelBatalla(Civilization ventana, Battle batalla) {
+		this.batalla = batalla;
+		batalla.startBattle();
+		setLayout(new BorderLayout());
+		try {
+			fondo_batalla = ImageIO.read(new File("./M3/src/Main/img/fondo_batalla.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		JPanel panel_unidades_civilization = new JPanel();
+		JPanel panel_unidades_enemigas = new JPanel();
+		
+		panel_unidades_civilization.setLayout(new GridLayout(1,1));
+		panel_unidades_enemigas.setLayout(new GridLayout(1,1));
+		
+		porcentaje_ejercito_civilization = new JLabel("Porcentaje restante aliado = ");
+		porcentaje_ejercito_enemigo = new JLabel("Porcentaje restante enemigo = ");
+		
+		panel_unidades_civilization.add(porcentaje_ejercito_civilization);
+		panel_unidades_enemigas.add(porcentaje_ejercito_enemigo);
+		
+		
+        add(panel_unidades_civilization,BorderLayout.WEST);
+        add(panel_unidades_enemigas, BorderLayout.EAST);
+		
+	}
+	
+    public void actualizarEstadisticas() {
+    	
+    }
+	
+    protected void paintComponent(Graphics g2d) { 
+        super.paintComponent(g2d);
+        g2d.drawImage(fondo_batalla.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, this);
+        
+        
+    }
 }
