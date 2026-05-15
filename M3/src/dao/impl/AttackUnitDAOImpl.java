@@ -4,6 +4,7 @@ import dao.AttackUnitDAO;
 import database.DBConnection;
 import civilizations.Civilization;
 import militaryUnit.MilitaryUnit;
+import variables.Variables;
 import Attack.attackUnit;
 import Attack.Swordsman;
 import Attack.Spearman;
@@ -13,16 +14,16 @@ import Attack.Cannon;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class AttackUnitDAOImpl implements AttackUnitDAO {
+public class AttackUnitDAOImpl implements AttackUnitDAO, Variables {
 
     private Connection conexion;
 
     // Posiciones en army[] que corresponden a unidades de ataque y sus nombres en la BD
     private static final int[] INDICES = {
-        Civilization.IDX_ARMY_SWORDSMAN,
-        Civilization.IDX_ARMY_SPEARMAN,
-        Civilization.IDX_ARMY_CROSSBOW,
-        Civilization.IDX_ARMY_CANNON
+    		IDX_UNIT_SWORDSMAN,
+    		IDX_UNIT_SPEARMAN,
+    		IDX_UNIT_CROSSBOW,
+    		IDX_UNIT_CANNON
     };
     private static final String[] TIPOS = { "Swordsman", "Spearman", "Crossbow", "Cannon" };
 
@@ -30,8 +31,7 @@ public class AttackUnitDAOImpl implements AttackUnitDAO {
         this.conexion = DBConnection.getInstance();
     }
 
-    @Override
-    @SuppressWarnings("unchecked") // Necesario por el array genérico ArrayList<MilitaryUnit>[]
+
     public void insertUnits(int civilizationId, ArrayList<MilitaryUnit>[] army) {
     	deleteUnits(civilizationId);
 
@@ -60,7 +60,6 @@ public class AttackUnitDAOImpl implements AttackUnitDAO {
         }
     }
 
-    @Override
     public ArrayList<MilitaryUnit> loadUnits(int civilizationId) {
         ArrayList<MilitaryUnit> lista = new ArrayList<>();
         String sql = "SELECT * FROM attack_units_stats WHERE civilization_id=? ORDER BY unit_id";
@@ -85,7 +84,6 @@ public class AttackUnitDAOImpl implements AttackUnitDAO {
         return lista;
     }
 
-    @Override
     public void deleteUnits(int civilizationId) {
         String sql = "DELETE FROM attack_units_stats WHERE civilization_id=?";
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {

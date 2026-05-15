@@ -57,14 +57,9 @@ public class Civilization implements Variables {
 		recalcularTechnologyCosts();
 	}
 	
-	//Setters y getters
-	
-	
-
 	public Civilization() {
 		this(0,0,0,0);
 	}
-
 	
 	/*
 	 * Inicializamos arrayList de armas
@@ -107,7 +102,7 @@ public class Civilization implements Variables {
 	 * */
 	public void newChurch() throws ResourceException{
 		if (food < FOOD_COST_CHURCH || wood < WOOD_COST_CHURCH || iron < IRON_COST_CHURCH) {
-			throw new ResourceException("iglesia", FOOD_COST_CHURCH, WOOD_COST_CHURCH, IRON_COST_CHURCH, food, wood, iron);
+			throw new ResourceException("Church", FOOD_COST_CHURCH, WOOD_COST_CHURCH, IRON_COST_CHURCH, food, wood, iron);
 		}
 		food -= FOOD_COST_CHURCH;
 		wood -= WOOD_COST_CHURCH;
@@ -117,7 +112,7 @@ public class Civilization implements Variables {
 	
 	public void newMagicTower() throws ResourceException{
 		if (food < FOOD_COST_MAGICTOWER || wood < WOOD_COST_MAGICTOWER || iron < IRON_COST_MAGICTOWER) {
-			throw new ResourceException("Torre del mago",  FOOD_COST_MAGICTOWER, WOOD_COST_MAGICTOWER, IRON_COST_MAGICTOWER, food, wood, iron);
+			throw new ResourceException("Magic tower",  FOOD_COST_MAGICTOWER, WOOD_COST_MAGICTOWER, IRON_COST_MAGICTOWER, food, wood, iron);
 
 			
 		}		
@@ -129,7 +124,7 @@ public class Civilization implements Variables {
 		
 	public void newFarm() throws ResourceException{
 		if (food < FOOD_COST_FARM || wood < WOOD_COST_FARM || iron < IRON_COST_FARM) {
-			throw new ResourceException("granja", FOOD_COST_FARM, WOOD_COST_FARM, IRON_COST_FARM, food, wood, iron);
+			throw new ResourceException("food", FOOD_COST_FARM, WOOD_COST_FARM, IRON_COST_FARM, food, wood, iron);
 		}		
 		food -= FOOD_COST_FARM;
 		wood -= WOOD_COST_FARM;
@@ -138,7 +133,7 @@ public class Civilization implements Variables {
 	}
 	public void newCarpentry() throws ResourceException{
 		if (food < FOOD_COST_CARPENTRY || wood < WOOD_COST_CARPENTRY || iron < IRON_COST_CARPENTRY) {
-			throw new ResourceException("carpinteria",  FOOD_COST_CARPENTRY, WOOD_COST_CARPENTRY, IRON_COST_CARPENTRY, food, wood, iron);
+			throw new ResourceException("carpentry",  FOOD_COST_CARPENTRY, WOOD_COST_CARPENTRY, IRON_COST_CARPENTRY, food, wood, iron);
 		}		
 		food -= FOOD_COST_CARPENTRY;
 		wood -= WOOD_COST_CARPENTRY;
@@ -147,7 +142,7 @@ public class Civilization implements Variables {
 	}
 	public void newSmithy()  throws ResourceException{
 		if (food < FOOD_COST_SMITHY || wood < WOOD_COST_SMITHY || iron < IRON_COST_SMITHY) {
-			throw new ResourceException("herreria",  FOOD_COST_SMITHY, WOOD_COST_SMITHY, IRON_COST_SMITHY, food, wood, iron);
+			throw new ResourceException("smithy",  FOOD_COST_SMITHY, WOOD_COST_SMITHY, IRON_COST_SMITHY, food, wood, iron);
 		}		
 		food -= FOOD_COST_SMITHY;
 		wood -= WOOD_COST_SMITHY;
@@ -175,9 +170,9 @@ public class Civilization implements Variables {
 	public void upgradeTechnologyDefense() throws ResourceException {
 		if (wood < upgradeDefenseTechnologyWoodCost || iron < upgradeDefenseTechnologyWoodCost) {
 //			throw new ResourceException("Defense Technology",technologyDefense,technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyWoodCost, wood, iron);
-			throw new ResourceException(String.format("La Defense Technology no puede aumentar de nivel de %d a %d."
-					+ "Se necesitan Wood=%d, Iron=%d. \n"
-					+ "Recursos disponibles: Wood=%d, Iron=%d.", technologyDefense, technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyIronCost, wood, iron));
+			throw new ResourceException(String.format("Defense Technology cannot be upgraded from %d to %d."
+					+ "Wood=%d, Iron=%d are required.\n"
+					+ "Remaining resources: Wood=%d, Iron=%d.", technologyDefense, technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyIronCost, wood, iron));
 		}
 		
 		wood -= upgradeDefenseTechnologyWoodCost;
@@ -189,9 +184,9 @@ public class Civilization implements Variables {
 
 	public void upgradeTechnologyAttack() throws ResourceException{
 		if (wood < upgradeAttackTechnologyWoodCost || iron < upgradeAttackTechnologyIronCost) {
-			throw new ResourceException(String.format("Attack Technology no puede aumentar de nivel de %d a %d."
-					+ "Se necesitan Wood=%d, Iron=%d. \n"
-					+ "Recursos disponibles: Wood=%d, Iron=%d.", technologyDefense, technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyIronCost, wood, iron));
+			throw new ResourceException(String.format("Attack Technology cannot be upgraded from %d to %d."
+					+ "Wood=%d, Iron=%d are required. \n"
+					+ "Remaining resources: Wood=%d, Iron=%d.", technologyDefense, technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyIronCost, wood, iron));
 		}
 		
 		wood -= upgradeAttackTechnologyWoodCost;
@@ -283,10 +278,10 @@ public class Civilization implements Variables {
 			mana -= manaCost;
 		}
 		if (toAdd < n) {
-			throw new ResourceException(String.format("No hay recursos suficientes para crear %d %s.\n"
-					+ "Solicitadas: %d\n"
-					+ "Creadas: %d\n"
-					+ "Recursos restantes: Food=%d, Wood=%d, Iron=%d, Mana=%d.", n, unitName, n, toAdd, food, wood, iron, mana));
+			throw new ResourceException(String.format("There are not resources enough to create %d %s.\n"
+					+ "Unit requested: %d\n"
+					+ "Created: %d\n"
+					+ "Remaining resources: Food=%d, Wood=%d, Iron=%d, Mana=%d.", n, unitName, n, toAdd, food, wood, iron, mana));
 		}
 	}
 	public void newSwordsman(int n) throws ResourceException {
@@ -303,38 +298,39 @@ public class Civilization implements Variables {
 		createUnits(n, IDX_UNIT_CANNON, "Cannon",FOOD_COST_CANNON, WOOD_COST_CANNON,IRON_COST_CANNON, MANA_COST_CANNON);
 	}
 	public void newArrowTower(int n) throws ResourceException {
-		createUnits(n, IDX_UNIT_ARROWTOWER, "Torre de flechas",FOOD_COST_ARROWTOWER, WOOD_COST_ARROWTOWER,IRON_COST_ARROWTOWER, MANA_COST_ARROWTOWER);
+		createUnits(n, IDX_UNIT_ARROWTOWER, "Arrow tower",FOOD_COST_ARROWTOWER, WOOD_COST_ARROWTOWER,IRON_COST_ARROWTOWER, MANA_COST_ARROWTOWER);
 	}
 	public void newCatapult(int n) throws ResourceException {
-		createUnits(n, IDX_UNIT_CATAPULT, "Catapultas", FOOD_COST_CATAPULT, WOOD_COST_CATAPULT,IRON_COST_CATAPULT, MANA_COST_CATAPULT);
+		createUnits(n, IDX_UNIT_CATAPULT, "Catapult", FOOD_COST_CATAPULT, WOOD_COST_CATAPULT,IRON_COST_CATAPULT, MANA_COST_CATAPULT);
 	}
 	public void newRocketLauncher(int n)  throws ResourceException {
-		createUnits(n, IDX_UNIT_ROCKETLAUNCHER, "Torre lanza ", FOOD_COST_ROCKETLAUNCHERTOWER, WOOD_COST_ROCKETLAUNCHERTOWER,IRON_COST_ROCKETLAUNCHERTOWER, MANA_COST_ROCKETLAUNCHERTOWER);
+		createUnits(n, IDX_UNIT_ROCKETLAUNCHER, "Rocket launcher", FOOD_COST_ROCKETLAUNCHERTOWER, WOOD_COST_ROCKETLAUNCHERTOWER,IRON_COST_ROCKETLAUNCHERTOWER, MANA_COST_ROCKETLAUNCHERTOWER);
 	}
 	public void newMagician(int n) throws BuildingException, ResourceException {
 		if (magicTower < 1) {
-			throw new BuildingException(String.format("No se puede reclutar un mago: se requiere al menos una torre"));
+			throw new BuildingException(String.format("Recruiting a magician is not allowed; you must have at least one magician tower built."));
 		}
-		createUnits(n, IDX_UNIT_MAGICIAN, "Magos", FOOD_COST_MAGICIAN, WOOD_COST_MAGICIAN,IRON_COST_MAGICIAN, MANA_COST_MAGICIAN);
+		createUnits(n, IDX_UNIT_MAGICIAN, "Magician", FOOD_COST_MAGICIAN, WOOD_COST_MAGICIAN,IRON_COST_MAGICIAN, MANA_COST_MAGICIAN);
 	}
 	public void newPriest(int n) throws BuildingException, ResourceException {
 		if (church < 1) {
-			throw new BuildingException(String.format("No se puede reclutar un Sacerdote: se requiere al menos una iglesia"));
+			throw new BuildingException(String.format("Recruiting a priest is not allowed; you must have at least one church already established."));
 		}
 		
 		int currentPriests =  army[IDX_UNIT_PRIEST].size();
 		int availableSlots = church - currentPriests;
 		if (availableSlots <= 0) {
-			throw new BuildingException(String.format("No se pueden reclutar más sacerdotes: los %d espacios de la iglesia están ocupados.\n "
-					+ "Construye más iglesias para reclutar sacerdotes adicionales.", church));
+			throw new BuildingException(String.format("There are %d church(s) and there are not church free.\n "
+					+ "Build more churches to recruit additional priests.", church));
 		}
+		
 
         int requested = Math.min(n, availableSlots);
         
         String extraInfo = (requested < n) 
-        		? String.format("(limitado a %d por la capacidad de la iglesia; construir más iglesias para el resto)", requested) :"";
+        		? String.format("(limited to %d by church capacity; built more church for add one more priest)", requested) :"";
         
-		createUnits(n, IDX_UNIT_PRIEST, "Sacerdotes " + extraInfo, FOOD_COST_PRIEST, WOOD_COST_PRIEST,IRON_COST_PRIEST, MANA_COST_PRIEST);
+		createUnits(n, IDX_UNIT_PRIEST, "Priest " + extraInfo, FOOD_COST_PRIEST, WOOD_COST_PRIEST,IRON_COST_PRIEST, MANA_COST_PRIEST);
 	}
 	
 	

@@ -4,6 +4,7 @@ import dao.DefenseUnitDAO;
 import database.DBConnection;
 import civilizations.Civilization;
 import militaryUnit.MilitaryUnit;
+import variables.Variables;
 import defenseUnit.DefenseUnit;
 import defenseUnit.ArrowTower;
 import defenseUnit.Catapult;
@@ -12,14 +13,14 @@ import defenseUnit.RocketLauncherTower;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class DefenseUnitDAOImpl implements DefenseUnitDAO {
+public class DefenseUnitDAOImpl implements DefenseUnitDAO, Variables {
 
     private Connection conexion;
 
     private static final int[] INDICES = {
-        Civilization.IDX_ARMY_ARROWTOWER,
-        Civilization.IDX_ARMY_CATAPULT,
-        Civilization.IDX_ARMY_ROCKETLAUNCHER
+        IDX_UNIT_ARROWTOWER,
+        IDX_UNIT_CATAPULT,
+        IDX_UNIT_ROCKETLAUNCHER
     };
     private static final String[] TIPOS = { "ArrowTower", "Catapult", "RocketLauncherTower" };
 
@@ -27,8 +28,6 @@ public class DefenseUnitDAOImpl implements DefenseUnitDAO {
         this.conexion = DBConnection.getInstance();
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
     public void insertUnits(int civilizationId, ArrayList<MilitaryUnit>[] army) {
         deleteUnits(civilizationId);
 

@@ -5,19 +5,20 @@ import database.DBConnection;
 import civilizations.Civilization;
 import militaryUnit.MilitaryUnit;
 import specialUnit.SpecialUnit;
+import variables.Variables;
 import specialUnit.Magician;
 import specialUnit.Priest;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class SpecialUnitDAOImpl implements SpecialUnitDAO {
+public class SpecialUnitDAOImpl implements SpecialUnitDAO, Variables {
 
     private Connection conexion;
 
     private static final int[] INDICES = {
-        Civilization.IDX_ARMY_MAGICIAN,
-        Civilization.IDX_ARMY_PRIEST
+    		IDX_UNIT_MAGICIAN,
+    		IDX_UNIT_PRIEST
     };
     private static final String[] TIPOS = { "Magician", "Priest" };
 
@@ -25,8 +26,7 @@ public class SpecialUnitDAOImpl implements SpecialUnitDAO {
         this.conexion = DBConnection.getInstance();
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
+
     public void insertUnits(int civilizationId, ArrayList<MilitaryUnit>[] army) {
         deleteUnits(civilizationId);
 
