@@ -3,7 +3,7 @@ package Attack;
 import variables.*;
 import militaryUnit.*;
 
-abstract class attackUnit implements Variables,MilitaryUnit{
+public abstract class attackUnit implements Variables,MilitaryUnit{
 	private int armor;
 	private int initialArmor;
 	private int baseDamage;
@@ -30,6 +30,10 @@ abstract class attackUnit implements Variables,MilitaryUnit{
 		return sanctified;
 	}
 
+	public void setSanctified(boolean sanctified) {
+		this.sanctified = sanctified;
+	}
+	
 	// METODOS
 	public void takeDamage(int receivedDamage) {
 		this.armor = this.armor - receivedDamage;

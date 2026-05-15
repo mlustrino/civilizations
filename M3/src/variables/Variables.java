@@ -234,4 +234,15 @@ public interface Variables {
 	// percentage of waste that will be generated with respect to the cost of the units
 	public final int PERCENTATGE_WASTE = 70;
 	
+	
+    public static final int IDX_UNIT_SWORDSMAN = 0;
+    public static final int IDX_UNIT_SPEARMAN = 1;
+    public static final int IDX_UNIT_CROSSBOW = 2;
+    public static final int IDX_UNIT_CANNON = 3;
+    public static final int IDX_UNIT_ARROWTOWER = 4;
+    public static final int IDX_UNIT_CATAPULT = 5;
+    public static final int IDX_UNIT_ROCKETLAUNCHER = 6;
+    public static final int IDX_UNIT_MAGICIAN = 7;
+    public static final int IDX_UNIT_PRIEST = 8;
+	
 }

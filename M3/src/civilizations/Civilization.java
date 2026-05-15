@@ -10,19 +10,8 @@ import Attack.*;
 import exceptions.*;
 
 public class Civilization implements Variables {
-	
-	
-    public static final int IDX_ARMY_SWORDSMAN = 0;
-    public static final int IDX_ARMY_SPEARMAN = 1;
-    public static final int IDX_ARMY_CROSSBOW = 2;
-    public static final int IDX_ARMY_CANNON = 3;
-    public static final int IDX_ARMY_ARROWTOWER = 4;
-    public static final int IDX_ARMY_CATAPULT = 5;
-    public static final int IDX_ARMY_ROCKETLAUNCHER = 6;
-    public static final int IDX_ARMY_MAGICIAN = 7;
-    public static final int IDX_ARMY_PRIEST = 8;
-    
-    public static final int ARMY_LENGTH = 9;
+	    
+    public static final int UNIT_ARRAY_LENGTH = 9;
     
 	// Technology
 	private int technologyDefense ;
@@ -52,15 +41,11 @@ public class Civilization implements Variables {
 	private int upgradeAttackTechnologyWoodCost;
 	private int upgradeDefenseTechnologyIronCost; 
 	private int upgradeAttackTechnologyIronCost;    
-//	
-//	private int upgradeDefenseTechFoodCost;
-//    private int upgradeDefenseTechWoodCost;
-//    private int upgradeDefenseTechIronCost;
-//
-//    private int upgradeAttackTechFoodCost;
-//    private int upgradeAttackTechWoodCost;
-//    private int upgradeAttackTechIronCost;
-	
+
+	/*NOUS CAMPS**/
+	private String name;
+	private int civilization_id;
+
 
 	public Civilization(int wood, int iron, int food, int mana) {
 		super();
@@ -85,7 +70,7 @@ public class Civilization implements Variables {
 	 * Inicializamos arrayList de armas
 	 * */
 	private void initArrayArmy() {
-		army = new ArrayList[9];
+		army = new ArrayList[UNIT_ARRAY_LENGTH];
 
 		for(int i = 0; i < army.length; i++) {
 		    army[i] = new ArrayList<>();
@@ -254,41 +239,41 @@ public class Civilization implements Variables {
 		for (int i = 0; i < toAdd; i++) {
 
 			switch (idx_army) {
-				case IDX_ARMY_SWORDSMAN :
-					army[IDX_ARMY_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAttack));
+				case IDX_UNIT_SWORDSMAN :
+					army[IDX_UNIT_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAttack));
 					break;
 	
-				case IDX_ARMY_SPEARMAN :
-					army[IDX_ARMY_SPEARMAN].add(new Spearman(technologyDefense,technologyAttack));
+				case IDX_UNIT_SPEARMAN :
+					army[IDX_UNIT_SPEARMAN].add(new Spearman(technologyDefense,technologyAttack));
 					break;
 	
-				case IDX_ARMY_CROSSBOW :
-					army[IDX_ARMY_CROSSBOW].add(new Crosswob(technologyDefense,technologyAttack));
+				case IDX_UNIT_CROSSBOW :
+					army[IDX_UNIT_CROSSBOW].add(new Crosswob(technologyDefense,technologyAttack));
 					break;
 	
-				case IDX_ARMY_CANNON :
-					army[IDX_ARMY_CANNON].add(new Cannon(technologyDefense,technologyAttack));
+				case IDX_UNIT_CANNON :
+					army[IDX_UNIT_CANNON].add(new Cannon(technologyDefense,technologyAttack));
 					break;
 	
-				case IDX_ARMY_ARROWTOWER :
-					army[IDX_ARMY_ARROWTOWER].add(new ArrowTower(technologyDefense,technologyAttack));
+				case IDX_UNIT_ARROWTOWER :
+					army[IDX_UNIT_ARROWTOWER].add(new ArrowTower(technologyDefense,technologyAttack));
 					break;
 	
-				case IDX_ARMY_CATAPULT :
-					army[IDX_ARMY_CATAPULT].add(new Catapult(technologyDefense,technologyAttack));
+				case IDX_UNIT_CATAPULT :
+					army[IDX_UNIT_CATAPULT].add(new Catapult(technologyDefense,technologyAttack));
 					break;
 	
-				case IDX_ARMY_ROCKETLAUNCHER :
-					army[IDX_ARMY_ROCKETLAUNCHER].add(new RocketLauncherTower(technologyDefense,technologyAttack));
+				case IDX_UNIT_ROCKETLAUNCHER :
+					army[IDX_UNIT_ROCKETLAUNCHER].add(new RocketLauncherTower(technologyDefense,technologyAttack));
 					break;
 	
-				case IDX_ARMY_MAGICIAN :
-					army[IDX_ARMY_MAGICIAN].add(new Magician(0,technologyAttack));
+				case IDX_UNIT_MAGICIAN :
+					army[IDX_UNIT_MAGICIAN].add(new Magician(0,technologyAttack));
 					break;
 	
-				case IDX_ARMY_PRIEST :
-//					army[IDX_ARMY_PRIEST].add(new Priest(technologyDefense,technologyAttack));
-					army[IDX_ARMY_PRIEST].add(new Priest(0,0));
+				case IDX_UNIT_PRIEST :
+//					army[IDX_UNIT_PRIEST].add(new Priest(technologyDefense,technologyAttack));
+					army[IDX_UNIT_PRIEST].add(new Priest(0,0));
 					break;
 			}
 			
@@ -305,39 +290,39 @@ public class Civilization implements Variables {
 		}
 	}
 	public void newSwordsman(int n) throws ResourceException {
-		createUnits(n, IDX_ARMY_SWORDSMAN, "Swordman", FOOD_COST_SWORDSMAN, WOOD_COST_SWORDSMAN,IRON_COST_SWORDSMAN, MANA_COST_SWORDSMAN);
+		createUnits(n, IDX_UNIT_SWORDSMAN, "Swordman", FOOD_COST_SWORDSMAN, WOOD_COST_SWORDSMAN,IRON_COST_SWORDSMAN, MANA_COST_SWORDSMAN);
 	}
 	
 	public void newSpearman(int n) throws ResourceException {
-		createUnits(n, IDX_ARMY_SPEARMAN, "Spearman", FOOD_COST_SPEARMAN, WOOD_COST_SPEARMAN,IRON_COST_SPEARMAN, MANA_COST_SPEARMAN);	
+		createUnits(n, IDX_UNIT_SPEARMAN, "Spearman", FOOD_COST_SPEARMAN, WOOD_COST_SPEARMAN,IRON_COST_SPEARMAN, MANA_COST_SPEARMAN);	
 	}
 	public void newCrossbow(int n) throws ResourceException {
-		createUnits(n, IDX_ARMY_CROSSBOW, "Crosswob",FOOD_COST_CROSSBOW, WOOD_COST_CROSSBOW,IRON_COST_CROSSBOW, MANA_COST_CROSSBOW);
+		createUnits(n, IDX_UNIT_CROSSBOW, "Crosswob",FOOD_COST_CROSSBOW, WOOD_COST_CROSSBOW,IRON_COST_CROSSBOW, MANA_COST_CROSSBOW);
 	}
 	public void newCannon(int n) throws ResourceException {
-		createUnits(n, IDX_ARMY_CANNON, "Cannon",FOOD_COST_CANNON, WOOD_COST_CANNON,IRON_COST_CANNON, MANA_COST_CANNON);
+		createUnits(n, IDX_UNIT_CANNON, "Cannon",FOOD_COST_CANNON, WOOD_COST_CANNON,IRON_COST_CANNON, MANA_COST_CANNON);
 	}
 	public void newArrowTower(int n) throws ResourceException {
-		createUnits(n, IDX_ARMY_ARROWTOWER, "Torre de flechas",FOOD_COST_ARROWTOWER, WOOD_COST_ARROWTOWER,IRON_COST_ARROWTOWER, MANA_COST_ARROWTOWER);
+		createUnits(n, IDX_UNIT_ARROWTOWER, "Torre de flechas",FOOD_COST_ARROWTOWER, WOOD_COST_ARROWTOWER,IRON_COST_ARROWTOWER, MANA_COST_ARROWTOWER);
 	}
 	public void newCatapult(int n) throws ResourceException {
-		createUnits(n, IDX_ARMY_CATAPULT, "Catapultas", FOOD_COST_CATAPULT, WOOD_COST_CATAPULT,IRON_COST_CATAPULT, MANA_COST_CATAPULT);
+		createUnits(n, IDX_UNIT_CATAPULT, "Catapultas", FOOD_COST_CATAPULT, WOOD_COST_CATAPULT,IRON_COST_CATAPULT, MANA_COST_CATAPULT);
 	}
 	public void newRocketLauncher(int n)  throws ResourceException {
-		createUnits(n, IDX_ARMY_ROCKETLAUNCHER, "Torre lanza ", FOOD_COST_ROCKETLAUNCHERTOWER, WOOD_COST_ROCKETLAUNCHERTOWER,IRON_COST_ROCKETLAUNCHERTOWER, MANA_COST_ROCKETLAUNCHERTOWER);
+		createUnits(n, IDX_UNIT_ROCKETLAUNCHER, "Torre lanza ", FOOD_COST_ROCKETLAUNCHERTOWER, WOOD_COST_ROCKETLAUNCHERTOWER,IRON_COST_ROCKETLAUNCHERTOWER, MANA_COST_ROCKETLAUNCHERTOWER);
 	}
 	public void newMagician(int n) throws BuildingException, ResourceException {
 		if (magicTower < 1) {
 			throw new BuildingException(String.format("No se puede reclutar un mago: se requiere al menos una torre"));
 		}
-		createUnits(n, IDX_ARMY_MAGICIAN, "Magos", FOOD_COST_MAGICIAN, WOOD_COST_MAGICIAN,IRON_COST_MAGICIAN, MANA_COST_MAGICIAN);
+		createUnits(n, IDX_UNIT_MAGICIAN, "Magos", FOOD_COST_MAGICIAN, WOOD_COST_MAGICIAN,IRON_COST_MAGICIAN, MANA_COST_MAGICIAN);
 	}
 	public void newPriest(int n) throws BuildingException, ResourceException {
 		if (church < 1) {
 			throw new BuildingException(String.format("No se puede reclutar un Sacerdote: se requiere al menos una iglesia"));
 		}
 		
-		int currentPriests =  army[IDX_ARMY_PRIEST].size();
+		int currentPriests =  army[IDX_UNIT_PRIEST].size();
 		int availableSlots = church - currentPriests;
 		if (availableSlots <= 0) {
 			throw new BuildingException(String.format("No se pueden reclutar más sacerdotes: los %d espacios de la iglesia están ocupados.\n "
@@ -349,7 +334,7 @@ public class Civilization implements Variables {
         String extraInfo = (requested < n) 
         		? String.format("(limitado a %d por la capacidad de la iglesia; construir más iglesias para el resto)", requested) :"";
         
-		createUnits(n, IDX_ARMY_PRIEST, "Sacerdotes " + extraInfo, FOOD_COST_PRIEST, WOOD_COST_PRIEST,IRON_COST_PRIEST, MANA_COST_PRIEST);
+		createUnits(n, IDX_UNIT_PRIEST, "Sacerdotes " + extraInfo, FOOD_COST_PRIEST, WOOD_COST_PRIEST,IRON_COST_PRIEST, MANA_COST_PRIEST);
 	}
 	
 	
@@ -402,19 +387,19 @@ public class Civilization implements Variables {
         System.out.printf("  %-14s %-12s %-22s%n",
                 "Arrow Tower", "Catapult", "Rocket Launcher");
         System.out.printf("  %-14d %-12d %-22d%n",
-                army[IDX_ARMY_ARROWTOWER].size(), army[IDX_ARMY_CATAPULT].size(), army[IDX_ARMY_ROCKETLAUNCHER].size());
+                army[IDX_UNIT_ARROWTOWER].size(), army[IDX_UNIT_CATAPULT].size(), army[IDX_UNIT_ROCKETLAUNCHER].size());
 
         System.out.println("------------------------------------------------ATTACK UNITS----------------------------------------");
         System.out.printf("  %-12s %-12s %-12s %-10s%n",
                 "Swordsman", "Spearman", "Crossbow", "Cannon");
         System.out.printf("  %-12d %-12d %-12d %-10d%n",
-                army[IDX_ARMY_SWORDSMAN].size(), army[IDX_ARMY_SPEARMAN].size(),
-                army[IDX_ARMY_CROSSBOW].size(), army[IDX_ARMY_CANNON].size());
+                army[IDX_UNIT_SWORDSMAN].size(), army[IDX_UNIT_SPEARMAN].size(),
+                army[IDX_UNIT_CROSSBOW].size(), army[IDX_UNIT_CANNON].size());
 
         System.out.println("----------------------------------------------SPECIAL UNITS----------------------------------------");
         System.out.printf("  %-12s %-12s%n", "Magician", "Priest");
         System.out.printf("  %-12d %-12d%n",
-                army[IDX_ARMY_MAGICIAN].size(), army[IDX_ARMY_PRIEST].size());
+                army[IDX_UNIT_MAGICIAN].size(), army[IDX_UNIT_PRIEST].size());
 
         System.out.println("---------------------------------------------------RESOURCES----------------------------------------");
         System.out.printf("  %-10s %-10s %-10s %-10s%n", "Food", "Wood", "Iron", "Mana");
@@ -446,11 +431,16 @@ public class Civilization implements Variables {
     public int getSmithy()               { return smithy; }
     public int getCarpentry()            { return carpentry; }
     public int getBattles()              { return battles; }
+    public String getName()              { return name; }
+    public int getCivilization_id() 	 { return civilization_id; }
+
+	
+
     public ArrayList<MilitaryUnit>[] getArmy() { return army; }
 
     public void setTechnologyDefense(int v) { this.technologyDefense = v; recalcularTechnologyCosts(); }
     public void setTechnologyAttack(int v)  { this.technologyAttack  = v; recalcularTechnologyCosts(); }
-    public void setWood(int v)              { this.wood    = v; }
+    public void setWood(int wood)           { this.wood    = wood; }
     public void setIron(int v)              { this.iron    = v; }
     public void setFood(int v)              { this.food    = v; }
     public void setMana(int v)              { this.mana    = v; }
@@ -460,6 +450,8 @@ public class Civilization implements Variables {
     public void setSmithy(int v)            { this.smithy      = v; }
     public void setCarpentry(int v)         { this.carpentry   = v; }
     public void setBattles(int v)           { this.battles     = v; }
+    public void setName(String n)           { this.name		   = n; }
+    public void setCivilization_id(int civilization_id) { this.civilization_id = civilization_id;}
     public void incrementBattles()          { this.battles++;       }
 
     public int[] getNextDefenseTechCost() {
