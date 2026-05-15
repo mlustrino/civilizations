@@ -30,22 +30,27 @@ public class pruebas_eliminar_a_futuro {
 		enemyArmy.add(new Spearman());
 		enemyArmy.add(new Cannon());
 		
+		
+		
 		Battle b1 = new Battle(civilizationArmy, enemyArmy);
-		System.out.println(civilizationArmy.size());
-		
-		System.out.println(b1.remainderPercentageFleet(civilizationArmy));
-		civilizationArmy.remove(1);
-		
-		System.out.println("Costes del ejercito");
-		int [] costes = b1.fleetResourceCost(civilizationArmy);
-		for (int i = 0; i < costes.length;i++) {
-			System.out.println(costes[i]);
-		}
 		b1.initInitialArmies();
-		//System.out.println(Arrays.toString(civilizationArmy));
+		System.out.println(b1.getInitialNumberUnitsEnemy());
 		
-		System.out.println(Arrays.deepToString(b1.getInitialArmies())); // Para leer arrays sin bucles
-		System.out.println(b1.getCivilizationArmy().size());
+		
+		
+//		System.out.println(b1.remainderPercentageFleet(civilizationArmy));
+//		civilizationArmy.remove(1);
+//		
+//		System.out.println("Costes del ejercito");
+//		int [] costes = b1.fleetResourceCost(civilizationArmy);
+//		for (int i = 0; i < costes.length;i++) {
+//			System.out.println(costes[i]);
+//		}
+//		b1.initInitialArmies();
+//		//System.out.println(Arrays.toString(civilizationArmy));
+//		
+//		System.out.println(Arrays.deepToString(b1.getInitialArmies())); // Para leer arrays sin bucles
+//		System.out.println(b1.getCivilizationArmy().size());
 
 	}
 
