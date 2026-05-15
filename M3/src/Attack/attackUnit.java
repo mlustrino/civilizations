@@ -29,6 +29,7 @@ abstract class attackUnit implements Variables,MilitaryUnit{
 	public boolean isSanctified() {
 		return sanctified;
 	}
+	
 
 	// METODOS
 	public void takeDamage(int receivedDamage) {
