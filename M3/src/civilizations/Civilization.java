@@ -73,7 +73,7 @@ public class Civilization implements Variables {
 		army = new ArrayList[UNIT_ARRAY_LENGTH];
 
 		for(int i = 0; i < army.length; i++) {
-		    army[i] = new ArrayList<>();
+		    army[i] = new ArrayList<MilitaryUnit>();
 		}
 	}
 

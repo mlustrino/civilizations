@@ -29,6 +29,7 @@ public abstract class attackUnit implements Variables,MilitaryUnit{
 	public boolean isSanctified() {
 		return sanctified;
 	}
+	
 
 	public void setSanctified(boolean sanctified) {
 		this.sanctified = sanctified;
