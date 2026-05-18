@@ -14,8 +14,8 @@ public class Civilization implements Variables {
     public static final int UNIT_ARRAY_LENGTH = 9;
     
 	// Technology
-	private int technologyDefense ;
-	private int technologyAttack ;
+	private int technologyDefense = 1 ;
+	private int technologyAttack = 1;
 	
 	// Recursos
 	private int wood;
@@ -234,9 +234,14 @@ public class Civilization implements Variables {
 		for (int i = 0; i < toAdd; i++) {
 
 			switch (idx_army) {
-				case IDX_UNIT_SWORDSMAN :
-					army[IDX_UNIT_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAttack));
-					break;
+//				case IDX_ARMY_SWORDSMAN :
+//					army[IDX_ARMY_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAttack));
+//					break;
+				case IDX_ARMY_SWORDSMAN: //BUG AQUI
+				    int armor = ARMOR_SWORDSMAN + (technologyDefense * PLUS_ARMOR_SWORDSMAN_BY_TECHNOLOGY) * ARMOR_SWORDSMAN / 100;
+				    int damage = BASE_DAMAGE_SWORDSMAN + (technologyAttack * PLUS_ATTACK_SWORDSMAN_BY_TECHNOLOGY) * BASE_DAMAGE_SWORDSMAN / 100;
+				    army[IDX_ARMY_SWORDSMAN].add(new Swordsman(armor, damage));
+				    break;
 	
 				case IDX_UNIT_SPEARMAN :
 					army[IDX_UNIT_SPEARMAN].add(new Spearman(technologyDefense,technologyAttack));
