@@ -498,6 +498,10 @@ public class Battle implements Variables {
                     JOptionPane.WARNING_MESSAGE);
 	    }
     	
+    	for (int i = 0; i < 9; i++) {
+    	    civilizacion.getArmy()[i].clear();
+    	    civilizacion.getArmy()[i].addAll(armies[0][i]);
+    	}
     	
     	
     	informe += "BATTLE NUMBER: "+ civilizacion.getBattles() + "\nBATTLE STATISTICS\n\n";
