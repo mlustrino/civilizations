@@ -102,11 +102,15 @@ public class Civilization implements Variables {
 	 * */
 	public void newChurch() throws ResourceException{
 		if (food < FOOD_COST_CHURCH || wood < WOOD_COST_CHURCH || iron < IRON_COST_CHURCH) {
-			throw new ResourceException("Church", FOOD_COST_CHURCH, WOOD_COST_CHURCH, IRON_COST_CHURCH, food, wood, iron);
+			throw new ResourceException(String.format("Cannot build Church\n"
+							+ "Missing: Food=%d, Wood=%d, Iron=%d, Mana=%d. \n"
+							+ "Resources on hand: Food=%d, Wood=%d, Iron=%d, Mana=%d.",
+							FOOD_COST_CHURCH, WOOD_COST_CHURCH, IRON_COST_CHURCH, MANA_COST_CHURCH, food, wood, iron, mana));
 		}
 		food -= FOOD_COST_CHURCH;
 		wood -= WOOD_COST_CHURCH;
 		iron -= IRON_COST_CHURCH;
+		mana -= MANA_COST_CHURCH;
 		church++;		
 	}
 	
@@ -144,6 +148,8 @@ public class Civilization implements Variables {
 		if (food < FOOD_COST_SMITHY || wood < WOOD_COST_SMITHY || iron < IRON_COST_SMITHY) {
 			throw new ResourceException("smithy",  FOOD_COST_SMITHY, WOOD_COST_SMITHY, IRON_COST_SMITHY, food, wood, iron);
 		}		
+		
+		
 		food -= FOOD_COST_SMITHY;
 		wood -= WOOD_COST_SMITHY;
 		iron -= IRON_COST_SMITHY;
@@ -230,6 +236,7 @@ public class Civilization implements Variables {
 	public void createUnits(int n, int idx_army, String unitName, int foodCost, int woodCost, int ironCost, int manaCost) throws ResourceException {
 		int available =  availableUnits(foodCost, woodCost,ironCost, manaCost);
 		int toAdd = Math.min(n, available);
+		int armor, damage;
 		
 		for (int i = 0; i < toAdd; i++) {
 
@@ -237,10 +244,10 @@ public class Civilization implements Variables {
 //				case IDX_ARMY_SWORDSMAN :
 //					army[IDX_ARMY_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAttack));
 //					break;
-				case IDX_ARMY_SWORDSMAN: //BUG AQUI
-				    int armor = ARMOR_SWORDSMAN + (technologyDefense * PLUS_ARMOR_SWORDSMAN_BY_TECHNOLOGY) * ARMOR_SWORDSMAN / 100;
-				    int damage = BASE_DAMAGE_SWORDSMAN + (technologyAttack * PLUS_ATTACK_SWORDSMAN_BY_TECHNOLOGY) * BASE_DAMAGE_SWORDSMAN / 100;
-				    army[IDX_ARMY_SWORDSMAN].add(new Swordsman(armor, damage));
+				case IDX_UNIT_SWORDSMAN: //BUG AQUI
+				    armor = ARMOR_SWORDSMAN + (technologyDefense * PLUS_ARMOR_SWORDSMAN_BY_TECHNOLOGY) * ARMOR_SWORDSMAN / 100;
+				    damage = BASE_DAMAGE_SWORDSMAN + (technologyAttack * PLUS_ATTACK_SWORDSMAN_BY_TECHNOLOGY) * BASE_DAMAGE_SWORDSMAN / 100;
+				    army[IDX_UNIT_SWORDSMAN].add(new Swordsman(armor, damage));
 				    break;
 	
 				case IDX_UNIT_SPEARMAN :
