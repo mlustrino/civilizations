@@ -168,7 +168,7 @@ public class Civilization implements Variables {
 	 * * Formula: baseCost + currentLevel * plusCost 
 	 * */
 	public void upgradeTechnologyDefense() throws ResourceException {
-		if (wood < upgradeDefenseTechnologyWoodCost || iron < upgradeDefenseTechnologyWoodCost) {
+		if (wood < upgradeDefenseTechnologyWoodCost || iron < upgradeDefenseTechnologyIronCost) {
 //			throw new ResourceException("Defense Technology",technologyDefense,technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyWoodCost, wood, iron);
 			throw new ResourceException(String.format("Defense Technology cannot be upgraded from %d to %d."
 					+ "Wood=%d, Iron=%d are required.\n"
