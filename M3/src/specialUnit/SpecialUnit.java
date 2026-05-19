@@ -3,7 +3,7 @@ package specialUnit;
 import militaryUnit.MilitaryUnit;
 import variables.Variables;
 
-abstract class SpecialUnit implements MilitaryUnit, Variables {
+public abstract class SpecialUnit implements MilitaryUnit, Variables {
 	private int armor;
 	private int initialArmor;
 	private int baseDamage;

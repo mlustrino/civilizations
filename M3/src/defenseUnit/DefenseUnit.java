@@ -3,7 +3,7 @@ import militaryUnit.*;
 import variables.*;
 
 
-abstract class DefenseUnit implements MilitaryUnit, Variables {
+public abstract class DefenseUnit implements MilitaryUnit, Variables {
 	private int armor;
 	private int initialArmor;
 	private int baseDamage;
@@ -27,6 +27,10 @@ abstract class DefenseUnit implements MilitaryUnit, Variables {
 	
 	public boolean isSanctified() {
 		return sanctified;
+	}
+
+	public void setSanctified(boolean sanctified) {
+		this.sanctified = sanctified;
 	}
 
 	// METODOS
