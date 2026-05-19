@@ -155,11 +155,17 @@ public class Battle implements Variables {
 	
 	public void initInitialArmies() { //Es para inicializar el Array de initialArmies 
 		initialArmies = new int [2][9];
-		/*for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 9; i++) {
 			initialArmies[0][i] = armies[0][i].size();
+		}
+		for (int i = 0; i < 4; i++) {
 			initialArmies[1][i] = armies[1][i].size();
-		}*/
+		}
  	}
+
+	public int[] getWasteWoodIron() {
+		return wasteWoodIron;
+	}
 	
 	public void updateResourcesLooses() {
 		resourcesLooses = new int [2][4];
@@ -324,6 +330,7 @@ public class Battle implements Variables {
     	int turno = startArmy(); // Un 0 es que empieza la civilizacion, un 1 es que empiezan los enemigos
     	int residuos_madera = 0;
     	int residuos_hierro = 0;
+    	int numTurno = 0;
     	
     	while (remainderPercentageFleet(armies[0]) > 20 && remainderPercentageFleet(armies[1]) > 20) {
 	    	int atacante, defensor;
@@ -399,7 +406,13 @@ public class Battle implements Variables {
 	        wasteWoodIron[0] = residuos_madera;
 	        wasteWoodIron[1] = residuos_hierro;	
 	        
-	        
+	        battleDevelopment += "Turno " + numTurno + ": "
+		            + unidad_atacante.getClass().getSimpleName()
+		            + " ataca a "
+		            + unidad_defensora.getClass().getSimpleName()
+		            + " (armadura restante: " + unidad_defensora.getActualArmor() + ")\n";
+		        numTurno++;
+		        
 	        if (turno == 1) {
 	        	turno = 0;
 	        } else {
