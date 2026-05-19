@@ -1,0 +1,605 @@
+/* IMPORTACIÓN DE FUENTES MEDIEVALES */
+@import url('https://googleapis.com');
+
+/* VARIABLES DE COLOR MEDIEVAL MEJORADAS */
+:root {
+    --bg: #0d0a07;
+    --panel: #1a120b;
+    --gold: #c5a059; /* Oro viejo */
+    --gold-bright: #e5c17b;
+    --text: #eadeca; /* Blanco antiguo de tus letras */
+}
+
+/* ESTILOS GENERALES */
+body {
+    background-color: var(--bg);
+    background-image: radial-gradient(circle, #1a130e 0%, #0d0a07 100%);
+    color: var(--text);
+    font-family: 'Philosopher', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Encabezados con tipografía gótica */
+h1, h2, h3, .logo-text {
+    font-family: 'MedievalSharp', cursive;
+    letter-spacing: 1px;
+}
+
+.container {
+    padding: 1.5rem;
+    max-width: 1000px;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+/* CABECERA Y MENÚ RESPONSIVE ORNAMENTADO */
+header {
+    background-color: #050302; /* Fondo negro de tu barra */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 4px double var(--gold);
+    position: relative;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    height: 50px;
+}
+
+.logo img {
+    height: 100%;
+    width: auto;
+}
+
+/* Menú en línea para pantallas de ordenador */
+#navLinks {
+    display: flex;
+    align-items: center;
+}
+
+#navLinks a {
+    font-family: 'Cinzel', serif;
+    color: var(--text);
+    text-decoration: none;
+    margin-left: 2.5rem; /* Espacio de separación entre tus palabras */
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase; /* Fuerza las mayúsculas como en tu foto */
+    transition: color 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+#navLinks a:hover {
+    color: var(--gold-bright);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    font-family: 'Cinzel', serif;
+    color: var(--text);
+    text-decoration: none;
+    margin-left: 2.5rem; /* Espacio de separación entre tus palabras */
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase; /* Fuerza las mayúsculas como en tu foto */
+    transition: color 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+nav a:hover {
+    color: var(--gold-bright);
+}
+
+/* PORTADA ESTILO MANUSCRITO */
+.hero {
+    background: var(--panel-parchment);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    border-radius: 4px;
+    /* Doble borde con relieve forjado */
+    border: 3px double var(--gold);
+    outline: 1px solid rgba(0, 0, 0, 0.5);
+    margin-bottom: 2rem;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.6), 0 8px 20px rgba(0,0,0,0.7);
+}
+
+.hero h1 {
+    color: var(--gold-bright);
+    margin-top: 0;
+    font-size: 2.2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+}
+
+/* TABLAS ESTILO CRÓNICA */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--panel);
+    margin-top: 1rem;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 1rem 0.8rem;
+    border: 1px solid var(--border-iron);
+    text-align: left;
+}
+
+th {
+    background-color: #24170e;
+    color: var(--gold-bright);
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.1rem;
+    border-bottom: 2px solid var(--gold);
+}
+
+tr:nth-child(even) {
+    background-color: #140e08; /* Alternancia de filas para lectura */
+}
+
+/* RECUADROS Y BOTONES METÁLICOS */
+.counter-box {
+    background: #24170e;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    border-left: 5px solid var(--gold);
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.btn {
+    background: linear-gradient(135deg, #a17f3f 0%, #735522 100%);
+    color: #0d0a07;
+    border: 1px solid var(--gold-bright);
+    padding: 0.6rem 1.2rem;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    border-radius: 3px;
+    display: inline-block;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+    text-transform: uppercase;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #e5c17b 0%, #a17f3f 100%);
+    color: #000;
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.6);
+    transform: translateY(-1px);
+}
+
+/* CUADRÍCULA DE RECURSOS */
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+.card {
+    background: var(--panel);
+    padding: 1.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid var(--gold);
+    text-align: center;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 5px 12px rgba(0,0,0,0.6);
+    position: relative;
+}
+
+/* Adorno en las esquinas de las tarjetas */
+.card::before {
+    content: '❖';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    font-size: 0.7rem;
+    color: #4a3b2c;
+}
+
+.card h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--gold-bright);
+    font-size: 1.2rem;
+}
+
+.card .value {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2rem;
+    font-weight: normal;
+    color: var(--text);
+}
+
+/* ICONOS DE RECURSOS */
+.icon-resource {
+    font-size: 1.6rem;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+}
+
+/* LISTAS DE LOGROS/MISIONES */
+ul {
+    background: var(--panel-parchment);
+    padding: 1.5rem 1.5rem 1.5rem 2.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-iron);
+    list-style-type: '⚔️ ';
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+li {
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.victory { 
+    color: var(--green); 
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(90, 158, 98, 0.3);
+}
+
+.loose { 
+    color: var(--red); 
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(184, 65, 59, 0.3);
+}
+
+/* PIE DE PÁGINA */
+
+footer {
+    clear: both;
+    position: relative;
+    z-index: 10;
+    background-color: #050302;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    margin-top: 4rem;
+    border-top: 2px solid var(--gold);
+    font-size: 0.85rem;
+    color: #8c765c;
+    font-family: 'Cinzel', serif;
+}
+
+/* DISEÑO COMPACTO DE RECURSOS DENTRO DE TABLAS */
+.resource-item {
+    display: inline-flex;
+    align-items: center;
+    background-color: #140e08;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    margin: 0.2rem;
+    font-size: 0.9rem;
+    white-space: nowrap; /* Evita que el texto salte de línea internamente */
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+.resource-value {
+    color: var(--gold-bright);
+    margin-left: 0.3rem;
+    font-family: 'MedievalSharp', cursive;
+}
+
+/* ANIMACIONES */
+.animate-fade {
+    animation: fadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Botón Hamburguesa oculto por defecto en ordenadores */
+.menu-toggle {
+    display: none; 
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.menu-toggle span {
+    width: 100%;
+    height: 3px;
+    background-color: var(--gold);
+    border-radius: 2px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================================================
+   GALERÍA DE IMÁGENES DEL IMPERIO (DISEÑO BASE / PC)
+   =================================================== */
+.empire-gallery {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Forzamos a que las tarjetas de imágenes se organicen de forma vertical interna */
+.gallery-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.2rem !important;
+}
+
+.gallery-card h3 {
+    margin-top: 0.2rem;
+    margin-bottom: 0.8rem;
+}
+
+.gallery-card p {
+    font-size: 0.9rem;
+    color: #8c765c; /* Tono bronce/madera para descripciones */
+    margin-top: 0.8rem;
+    margin-bottom: 0.2rem;
+    line-height: 1.3;
+}
+
+/* Enmarcado heráldico para proteger y fijar el tamaño de la imagen */
+.image-container {
+    width: 100%;
+    height: 160px; /* Altura fija para que las 3 tarjetas queden alineadas simétricamente */
+    overflow: hidden;
+    border: 1px solid var(--gold); /* Borde de hierro dorado */
+    border-radius: 3px;
+    background-color: #050302;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta y recorta la foto para que nunca se estire feo */
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Efecto de aproximación suave al pasar el ratón por encima (Solo en PC) */
+@media (min-width: 769px) {
+    .gallery-card:hover .image-container img {
+        transform: scale(1.06);
+    }
+}
+
+/* 📱 OPTIMIZACIÓN COMPLETA PARA MÓVILES */
+@media (max-width: 768px) {
+    header { 
+        display: flex !important;
+        flex-direction: row !important; /* Fuerza a que el logo y el botón estén en la misma línea */
+        justify-content: space-between !important; /* Logotipo a la izquierda, botón a la derecha */
+        align-items: center !important;
+        padding: 1rem 1.5rem; 
+    }
+    
+    .menu-toggle {
+        display: flex !important; /* Asegura que el botón sea visible */
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+        /* Modificado de "nav" a "#navLinks" para que coincida con tu HTML */
+    #navLinks {
+        display: none; /* Se oculta por defecto en móviles */
+        flex-direction: column !important;
+        position: absolute !important;
+        top: 100% !important; /* Despliega el menú justo debajo de la barra */
+        left: 0 !important;
+        width: 100% !important;
+        background-color: #050302 !important; /* Mismo fondo negro de tu barra */
+        border-bottom: 3px double var(--gold);
+        padding: 1rem 0 !important;
+        z-index: 999 !important;
+    }
+
+    /* Modificado de "nav.active" a "#navLinks.active" para que responda al JavaScript */
+    #navLinks.active {
+        display: flex !important;
+    }
+
+    #navLinks a {
+        margin: 0 !important;
+        padding: 1.2rem 0 !important;
+        width: 100% !important;
+        text-align: center !important;
+        display: block !important;
+        border-bottom: 1px solid rgba(61, 47, 33, 0.3);
+    }
+
+    #navLinks a:last-child {
+        border-bottom: none !important;
+    }
+
+    nav {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 100%; /* Despliega el menú justo debajo de la barra */
+        left: 0;
+        width: 100%;
+        background-color: #050302; /* Mismo fondo negro */
+        border-bottom: 3px double var(--gold);
+        padding: 1rem 0;
+        z-index: 999;
+    }
+
+    nav.active {
+        display: flex !important;
+    }
+
+    nav a {
+        margin: 0;
+        padding: 1.2rem 0;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid rgba(61, 47, 33, 0.3);
+    }
+
+   nav a:last-child {
+        border-bottom: none;
+    }
+
+    .container {
+        padding: 1rem 0.8rem;
+    }
+
+    .hero {
+        padding: 1.5rem 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+        font-size: 1.7rem;
+    }
+
+    /* Transformación de tabla a bloques legibles en pantalla pequeña */
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+    }
+    
+    thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    tr { 
+        border: 1px solid var(--gold); 
+        margin-bottom: 1rem;
+        border-radius: 4px;
+        background-color: var(--panel);
+        padding: 0.5rem;
+    }
+    
+    td { 
+        border: none;
+        border-bottom: 1px solid #2b2015; 
+        position: relative;
+        padding-left: 50% !important; 
+        text-align: right;
+        font-size: 0.95rem;
+        min-height: 2rem;
+    }
+
+    td:last-child {
+        border-bottom: none;
+    }
+    
+    /* Mapea dinámicamente títulos simulados usando CSS */
+    td:before { 
+        position: absolute;
+        top: 1rem;
+        left: 0.8rem;
+        width: 45%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+        text-align: left;
+        font-family: 'MedievalSharp', cursive;
+        color: var(--gold-bright);
+    }
+    
+        /* Etiquetas adaptadas de forma exacta para cada página */
+    
+    /* Configuración para index.hbs (4 columnas) */
+    .container:not(.war-history-page):not(.report-page):not(.developers-page) td:nth-of-type(1):before { content: "Battle ID:"; }
+    .container:not(.war-history-page):not(.report-page):not(.developers-page) td:nth-of-type(2):before { content: "Winner:"; }
+    .container:not(.war-history-page):not(.report-page):not(.developers-page) td:nth-of-type(3):before { content: "Resources:"; }
+    .container:not(.war-history-page):not(.report-page):not(.developers-page) td:nth-of-type(4):before { content: "Action:"; }
+    
+    /* Títulos para la Página de Historial de Guerres (batalles.hbs) */
+    .war-history-page td:nth-of-type(1):before { content: "ID:"; }
+    .war-history-page td:nth-of-type(2):before { content: "Result:"; }
+    .war-history-page td:nth-of-type(3):before { content: "Allied Losses:"; }
+    .war-history-page td:nth-of-type(4):before { content: "Enemy Losses:"; }
+    .war-history-page td:nth-of-type(5):before { content: "Link:"; }
+
+    /* Títulos para la Página de Estadísticas (informes.hbs) */
+    .report-page td:nth-of-type(1):before { content: "Army:"; }
+    .report-page td:nth-of-type(2):before { content: "Food Lost:"; }
+    .report-page td:nth-of-type(3):before { content: "Wood Lost:"; }
+    .report-page td:nth-of-type(4):before { content: "Iron Lost:"; }
+
+    /* Títulos para la Página de Desarrolladores (programadors.hbs) */
+    .developers-page td:nth-of-type(1):before { content: "Developer:"; }
+    .developers-page td:nth-of-type(2):before { content: "Executed Task:"; }
+    
+    td:last-child {
+        border-bottom: none;
+    }
+
+    .resources-grid {
+        grid-template-columns: 1fr 1fr; /* Muestra tarjetas de dos en dos en pantallas táctiles */
+        gap: 0.8rem;
+    }
+
+    .card {
+        padding: 1rem 0.5rem;
+    }
+
+    .card .value {
+        font-size: 1.5rem;
+    }
+
+    td .resource-item {
+        display: inline-flex;
+        margin-top: 0.2rem;
+        margin-bottom: 0.2rem;
+    }
+
+        /* ===================================================
+       AJUSTES EXCLUSIVOS DE LA GALERÍA EN MÓVIL
+       =================================================== */
+    .empire-gallery {
+        grid-template-columns: 1fr 1fr !important; /* Muestra las imágenes de dos en dos en móviles */
+        gap: 0.8rem !important;
+    }
+
+    .gallery-card {
+        padding: 0.8rem !important; /* Reduce ligeramente el espacio interno en móviles */
+    }
+
+    .image-container {
+        height: 120px !important; /* Reduce la altura de la imagen para que quepa en pantallas táctiles */
+    }
+    
+    .gallery-card p {
+        font-size: 0.8rem !important; /* Letra un poco más pequeña para descripciones en móviles */
+        margin-top: 0.5rem;
+    }
+
+    /* Si el teléfono celular es extremadamente estrecho (< 480px) */
+    @media (max-width: 480px) {
+        .empire-gallery {
+            grid-template-columns: 1fr !important; /* Pone las imágenes una debajo de otra */
+        }
+        
+        .image-container {
+            height: 150px !important; /* Le devolvemos altura al tener más ancho de pantalla disponible */
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .resources-grid {
+        grid-template-columns: 1fr; /* Una tarjeta por fila si el móvil es extremadamente estrecho */
+    }
+}
