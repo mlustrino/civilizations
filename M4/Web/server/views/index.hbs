@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  {{> header}}
+  <title>Civilizations - Main</title>
+  <!-- Enlace a tu archivo CSS medieval limpio -->
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    {{> navbar}}
+
+  <main class="container animate-fade">
+    
+        <div class="hero">
+            <h1>Civilizations Control Panel</h1>
+            <p>Manage your empire's status, review reports, and plan your strategy.</p>
+        </div>
+
+        <h2>Last 2 Battles Played</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Battle ID</th>
+                    <th>Winner</th>
+                    <th>Resources Generated</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#1</td>
+                    <td class="victory">Civilization (Victory)</td>
+                    <td>
+                        <!-- Usamos contenedores individuales compactos en lugar de .card -->
+                        <div class="resource-item">
+                            <span class="icon-resource">🪵</span> Wood: <strong class="resource-value">22150</strong>
+                        </div>
+                        <div class="resource-item">
+                            <span class="icon-resource">⚔️</span> Iron: <strong class="resource-value">12000</strong>
+                        </div>
+                    </td>
+                    <td><a href="/informes" class="btn">View Report</a></td>
+                </tr>
+                <tr>
+                    <td>#2</td>
+                    <td class="loose">Enemy (Defeat)</td>
+                    <td>
+                        <div class="resource-item">
+                            <span class="icon-resource">🪵</span> Wood: <strong class="resource-value">4100</strong>
+                        </div>
+                        <div class="resource-item">
+                            <span class="icon-resource">⚔️</span> Iron: <strong class="resource-value">1500</strong>
+                        </div>
+                    </td>
+                    <td><a href="/informes" class="btn">View Report</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- SECCIÓN DE IMÁGENES DEL IMPERIO -->
+        <h2>Empire Overviews</h2>
+        <div class="resources-grid empire-gallery">
+            <!-- Tarjeta 1: Pantalla de Inicio -->
+            <div class="card gallery-card">
+                <h3>Main Screen</h3>
+                <div class="image-container">
+                    <img src="/img/inicio.png" alt="Main Screen">
+                </div>
+                <p>Main command center of the civilization.</p>
+            </div>
+
+            <!-- Tarjeta 2: Nuestra Ciudad -->
+            <div class="card gallery-card">
+                <h3>Our City</h3>
+                <div class="image-container">
+                    <img src="/img/civilization.png" alt="Our City">
+                </div>
+                <p>Overview of buildings and resource generation.</p>
+            </div>
+
+            <!-- Tarjeta 3: Generar Tropas -->
+            <div class="card gallery-card">
+                <h3>Barracks & Troops</h3>
+                <div class="image-container">
+                    <img src="/img/gen_tropas.png" alt="Barracks & Troops">
+                </div>
+                <p>Recruit and train your medieval army.</p>
+            </div>
+        </div>
+
+
+  </main>
+
+  {{> footer}}
+</body>
+</html>

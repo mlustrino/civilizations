@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  {{> header}}
+  <title>Civilizations - Main</title>
+</head>
+<body>
+    {{> navbar}}
+
+  <main class="container war-history-page animate-fade">
+    
+        <h1>War History</h1>
+        
+        <div class="counter-box">
+            TOTAL BATTLES PLAYED: 2
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Result</th>
+                    <th>Allied Losses (Weighted)</th>
+                    <th>Enemy Losses (Weighted)</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#1</td>
+                    <td class="victory">Civilization Victory</td>
+                    <td>56,750</td>
+                    <td>169,250</td>
+                    <td><a href="/informes" class="btn">Report #1</a></td>
+                </tr>
+                <tr>
+                    <td>#2</td>
+                    <td class="loose">Enemy Victory</td>
+                    <td>85,200</td>
+                    <td>31,300</td>
+                    <td><a href="/informes" class="btn">Report #2</a></td>
+                </tr>
+            </tbody>
+        </table>
+  </main>
+
+  {{> footer}}
+</body>
+</html>

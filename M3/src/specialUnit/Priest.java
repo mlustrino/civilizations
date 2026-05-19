@@ -34,5 +34,11 @@ public class Priest extends SpecialUnit {
 	public int getChanceAttackAgain() {
 		return CHANCE_ATTACK_AGAIN_PRIEST;
 	}
+
+	@Override
+	public void setSanctified(boolean sanctified) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

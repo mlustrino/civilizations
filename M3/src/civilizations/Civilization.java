@@ -9,6 +9,7 @@ import defenseUnit.*;
 import Attack.*;
 import exceptions.*;
 
+
 public class Civilization implements Variables {
 	    
     public static final int UNIT_ARRAY_LENGTH = 9;
@@ -174,7 +175,7 @@ public class Civilization implements Variables {
 	 * * Formula: baseCost + currentLevel * plusCost 
 	 * */
 	public void upgradeTechnologyDefense() throws ResourceException {
-		if (wood < upgradeDefenseTechnologyWoodCost || iron < upgradeDefenseTechnologyWoodCost) {
+		if (wood < upgradeDefenseTechnologyWoodCost || iron < upgradeDefenseTechnologyIronCost) {
 //			throw new ResourceException("Defense Technology",technologyDefense,technologyDefense+1, upgradeDefenseTechnologyWoodCost, upgradeDefenseTechnologyWoodCost, wood, iron);
 			throw new ResourceException(String.format("Defense Technology cannot be upgraded from %d to %d."
 					+ "Wood=%d, Iron=%d are required.\n"
@@ -236,13 +237,13 @@ public class Civilization implements Variables {
 	public void createUnits(int n, int idx_army, String unitName, int foodCost, int woodCost, int ironCost, int manaCost) throws ResourceException {
 		int available =  availableUnits(foodCost, woodCost,ironCost, manaCost);
 		int toAdd = Math.min(n, available);
-		int armor, damage;
-		
+		int armor;
+		int damage;
 		for (int i = 0; i < toAdd; i++) {
 
 			switch (idx_army) {
-//				case IDX_ARMY_SWORDSMAN :
-//					army[IDX_ARMY_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAttack));
+//				case IDX_UNIT_SWORDSMAN :
+//					army[IDX_UNIT_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAttack));
 //					break;
 				case IDX_UNIT_SWORDSMAN: //BUG AQUI
 				    armor = ARMOR_SWORDSMAN + (technologyDefense * PLUS_ARMOR_SWORDSMAN_BY_TECHNOLOGY) * ARMOR_SWORDSMAN / 100;
@@ -251,36 +252,48 @@ public class Civilization implements Variables {
 				    break;
 	
 				case IDX_UNIT_SPEARMAN :
-					army[IDX_UNIT_SPEARMAN].add(new Spearman(technologyDefense,technologyAttack));
-					break;
+				    armor = ARMOR_SPEARMAN + (technologyDefense * PLUS_ARMOR_SPEARMAN_BY_TECHNOLOGY) * ARMOR_SPEARMAN / 100;
+				    damage = BASE_DAMAGE_SPEARMAN + (technologyAttack * PLUS_ATTACK_SPEARMAN_BY_TECHNOLOGY) * BASE_DAMAGE_SPEARMAN / 100;
+				    army[IDX_UNIT_SPEARMAN].add(new Spearman(armor, damage));
+				    break;
 	
 				case IDX_UNIT_CROSSBOW :
-					army[IDX_UNIT_CROSSBOW].add(new Crosswob(technologyDefense,technologyAttack));
-					break;
+				    armor = ARMOR_CROSSBOW + (technologyDefense * PLUS_ARMOR_CROSSBOW_BY_TECHNOLOGY) * ARMOR_CROSSBOW / 100;
+				    damage = BASE_DAMAGE_CROSSBOW + (technologyAttack * PLUS_ATTACK_CROSSBOW_BY_TECHNOLOGY) * BASE_DAMAGE_CROSSBOW / 100;
+				    army[IDX_UNIT_CROSSBOW].add(new Crossbow(armor, damage));
+				    break;
 	
 				case IDX_UNIT_CANNON :
-					army[IDX_UNIT_CANNON].add(new Cannon(technologyDefense,technologyAttack));
-					break;
+				    armor = ARMOR_CANNON + (technologyDefense * PLUS_ARMOR_CANNON_BY_TECHNOLOGY) * ARMOR_CANNON / 100;
+				    damage = BASE_DAMAGE_CANNON + (technologyAttack * PLUS_ATTACK_CANNON_BY_TECHNOLOGY) * BASE_DAMAGE_CANNON / 100;
+				    army[IDX_UNIT_CANNON].add(new Cannon(armor, damage));
+				    break;
 	
 				case IDX_UNIT_ARROWTOWER :
-					army[IDX_UNIT_ARROWTOWER].add(new ArrowTower(technologyDefense,technologyAttack));
-					break;
+				    armor = ARMOR_ARROWTOWER + (technologyDefense * PLUS_ARMOR_ARROWTOWER_BY_TECHNOLOGY) * ARMOR_ARROWTOWER / 100;
+				    damage = BASE_DAMAGE_ARROWTOWER + (technologyAttack * PLUS_ATTACK_ARROWTOWER_BY_TECHNOLOGY) * BASE_DAMAGE_ARROWTOWER / 100;
+				    army[IDX_UNIT_ARROWTOWER].add(new ArrowTower(armor, damage));
+				    break;
 	
 				case IDX_UNIT_CATAPULT :
-					army[IDX_UNIT_CATAPULT].add(new Catapult(technologyDefense,technologyAttack));
-					break;
+				    armor = ARMOR_CATAPULT + (technologyDefense * PLUS_ARMOR_CATAPULT_BY_TECHNOLOGY) * ARMOR_CATAPULT / 100;
+				    damage = BASE_DAMAGE_CATAPULT + (technologyAttack * PLUS_ATTACK_CATAPULT_BY_TECHNOLOGY) * BASE_DAMAGE_CATAPULT / 100;
+				    army[IDX_UNIT_CATAPULT].add(new Catapult(armor, damage));
+				    break;
 	
 				case IDX_UNIT_ROCKETLAUNCHER :
-					army[IDX_UNIT_ROCKETLAUNCHER].add(new RocketLauncherTower(technologyDefense,technologyAttack));
-					break;
+				    armor = ARMOR_ROCKETLAUNCHERTOWER + (technologyDefense * PLUS_ARMOR_ROCKETLAUNCHERTOWER_BY_TECHNOLOGY) * ARMOR_ROCKETLAUNCHERTOWER / 100;
+				    damage = BASE_DAMAGE_ROCKETLAUNCHERTOWER + (technologyAttack * PLUS_ATTACK_ROCKETLAUNCHERTOWER_BY_TECHNOLOGY) * BASE_DAMAGE_ROCKETLAUNCHERTOWER / 100;
+				    army[IDX_UNIT_ROCKETLAUNCHER].add(new RocketLauncherTower(armor, damage));
+				    break;
 	
 				case IDX_UNIT_MAGICIAN :
-					army[IDX_UNIT_MAGICIAN].add(new Magician(0,technologyAttack));
-					break;
+				    damage = BASE_DAMAGE_MAGICIAN + (technologyAttack * PLUS_ATTACK_MAGICIAN_BY_TECHNOLOGY) * BASE_DAMAGE_MAGICIAN / 100; // Tiene 1 de armor
+				    army[IDX_UNIT_MAGICIAN].add(new Magician(1, damage));
+				    break;
 	
 				case IDX_UNIT_PRIEST :
-//					army[IDX_UNIT_PRIEST].add(new Priest(technologyDefense,technologyAttack));
-					army[IDX_UNIT_PRIEST].add(new Priest(0,0));
+					army[IDX_UNIT_PRIEST].add(new Priest(1,0)); // 1 de armor y 0 de damage
 					break;
 			}
 			

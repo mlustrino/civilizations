@@ -9,7 +9,7 @@ import database.DBConnection;
 import militaryUnit.MilitaryUnit;
 import Attack.Swordsman;
 import Attack.Spearman;
-import Attack.Crosswob;
+import Attack.Crossbow;
 import Attack.Cannon;
 import defenseUnit.ArrowTower;
 import defenseUnit.Catapult;
@@ -106,7 +106,7 @@ public class CivilizationDAOImpl implements CivilizationDAO, Variables {
                 for (MilitaryUnit u : attackUnitDAO.loadUnits(civilizationId)) {
                     if      (u instanceof Swordsman) army[IDX_UNIT_SWORDSMAN].add(u);
                     else if (u instanceof Spearman)  army[IDX_UNIT_SPEARMAN].add(u);
-                    else if (u instanceof Crosswob)  army[IDX_UNIT_CROSSBOW].add(u);
+                    else if (u instanceof Crossbow)  army[IDX_UNIT_CROSSBOW].add(u);
                     else if (u instanceof Cannon)    army[IDX_UNIT_CANNON].add(u);
                 }
 
