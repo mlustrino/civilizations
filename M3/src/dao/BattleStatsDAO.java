@@ -41,6 +41,9 @@ public interface BattleStatsDAO {
     // Lista todos los resúmenes de batalla de una civilización, ordenados por numBattle
     ArrayList<BattleResumen> battleListByCivilization(int civilizationId);
 
+    // Devuelve el siguiente num_battle disponible para una civilización (MAX actual + 1)
+    int getNextBattleNum(int civilizationId);
+
     // Elimina en cascada. todos los registros de batalla de una civilización
     void deleteBattleByCivilization(int civilizationId);
 }

@@ -137,6 +137,18 @@ public class BattleStatsDAOImpl implements BattleStatsDAO {
     }
 
 
+    public int getNextBattleNum(int civilizationId) {
+        String sql = "SELECT COALESCE(MAX(num_battle), 0) + 1 FROM battle_stats WHERE civilization_id=?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, civilizationId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("Error al obtener siguiente num_battle: " + e.getMessage());
+        }
+        return 1;
+    }
+    
     public void deleteBattleByCivilization(int civilizationId) {
         // Borramos solo battle_stats; el CASCADE elimina las demás tablas de stats automáticamente
         String sql = "DELETE FROM battle_stats WHERE civilization_id=?";

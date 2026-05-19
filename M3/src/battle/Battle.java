@@ -477,13 +477,6 @@ public class Battle implements Variables {
 	        wasteWoodIron[0] = residuos_madera;
 	        wasteWoodIron[1] = residuos_hierro;	
 	        
-	        battleDevelopment += "Turno " + numTurno + ": "
-		            + unidad_atacante.getClass().getSimpleName()
-		            + " ataca a "
-		            + unidad_defensora.getClass().getSimpleName()
-		            + " (armadura restante: " + unidad_defensora.getActualArmor() + ")\n";
-		        numTurno++;
-		        
 	        if (turno == 1) {
 	        	turno = 0;
 	        } else {
