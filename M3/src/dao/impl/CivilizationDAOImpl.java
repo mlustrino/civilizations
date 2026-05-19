@@ -39,13 +39,19 @@ public class CivilizationDAOImpl implements CivilizationDAO, Variables {
 
     @Override
     public int insertCivilization(Civilization civ) {
+    	System.out.println("entro a la función");
         String sql = "INSERT INTO civilization_stats " +
                      "(name, wood_amount, iron_amount, food_amount, mana_amount, " +
                      "magicTower_counter, church_counter, farm_counter, smithy_counter, " +
                      "carpentry_counter, technology_defense_level, technology_attack_level, battles_counter) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        System.out.println("entro al string la función");
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            System.out.println("antes de setear");
             setearParametros(ps, civ);
+
+            System.out.println("dopo setear");
             ps.executeUpdate();
 
             ResultSet llaves = ps.getGeneratedKeys();

@@ -26,34 +26,36 @@ public class SpecialUnitDAOImpl implements SpecialUnitDAO, Variables {
         this.conexion = DBConnection.getInstance();
     }
 
-
     public void insertUnits(int civilizationId, ArrayList<MilitaryUnit>[] army) {
-        deleteUnits(civilizationId);
-
-        // Las unidades especiales no tienen campo sanctified en la BD
         String sql = "INSERT INTO special_units_stats " +
                      "(civilization_id, unit_id, type, armor, base_damage, experience) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            int unitId = 0;
-            for (int k = 0; k < INDICES.length; k++) {
-                for (MilitaryUnit m : army[INDICES[k]]) {
-                    SpecialUnit u = (SpecialUnit) m;
-                    ps.setInt(1, civilizationId);
-                    ps.setInt(2, unitId++);
-                    ps.setString(3, TIPOS[k]);
-                    ps.setInt(4, u.getActualArmor());
-                    ps.setInt(5, u.getBaseDamage());
-                    ps.setInt(6, u.getExperience());
-                    ps.addBatch();
+        synchronized (conexion) {
+            try {
+                deleteUnits(civilizationId);
+                try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+                    int unitId = 0;
+                    for (int k = 0; k < INDICES.length; k++) {
+                        for (MilitaryUnit m : army[INDICES[k]]) {
+                            SpecialUnit u = (SpecialUnit) m;
+                            ps.setInt(1, civilizationId);
+                            ps.setInt(2, unitId++);
+                            ps.setString(3, TIPOS[k]);
+                            ps.setInt(4, u.getActualArmor());
+                            ps.setInt(5, u.getBaseDamage());
+                            ps.setInt(6, u.getExperience());
+                            ps.addBatch();
+                        }
+                    }
+                    ps.executeBatch();
                 }
+            } catch (SQLException e) {
+                System.err.println("Error al guardar unidades especiales: " + e.getMessage());
             }
-            ps.executeBatch();
-        } catch (SQLException e) {
-            System.err.println("Error al guardar unidades especiales: " + e.getMessage());
         }
     }
 
+    
     @Override
     public ArrayList<MilitaryUnit> loadUnits(int civilizationId) {
         ArrayList<MilitaryUnit> lista = new ArrayList<>();
