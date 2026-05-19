@@ -22,6 +22,7 @@ public class Battle implements Variables {
 	private ArrayList<MilitaryUnit> enemyArmy;
 	private ArrayList<MilitaryUnit> [][] armies;
 	private String battleDevelopment;
+	private String informe;
 	private int [][] initialCostFleet;
 	private int initialNumberUnitsCivilization, initialNumberUnitsEnemy;
 	private int [] wasteWoodIron;
@@ -52,7 +53,7 @@ public class Battle implements Variables {
 			else if (unit instanceof Spearman) {
 				armies[0][1].add(unit);
 			}
-			else if (unit instanceof Crosswob) {
+			else if (unit instanceof Crossbow) {
 				armies[0][2].add(unit);
 			}
 			else if (unit instanceof Cannon) {
@@ -82,7 +83,7 @@ public class Battle implements Variables {
 			else if (unit instanceof Spearman) {
 				armies[1][1].add(unit);
 			}
-			else if (unit instanceof Crosswob) {
+			else if (unit instanceof Crossbow) {
 				armies[1][2].add(unit);
 			}
 			else if (unit instanceof Cannon) {
@@ -91,6 +92,7 @@ public class Battle implements Variables {
 		}
 			
 		this.battleDevelopment = "";
+		this.informe = "";
 		
 		this.initialCostFleet = new int [2][3];
 		for (MilitaryUnit unit : civilizationArmy) {
@@ -153,7 +155,11 @@ public class Battle implements Variables {
 	public String getBattleDevelopment() {
 		return battleDevelopment;
 	}
-	
+
+	public String getInforme() {
+		return informe;
+	}
+
 	public void initInitialArmies() { //Es para inicializar el Array de initialArmies 
 		initialArmies = new int [2][9];
 		for (int i = 0; i < 9; i++) {
@@ -221,21 +227,6 @@ public class Battle implements Variables {
 		
 		return num_unit;
 	}
-//	public int getGroupDefender(ArrayList<MilitaryUnit>[] armyGroups) {
-//	    int total = 0;
-//	    for (int i = 0; i < armyGroups.length; i++) {
-//	        total += armyGroups[i].size();
-//	    }
-//	    if (total == 0) return 0;
-//	    
-//	    int random = (int)(Math.random() * total);
-//	    int acumulado = 0;
-//	    for (int i = 0; i < armyGroups.length; i++) {
-//	        acumulado += armyGroups[i].size();
-//	        if (random < acumulado) return i;
-//	    }
-//	    return 0;
-//	}
 	
     public int getCivilizationGroupAttacker() {
     	
@@ -310,6 +301,23 @@ public class Battle implements Variables {
 		return actualNumberUnitsEnemy;
 	}
 	
+	public void incrementExperience() {
+		for (int i = 0; i < armies[0].length;i++) {
+			for (MilitaryUnit unit : armies[0][i]) {
+				unit.setExperience(unit.getExperience() + 1);
+			}
+		}
+	}
+	
+	public void sanctifyUnits() {
+		if (armies[0][8].size() >= 1) {
+			for (int i = 0; i < armies[0].length;i++) {
+				for (MilitaryUnit unit : armies[0][i]) {
+					unit.setSanctified(true);
+				}
+			}
+		}
+	}
 	
 	public int startArmy() { // Para saber quien empieza 
 		if (Math.random() < 0.5) {
@@ -326,10 +334,10 @@ public class Battle implements Variables {
     	int turno = startArmy(); // Un 0 es que empieza la civilizacion, un 1 es que empiezan los enemigos
     	int residuos_madera = 0;
     	int residuos_hierro = 0;
-    	String informe = "";
+    	informe = "";
     	Scanner sc = new Scanner(System.in);
     	
-    	battleDevelopment = "Battle Number: \n";
+    	battleDevelopment = "Battle Number: " + civilizacion.getBattles() + "\n";
     	
     	while (remainderPercentageFleet(armies[0]) > 20 && remainderPercentageFleet(armies[1]) > 20) {
 	    	MilitaryUnit unidad_atacante, unidad_defensora;
@@ -338,8 +346,7 @@ public class Battle implements Variables {
 	        
 	    	
 	    	// **********************BLOQUE PARA DECIDIR QUIEN ATACA Y QUIEN DEFIENDE DE CADA GRUPO**************************************
-//	    	System.out.println("Nuestro ejercito: " + remainderPercentageFleet(armies[0]));
-//	    	System.out.println("Ejercito enemigo: "+ remainderPercentageFleet(armies[1]));
+	    	sanctifyUnits();
 	    	
 	    	if (turno == 0) {
 	            ejercito_atacante = 0;
@@ -478,15 +485,17 @@ public class Battle implements Variables {
             JOptionPane.showMessageDialog(null, 
                     "Ha ganado el ejercito de la civilization", 
                     "Winner", 
-                    JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.WARNING_MESSAGE);
     	    civilizacion.setWood(civilizacion.getWood() + wasteWoodIron[0]);
     	    civilizacion.setIron(civilizacion.getIron() + wasteWoodIron[1]);
+    	    incrementExperience();
+    	    
     	    civilizacion.incrementBattles();
 	    } else {
             JOptionPane.showMessageDialog(null, 
                     "Ha ganado el ejercito enemigo", 
                     "Loser", 
-                    JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.WARNING_MESSAGE);
 	    }
     	
     	
@@ -518,14 +527,14 @@ public class Battle implements Variables {
     	
     	
     	
-    	System.out.println(informe);
+    	//System.out.println(informe);
     	
-    	System.out.println("View Battle Development? (S/n)");
-    	String opc = sc.nextLine();
-    	
-    	if (opc.toLowerCase().equals("s")) {
-        	System.out.println(battleDevelopment);
-    	}
+//    	System.out.println("View Battle Development? (S/n)");
+//    	String opc = sc.nextLine();
+//    	
+//    	if (opc.toLowerCase().equals("s")) {
+//        	System.out.println(battleDevelopment);
+//    	}
 	}
 	
 

@@ -24,4 +24,6 @@ public interface MilitaryUnit{
 	abstract void setExperience(int n);
 	
 	abstract int getExperience();
+	
+	abstract void setSanctified(boolean sanctified);
 }

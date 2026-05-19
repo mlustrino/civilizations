@@ -253,7 +253,7 @@ public class Civilization implements Variables {
 				case IDX_UNIT_CROSSBOW :
 				    armor = ARMOR_CROSSBOW + (technologyDefense * PLUS_ARMOR_CROSSBOW_BY_TECHNOLOGY) * ARMOR_CROSSBOW / 100;
 				    damage = BASE_DAMAGE_CROSSBOW + (technologyAttack * PLUS_ATTACK_CROSSBOW_BY_TECHNOLOGY) * BASE_DAMAGE_CROSSBOW / 100;
-				    army[IDX_UNIT_CROSSBOW].add(new Crosswob(armor, damage));
+				    army[IDX_UNIT_CROSSBOW].add(new Crossbow(armor, damage));
 				    break;
 	
 				case IDX_UNIT_CANNON :
