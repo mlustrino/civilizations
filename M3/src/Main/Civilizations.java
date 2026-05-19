@@ -29,10 +29,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import Attack.Cannon;
-import Attack.Crosswob;
+import Attack.Crossbow;
 import Attack.Spearman;
 import Attack.Swordsman;
 import battle.Battle;
@@ -144,13 +147,13 @@ class PanelInicio extends JPanel {
 class PanelJuego extends JPanel implements Variables {
 	private BufferedImage fondo_juego;
 	private ImageIcon icono_madera, icono_comida, icono_hierro, icono_mana, icono_tech_att, icono_tech_def;
+	private ImageIcon icono_farm, icono_carpentry, icono_smithy, icono_magictower, icono_church;
     private Civilization civilizacion;          
     private JLabel comida, madera, hierro, mana; 
     private JLabel lvl_tech_attack, lvl_tech_defense; 
     private JLabel coste_tech_attack, coste_tech_defense;
     private JLabel label_food_gen, label_wood_gen, label_iron_gen, label_mana_gen;
     private JLabel cant_farm, cant_carpentry, cant_smithy, cant_magictower, cant_church;
-    private JLabel enemy_swordsman, enemy_spearman, enemy_crossbow, enemy_cannon;
     private JLabel civilization_swordsman, civilization_spearman, civilization_crossbow, civilization_cannon;
     private JLabel civilization_arrowtower, civilization_catapult, civilization_rocketlauncher;
     private JLabel civilization_magician, civilization_priest;
@@ -158,7 +161,6 @@ class PanelJuego extends JPanel implements Variables {
 	
 	
     public PanelJuego(Civilizations ventana) {
-    	
     	
     	setLayout(new BorderLayout());
     	civilizacion = new Civilization(3000,3000,3000,3000);
@@ -173,6 +175,12 @@ class PanelJuego extends JPanel implements Variables {
             BufferedImage imgtechatt = ImageIO.read(new File("./M3/src/Main/img/tec_att.png"));
             BufferedImage imgtechdef = ImageIO.read(new File("./M3/src/Main/img/tec_def.png"));
             
+            BufferedImage imgfarm = ImageIO.read(new File("./M3/src/Main/img/Farm.png"));
+            BufferedImage imgcarpentry = ImageIO.read(new File("./M3/src/Main/img/Carpentry.png"));
+            BufferedImage imgsmithy = ImageIO.read(new File("./M3/src/Main/img/Smithy.png"));
+            BufferedImage imgmagictower = ImageIO.read(new File("./M3/src/Main/img/Magictower.png"));
+            BufferedImage imgchurch = ImageIO.read(new File("./M3/src/Main/img/Church.png"));
+            
             
             icono_madera = new ImageIcon(imgmadera.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
             icono_comida = new ImageIcon(imgcomida.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
@@ -180,6 +188,12 @@ class PanelJuego extends JPanel implements Variables {
             icono_mana = new ImageIcon(imgmana.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
             icono_tech_att = new ImageIcon(imgtechatt.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
             icono_tech_def = new ImageIcon(imgtechdef.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+            
+            icono_farm = new ImageIcon(imgfarm.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_carpentry = new ImageIcon(imgcarpentry.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_smithy = new ImageIcon(imgsmithy.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_magictower = new ImageIcon(imgmagictower.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+            icono_church = new ImageIcon(imgchurch.getScaledInstance(60, 60, Image.SCALE_SMOOTH));
                         
             
             
@@ -221,10 +235,15 @@ class PanelJuego extends JPanel implements Variables {
         panel_construccion.setLayout(new GridLayout(1,5));
         
         JButton cons_granja = new JButton("Build a farm");
+        cons_granja.setToolTipText("<html>Wood: " + WOOD_COST_FARM + "<br>Iron: " + IRON_COST_FARM + "<br>Food: " + FOOD_COST_FARM);
         JButton cons_carpinteria = new JButton("Build a carpentry");
+        cons_carpinteria.setToolTipText("<html>Wood: " + WOOD_COST_CARPENTRY + "<br>Iron: " + IRON_COST_CARPENTRY + "<br>Food: " + FOOD_COST_CARPENTRY);
         JButton cons_herreria = new JButton("Build a smithy");
+        cons_herreria.setToolTipText("<html>Wood: " + WOOD_COST_SMITHY + "<br>Iron: " + IRON_COST_SMITHY + "<br>Food: " + FOOD_COST_SMITHY);
         JButton cons_torre_magica = new JButton("Build a magic tower");
+        cons_torre_magica.setToolTipText("<html>Wood: " + WOOD_COST_MAGICTOWER + "<br>Iron: " + IRON_COST_MAGICTOWER + "<br>Food: " + FOOD_COST_MAGICTOWER);
         JButton cons_iglesia = new JButton("Build a church");
+        cons_iglesia.setToolTipText("<html>Wood: " + WOOD_COST_CHURCH + "<br>Iron: " + IRON_COST_CHURCH + "<br>Food: " + FOOD_COST_CHURCH + "<br>Mana: " + MANA_COST_CHURCH);
         
         cons_granja.addActionListener(new ActionListener() {
 			
@@ -323,12 +342,12 @@ class PanelJuego extends JPanel implements Variables {
         // Panel tecnologias
         JPanel panel_tech = new JPanel();
         panel_tech.setLayout(new BorderLayout());
-        panel_tech.setOpaque(false);
         
         // Panel de arriba
         JPanel panel_tech_upgrades = new JPanel();
         panel_tech_upgrades.setLayout(new GridLayout(4,1));
-        panel_tech_upgrades.setOpaque(false);
+        panel_tech_upgrades.setBackground(Color.LIGHT_GRAY);
+        panel_tech_upgrades.setBorder(new EmptyBorder(0, 10, 0, 0));
         
         
         JButton boton_upgrade_tech_attack = new JButton("Upgrade attack tech");
@@ -384,12 +403,14 @@ class PanelJuego extends JPanel implements Variables {
         
         JPanel panel_cantidad_edificios = new JPanel();
         panel_cantidad_edificios.setLayout(new GridLayout(5,1));
+        panel_cantidad_edificios.setBackground(Color.LIGHT_GRAY);
+        panel_cantidad_edificios.setBorder(new EmptyBorder(0, 10, 0, 0));
         
-        cant_farm = new JLabel("Farm: " + civilizacion.getFarm());
-        cant_carpentry = new JLabel("Carpentry: " + civilizacion.getCarpentry());
-        cant_smithy = new JLabel("Smithy: " + civilizacion.getSmithy());
-        cant_magictower = new JLabel("Magic Tower: " + civilizacion.getMagicTower());
-        cant_church = new JLabel("Church: " + civilizacion.getChurch());
+        cant_farm = new JLabel("Farm: " + civilizacion.getFarm(), icono_farm, JLabel.LEFT);
+        cant_carpentry = new JLabel("Carpentry: " + civilizacion.getCarpentry(), icono_carpentry, JLabel.LEFT);
+        cant_smithy = new JLabel("Smithy: " + civilizacion.getSmithy(), icono_smithy, JLabel.LEFT);
+        cant_magictower = new JLabel("Magic Tower: " + civilizacion.getMagicTower(), icono_magictower, JLabel.LEFT);
+        cant_church = new JLabel("Church: " + civilizacion.getChurch(), icono_church, JLabel.LEFT);
         
         panel_cantidad_edificios.add(cant_farm);
         panel_cantidad_edificios.add(cant_carpentry);
@@ -401,6 +422,8 @@ class PanelJuego extends JPanel implements Variables {
         
         JPanel panel_tech_info = new JPanel();
         panel_tech_info.setLayout(new GridLayout(4,1));
+        panel_tech_info.setBackground(Color.LIGHT_GRAY);
+        panel_tech_info.setBorder(new EmptyBorder(0, 10, 0, 0));
         
         label_food_gen = new JLabel("You make " + (CIVILIZATION_FOOD_GENERATED + CIVILIZATION_FOOD_GENERATED_PER_FARM*civilizacion.getFarm()) + " food/min");
         label_wood_gen = new JLabel("You make "+ (CIVILIZATION_WOOD_GENERATED + CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY*civilizacion.getCarpentry()) + " wood/min");
@@ -413,16 +436,11 @@ class PanelJuego extends JPanel implements Variables {
         panel_tech_info.add(label_iron_gen);
         panel_tech_info.add(label_mana_gen);
         
-        panel_tech_info.setBackground(Color.ORANGE);
         
         panel_tech.add(panel_tech_info, BorderLayout.SOUTH);
         
         add(panel_tech,BorderLayout.EAST);
         
-        enemy_swordsman = new JLabel("Swordsman: ");
-        enemy_spearman =  new JLabel("Spearman: ");
-        enemy_crossbow = new JLabel("Crossbow: ");
-        enemy_cannon = new JLabel("Cannon: ");
         
         civilization_swordsman = new JLabel("Swordsman: " + civilizacion.getArmy()[0].size());
         civilization_spearman = new JLabel("Spearman: " + civilizacion.getArmy()[1].size());
@@ -436,7 +454,8 @@ class PanelJuego extends JPanel implements Variables {
         
         
         JPanel panel_info_tropas = new JPanel();
-        panel_info_tropas.setLayout(new GridLayout(16,1));
+        panel_info_tropas.setLayout(new GridLayout(11,1));
+        panel_info_tropas.setBackground(Color.LIGHT_GRAY);
         
         JButton boton_crear_tropas = new JButton("Crear Tropas"); 
         boton_crear_tropas.addActionListener(new ActionListener() {
@@ -445,13 +464,8 @@ class PanelJuego extends JPanel implements Variables {
             }
         });
         
-        panel_info_tropas.add(new JLabel("Tropas enemigas")); //AQUI
-        panel_info_tropas.add(enemy_swordsman);
-        panel_info_tropas.add(enemy_spearman);
-        panel_info_tropas.add(enemy_crossbow);
-        panel_info_tropas.add(enemy_cannon);
         
-        panel_info_tropas.add(new JLabel("Tus tropas"));
+        panel_info_tropas.add(new JLabel("UNITS"));
         panel_info_tropas.add(civilization_swordsman);
         panel_info_tropas.add(civilization_spearman);
         panel_info_tropas.add(civilization_crossbow);
@@ -466,7 +480,6 @@ class PanelJuego extends JPanel implements Variables {
         
         panel_info_tropas.add(boton_crear_tropas);
         add(panel_info_tropas, BorderLayout.WEST);
-        //add(boton_crear_tropas, BorderLayout.WEST);
         
         
        
@@ -553,7 +566,7 @@ class PanelJuego extends JPanel implements Variables {
         		}
         	} else if (num_random <= 80) { // Crea Crossbow
         		if (foodAvailable >= FOOD_COST_CROSSBOW && woodAvailable >= WOOD_COST_CROSSBOW && ironAvailable >= IRON_COST_CROSSBOW) {
-            		enemyArmy.add(new Crosswob());
+            		enemyArmy.add(new Crossbow());
             		foodAvailable -= FOOD_COST_CROSSBOW;
             		woodAvailable -= WOOD_COST_CROSSBOW;
             		ironAvailable -= IRON_COST_CROSSBOW;
@@ -617,6 +630,7 @@ class PanelJuego extends JPanel implements Variables {
         cant_smithy.setText("Smithy: " + civilizacion.getSmithy());
         cant_magictower.setText("Magic Tower: " + civilizacion.getMagicTower());
         cant_church.setText("Church: " + civilizacion.getChurch());
+        
         
         civilization_swordsman.setText("Swordsmans: " + civilizacion.getArmy()[0].size());
         civilization_spearman.setText("Spearman: " + civilizacion.getArmy()[1].size());
@@ -692,12 +706,16 @@ class PanelCreacionTropas extends JPanel implements Variables {
         
         JLabel ataque = new JLabel("Tropas ofensivas");
         ataque.setHorizontalAlignment(JLabel.CENTER);
-        ataque.setForeground(Color.WHITE);
+        ataque.setForeground(Color.BLACK);
         
         JButton button_cannon = new JButton("Cannon");
+        button_cannon.setToolTipText("<html>Wood: " + WOOD_COST_CANNON + "<br>Iron: " + IRON_COST_CANNON + "<br>Food: " + FOOD_COST_CANNON + "<br>Mana: " + MANA_COST_CANNON);
         JButton button_crossbow = new JButton("Crossbow");
+        button_crossbow.setToolTipText("<html>Wood: " + WOOD_COST_CROSSBOW + "<br>Iron: " + IRON_COST_CROSSBOW + "<br>Food: " + FOOD_COST_CROSSBOW + "<br>Mana: " + MANA_COST_CROSSBOW);
         JButton button_spearman = new JButton("Spearman");
+        button_spearman.setToolTipText("<html>Wood: " + WOOD_COST_SPEARMAN + "<br>Iron: " + IRON_COST_SPEARMAN + "<br>Food: " + FOOD_COST_SPEARMAN + "<br>Mana: " + MANA_COST_SPEARMAN);
         JButton button_swordsman = new JButton("Swordsman");
+        button_swordsman.setToolTipText("<html>Wood: " + WOOD_COST_SWORDSMAN + "<br>Iron: " + IRON_COST_SWORDSMAN + "<br>Food: " + FOOD_COST_SWORDSMAN + "<br>Mana: " + MANA_COST_SWORDSMAN);
         
         button_cannon.addActionListener(new ActionListener() {
 			
@@ -831,11 +849,14 @@ class PanelCreacionTropas extends JPanel implements Variables {
         
         JLabel defensa = new JLabel("Tropas defensivas");
         defensa.setHorizontalAlignment(JLabel.CENTER);
-        defensa.setForeground(Color.WHITE);
+        defensa.setForeground(Color.BLACK);
         
         JButton button_arrowtower = new JButton("Arrow Tower");
+        button_arrowtower.setToolTipText("<html>Wood: " + WOOD_COST_ARROWTOWER + "<br>Iron: " + IRON_COST_ARROWTOWER + "<br>Food: " + FOOD_COST_ARROWTOWER + "<br>Mana: " + MANA_COST_ARROWTOWER);
         JButton button_catapult = new JButton("Catapult");
+        button_catapult.setToolTipText("<html>Wood: " + WOOD_COST_CATAPULT + "<br>Iron: " + IRON_COST_CATAPULT + "<br>Food: " + FOOD_COST_CATAPULT + "<br>Mana: " + MANA_COST_CATAPULT);
         JButton button_rocket = new JButton("Rocket Launcher Tower");
+        button_rocket.setToolTipText("<html>Wood: " + WOOD_COST_ROCKETLAUNCHERTOWER + "<br>Iron: " + IRON_COST_ROCKETLAUNCHERTOWER + "<br>Food: " + FOOD_COST_ROCKETLAUNCHERTOWER + "<br>Mana: " + MANA_COST_ROCKETLAUNCHERTOWER);
         
         button_arrowtower.addActionListener(new ActionListener() {
 			
@@ -938,10 +959,12 @@ class PanelCreacionTropas extends JPanel implements Variables {
         
         JLabel especiales = new JLabel("Tropas especiales");
         especiales.setHorizontalAlignment(JLabel.CENTER);
-        especiales.setForeground(Color.WHITE);
+        especiales.setForeground(Color.BLACK);
         
         JButton button_magician = new JButton("Magician");
+        button_magician.setToolTipText("<html>Wood: " + WOOD_COST_MAGICIAN + "<br>Iron: " + IRON_COST_MAGICIAN + "<br>Food: " + FOOD_COST_MAGICIAN + "<br>Mana: " + MANA_COST_MAGICIAN);
         JButton button_priest = new JButton("Priest");
+        button_priest.setToolTipText("<html>Wood: " + WOOD_COST_PRIEST + "<br>Iron: " + IRON_COST_PRIEST + "<br>Food: " + FOOD_COST_PRIEST + "<br>Mana: " + MANA_COST_PRIEST);
         
         button_magician.addActionListener(new ActionListener() {
 			
@@ -1058,45 +1081,50 @@ class Frame_batalla extends JFrame {
 }
 
 class PanelBatalla extends JPanel implements Variables {
-	private BufferedImage fondo_batalla;
-	private JLabel porcentaje_ejercito_civilization, porcentaje_ejercito_enemigo;
+	//private BufferedImage fondo_batalla;
 	private Battle batalla;
 	
 	public PanelBatalla(Civilization ventana, Battle batalla) {
 		this.batalla = batalla;
 		batalla.startBattle();
 		setLayout(new BorderLayout());
-		try {
-			fondo_batalla = ImageIO.read(new File("./M3/src/Main/img/fondo_batalla.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		JPanel panel_unidades_civilization = new JPanel();
-		JPanel panel_unidades_enemigas = new JPanel();
-		
-		panel_unidades_civilization.setLayout(new GridLayout(1,1));
-		panel_unidades_enemigas.setLayout(new GridLayout(1,1));
-		
-		porcentaje_ejercito_civilization = new JLabel("Porcentaje restante aliado = ");
-		porcentaje_ejercito_enemigo = new JLabel("Porcentaje restante enemigo = ");
-		
-		panel_unidades_civilization.add(porcentaje_ejercito_civilization);
-		panel_unidades_enemigas.add(porcentaje_ejercito_enemigo);
-		
-		
-        add(panel_unidades_civilization,BorderLayout.WEST);
-        add(panel_unidades_enemigas, BorderLayout.EAST);
+//		try {
+//			fondo_batalla = ImageIO.read(new File("./M3/src/Main/img/fondo_batalla.png"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		setBackground(Color.BLACK);
+        JTextArea consola = new JTextArea();
+        consola.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+        consola.setEditable(false);
+        consola.setOpaque(false);
+        consola.setForeground(Color.WHITE);
+        consola.setText(batalla.getInforme());
+        
+        JScrollPane scroll = new JScrollPane(consola);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+
+        add(scroll, BorderLayout.CENTER);
+        
+        JButton show_battle_development = new JButton("Show Battle Development");
+        
+        //        button_priest.addActionListener(new ActionListener() {
+        show_battle_development.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				consola.setText(batalla.getBattleDevelopment());
+				
+			}
+		});
+        
+        add(show_battle_development, BorderLayout.SOUTH);
 		
 	}
 	
-    public void actualizarEstadisticas() {
-    	
-    }
-	
     protected void paintComponent(Graphics g2d) { 
         super.paintComponent(g2d);
-        g2d.drawImage(fondo_batalla.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, this);
+        //g2d.drawImage(fondo_batalla.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, this);
         
         
     }

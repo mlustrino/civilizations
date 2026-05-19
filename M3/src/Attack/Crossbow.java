@@ -1,12 +1,12 @@
 package Attack;
 
-public class Crosswob extends attackUnit{
+public class Crossbow extends attackUnit{
 	
-	public Crosswob(int armor,int baseDamage) {
+	public Crossbow(int armor,int baseDamage) {
 		super(armor,baseDamage);
 	}
 	
-	public Crosswob() {
+	public Crossbow() {
 		super(ARMOR_CROSSBOW,BASE_DAMAGE_CROSSBOW);
 	}
 	

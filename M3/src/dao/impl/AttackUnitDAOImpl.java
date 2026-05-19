@@ -8,7 +8,7 @@ import variables.Variables;
 import Attack.attackUnit;
 import Attack.Swordsman;
 import Attack.Spearman;
-import Attack.Crosswob;
+import Attack.Crossbow;
 import Attack.Cannon;
 
 import java.sql.*;
@@ -99,7 +99,7 @@ public class AttackUnitDAOImpl implements AttackUnitDAO, Variables {
         switch (tipo) {
             case "Swordsman": return new Swordsman(armor, baseDamage);
             case "Spearman":  return new Spearman(armor, baseDamage);
-            case "Crossbow":  return new Crosswob(armor, baseDamage); // El nombre de la clase tiene un typo: Crosswob
+            case "Crossbow":  return new Crossbow(armor, baseDamage); // El nombre de la clase tiene un typo: Crosswob
             case "Cannon":    return new Cannon(armor, baseDamage);
             default:
                 System.err.println("Tipo de unidad de ataque desconocido en BD: " + tipo);

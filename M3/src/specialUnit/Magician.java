@@ -34,5 +34,11 @@ public class Magician extends SpecialUnit {
 	public int getChanceAttackAgain() {
 		return CHANCE_ATTACK_AGAIN_MAGICIAN;
 	}
+
+	public void setSanctified(boolean sanctified) {
+		
+	}
+	
+	
 	
 }
