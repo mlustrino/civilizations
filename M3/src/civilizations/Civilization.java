@@ -9,6 +9,7 @@ import defenseUnit.*;
 import Attack.*;
 import exceptions.*;
 
+
 public class Civilization implements Variables {
 	    
     public static final int UNIT_ARRAY_LENGTH = 9;

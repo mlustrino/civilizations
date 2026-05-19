@@ -40,6 +40,8 @@ import Attack.Spearman;
 import Attack.Swordsman;
 import battle.Battle;
 
+import music.*;
+
 public class Civilizations extends JFrame {
 
     private PanelInicio panel_inicio;
@@ -71,6 +73,9 @@ public class Civilizations extends JFrame {
 	public void mostrarJuego() {
 	    remove(panel_inicio);
 	    add(panel_juego);
+	    // Esto es para que comience a sonar la musica
+	    Reproductor musica = new Reproductor();
+        musica.iniciarMusica("Main/song/musica_de_fondo.wav");
 	    revalidate(); // El revalidate nos sirve para que el JFrame recalcule el layout, de la misma manera que repaint sirve para decirle que vuelva a pintar
 	    repaint();
 	}
