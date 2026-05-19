@@ -58,7 +58,6 @@ public class Civilizations extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Civilizations");
 		setIconImage(icono_juego);
-		System.out.println("hola");
 		
 		panel_inicio = new PanelInicio(this);
 		panel_juego = new PanelJuego(this);
@@ -510,7 +509,7 @@ class PanelJuego extends JPanel implements Variables {
 				        civilizationArmy.add(civilizacion.getArmy()[i].get(j));
 				    }
 				}
-				Battle batalla = new Battle(civilizationArmy, enemyArmy);
+				Battle batalla = new Battle(civilizationArmy, enemyArmy, civilizacion);
 				new Frame_batalla(civilizacion, batalla);
 				
 			}
