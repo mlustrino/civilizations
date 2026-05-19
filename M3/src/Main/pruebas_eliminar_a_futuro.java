@@ -32,9 +32,6 @@ public class pruebas_eliminar_a_futuro {
 		
 		
 		
-		Battle b1 = new Battle(civilizationArmy, enemyArmy);
-		b1.initInitialArmies();
-		System.out.println(b1.getInitialNumberUnitsEnemy());
 		
 		
 		
