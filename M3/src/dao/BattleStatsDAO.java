@@ -30,6 +30,14 @@ public interface BattleStatsDAO {
     // unitType: "Swordsman", "Spearman", "Crossbow" o "Cannon"
     void insertStatsEnemiAttak(int civId, int numBattle, String unitType, int initialArmy, int drops);
 
+    // Actualiza los recursos adquiridos al terminar la batalla
+    void updateBattleStats(int civilizationId, int numBattle, int woodAcquired, int ironAcquired);
+
+    // Actualiza las bajas de cada tipo de unidad al terminar la batalla (drops = inicial - sobrevivientes)
+    void updateDropsAttakCivilization(int civId, int numBattle, String unitType, int drops);
+    void updateDropsDefenseCivilization(int civId, int numBattle, String unitType, int drops);
+    void updateDropsSpecialCivilization(int civId, int numBattle, String unitType, int drops);
+    void updateDropsEnemyAttak(int civId, int numBattle, String unitType, int drops);
     // Lista todos los resúmenes de batalla de una civilización, ordenados por numBattle
     ArrayList<BattleResumen> battleListByCivilization(int civilizationId);
 
