@@ -325,6 +325,60 @@ footer {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ===================================================
+   GALERÍA DE IMÁGENES DEL IMPERIO (DISEÑO BASE / PC)
+   =================================================== */
+.empire-gallery {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Forzamos a que las tarjetas de imágenes se organicen de forma vertical interna */
+.gallery-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.2rem !important;
+}
+
+.gallery-card h3 {
+    margin-top: 0.2rem;
+    margin-bottom: 0.8rem;
+}
+
+.gallery-card p {
+    font-size: 0.9rem;
+    color: #8c765c; /* Tono bronce/madera para descripciones */
+    margin-top: 0.8rem;
+    margin-bottom: 0.2rem;
+    line-height: 1.3;
+}
+
+/* Enmarcado heráldico para proteger y fijar el tamaño de la imagen */
+.image-container {
+    width: 100%;
+    height: 160px; /* Altura fija para que las 3 tarjetas queden alineadas simétricamente */
+    overflow: hidden;
+    border: 1px solid var(--gold); /* Borde de hierro dorado */
+    border-radius: 3px;
+    background-color: #050302;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta y recorta la foto para que nunca se estire feo */
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Efecto de aproximación suave al pasar el ratón por encima (Solo en PC) */
+@media (min-width: 769px) {
+    .gallery-card:hover .image-container img {
+        transform: scale(1.06);
+    }
+}
+
 /* 📱 OPTIMIZACIÓN COMPLETA PARA MÓVILES */
 @media (max-width: 768px) {
     header { 
@@ -509,6 +563,38 @@ footer {
         display: inline-flex;
         margin-top: 0.2rem;
         margin-bottom: 0.2rem;
+    }
+
+        /* ===================================================
+       AJUSTES EXCLUSIVOS DE LA GALERÍA EN MÓVIL
+       =================================================== */
+    .empire-gallery {
+        grid-template-columns: 1fr 1fr !important; /* Muestra las imágenes de dos en dos en móviles */
+        gap: 0.8rem !important;
+    }
+
+    .gallery-card {
+        padding: 0.8rem !important; /* Reduce ligeramente el espacio interno en móviles */
+    }
+
+    .image-container {
+        height: 120px !important; /* Reduce la altura de la imagen para que quepa en pantallas táctiles */
+    }
+    
+    .gallery-card p {
+        font-size: 0.8rem !important; /* Letra un poco más pequeña para descripciones en móviles */
+        margin-top: 0.5rem;
+    }
+
+    /* Si el teléfono celular es extremadamente estrecho (< 480px) */
+    @media (max-width: 480px) {
+        .empire-gallery {
+            grid-template-columns: 1fr !important; /* Pone las imágenes una debajo de otra */
+        }
+        
+        .image-container {
+            height: 150px !important; /* Le devolvemos altura al tener más ancho de pantalla disponible */
+        }
     }
 }
 
