@@ -16,17 +16,17 @@ if (!isProxmox) {
   db.init({
     host: '127.0.0.1',
     port: 3307,
-    user: 'root',
-    password: 'root',
-    database: 'escola'
+    user: 'sacerdote',
+    password: 'C1v1l1z4t10n',
+    database: 'civilizations'
   });
 } else {
   db.init({
     host: '127.0.0.1',
     port: 3306,
-    user: 'super',
-    password: '1234',
-    database: 'escola'
+    user: 'sacerdote',
+    password: 'C1v1l1z4t10n',
+    database: 'civilizations'
   });
 }
 
@@ -55,7 +55,7 @@ hbs.registerHelper('gt', (a, b) => a > b);
 hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
 
 // Route
-app.get('/', async (req, res) => {
+/*app.get('/', async (req, res) => {
   try {
     // Obtenir les dades de la base de dades
     const cursosRows = await db.query('SELECT id, nom, tematica FROM cursos ORDER BY id');
@@ -81,6 +81,105 @@ app.get('/', async (req, res) => {
     // Renderitzar la plantilla amb les dades
     res.render('index', data);
   } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});*/
+
+// Ruta para la página de batallas
+app.get('/civilitzacio', (req, res) => {
+  try{
+            // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      common: commonData
+    };
+    res.render('civilitzacio',data); 
+
+  }catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});
+
+app.get('/programadors', (req, res) => {
+  try{
+            // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      common: commonData
+    };
+    res.render('programadors',data); 
+
+  }catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});
+
+// Ruta para la página de batallas
+app.get('/batalles', (req, res) => {
+  try{
+            // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      common: commonData
+    };
+    res.render('batalles',data); 
+
+  }catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});
+
+app.get('/', async (req, res) => {
+  try {
+
+        // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      common: commonData
+    };
+
+    // Renderitzar la plantilla amb les dades
+    res.render('index', data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});
+
+app.get('/informes', (req, res) => {
+  try{
+            // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      common: commonData
+    };
+    res.render('informes',data); 
+
+  }catch (err) {
     console.error(err);
     res.status(500).send('Error consultant la base de dades');
   }

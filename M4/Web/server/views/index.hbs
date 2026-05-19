@@ -2,41 +2,61 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   {{> header}}
-  <link rel="stylesheet" href="index.css">
-  <title>Escola programació</title>
+  <title>Civilizations - Main</title>
+  <!-- Enlace a tu archivo CSS medieval limpio -->
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  {{> menu}}
+    {{> navbar}}
 
-  <main class="container">
-    <h1>Escola de programació</h1>
+  <main class="container animate-fade">
+    
+        <div class="hero">
+            <h1>Civilizations Control Panel</h1>
+            <p>Manage your empire's status, review reports, and plan your strategy.</p>
+        </div>
 
-    <section class="cols-2">
-      <article class="card">
-        <h2>Cursos</h2>
+        <h2>Last 2 Battles Played</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Battle ID</th>
+                    <th>Winner</th>
+                    <th>Resources Generated</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#1</td>
+                    <td class="victory">Civilization (Victory)</td>
+                    <td>
+                        <!-- Usamos contenedores individuales compactos en lugar de .card -->
+                        <div class="resource-item">
+                            <span class="icon-resource">🪵</span> Wood: <strong class="resource-value">22150</strong>
+                        </div>
+                        <div class="resource-item">
+                            <span class="icon-resource">⚔️</span> Iron: <strong class="resource-value">12000</strong>
+                        </div>
+                    </td>
+                    <td><a href="/informes" class="btn">View Report</a></td>
+                </tr>
+                <tr>
+                    <td>#2</td>
+                    <td class="loose">Enemy (Defeat)</td>
+                    <td>
+                        <div class="resource-item">
+                            <span class="icon-resource">🪵</span> Wood: <strong class="resource-value">4100</strong>
+                        </div>
+                        <div class="resource-item">
+                            <span class="icon-resource">⚔️</span> Iron: <strong class="resource-value">1500</strong>
+                        </div>
+                    </td>
+                    <td><a href="/informes" class="btn">View Report</a></td>
+                </tr>
+            </tbody>
+        </table>
 
-        <ul class="list">
-          {{#each cursos}}
-            <li class="list-item">
-              <strong>{{nom}}</strong><br>
-              <span class="muted">{{tematica}}</span>
-            </li>
-          {{/each}}
-        </ul>
-      </article>
-
-      <article class="card">
-        <h2>Especialitats</h2>
-
-        <ul class="list">
-          {{#each especialitats}}
-            <li class="list-item">
-              {{nom}}
-            </li>
-          {{/each}}
-        </ul>
-      </article>
-    </section>
   </main>
 
   {{> footer}}
