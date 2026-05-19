@@ -24,6 +24,7 @@ public abstract class SpecialUnit implements MilitaryUnit, Variables {
 	}
 	
 	
+	
 	// METODOS
 	public void takeDamage(int receivedDamage) {
 		this.armor = this.armor - receivedDamage;
