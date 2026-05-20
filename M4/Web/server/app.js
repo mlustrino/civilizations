@@ -86,93 +86,7 @@ hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
   }
 });*/
 
-app.get('/prueba', async (req, res) => {
-  try {
-    // Obtenir les dades de la base de dades
-    const battleInfo = await db.query('SELECT  civilization_id as id,  num_battle as id_battle, log_entry as logs FROM battle_log');
-    //const battleInfo = await db.query('SELECT civilization_id as id,  wood_amount as id_battle, name as logs  FROM civilization_stats');
-
-    // Transformar les dades a JSON (per les plantilles .hbs)
-    // Cal informar de les columnes i els seus tipus
-    const battleJson = db.table_to_json(battleInfo, { id: 'number', id_battle: 'number', logs: 'string' });
-    
-        if (battleJson[0] && battleJson[0].logs) {
-      battleJson[0].logs = battleJson[0].logs.replace(/\n/g, '<br>');
-    }
-
-    //const battleJson = db.table_to_json(battleInfo);
-    console.log(battleJson[0])
-    // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
-    const commonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
-    );
-
-    // Construir l'objecte de dades per a la plantilla
-    const data = {
-      battle: battleJson[0],
-      common: commonData
-    };
-
-    // Renderitzar la plantilla amb les dades
-    res.render('prueba', data);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error consultant la base de dades');
-  }
-});
-
-app.get('/civilitzacio', async (req, res) => {
-  try {
-    // 1. Obtener la civilización activa
-    const civRows = await db.query(
-      `SELECT civilization_id, name, wood_amount, iron_amount, food_amount, mana_amount,
-        magicTower_counter, church_counter, farm_counter, smithy_counter, carpentry_counter,
-        technology_defense_level, technology_attack_level, battles_counter
-      FROM civilization_stats LIMIT 1`
-    );
-
-    const civList = civRows && civRows.length > 0
-      ? db.table_to_json(civRows, {
-          civilization_id: 'number', name: 'string', wood_amount: 'number',
-          iron_amount: 'number', food_amount: 'number', mana_amount: 'number',
-          magicTower_counter: 'number', church_counter: 'number', farm_counter: 'number',
-          smithy_counter: 'number', carpentry_counter: 'number',
-          technology_defense_level: 'number', technology_attack_level: 'number',
-          battles_counter: 'number'
-        })
-      : [];
-    
-    const civ = civList[0] || null;
-
-    // 2. Obtener la cantidad de CADA tipo de unidad para esta civilización
-    let unidadesAtaque = [];
-    if (civ) {
-      const unitsRows = await db.query(
-        `SELECT type, COUNT(*) as cantidad 
-         FROM attack_units_stats 
-         WHERE civilization_id = ${civ.civilization_id} 
-         GROUP BY type`
-      );
-      
-      // Esto genera un array de objetos: [{type: 'Swordsman', cantidad: 14}, {type: 'Archer', cantidad: 5}]
-      unidadesAtaque = db.table_to_json(unitsRows, { type: 'string', cantidad: 'number' });
-    }
-    const commonData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8'));
-    
-    // 3. Enviamos los datos a la vista
-    res.render('civilitzacio', { 
-      civ, 
-      attack: unidadesAtaque, // Enviamos el listado con los tipos y totales
-      common: commonData 
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error consultant la base de dades');
-  }
-});
-
-
-/*// Ruta para la página de batallas
+// Ruta para la página de batallas
 app.get('/civilitzacio', (req, res) => {
   try{
             // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
@@ -190,7 +104,7 @@ app.get('/civilitzacio', (req, res) => {
     console.error(err);
     res.status(500).send('Error consultant la base de dades');
   }
-});*/
+});
 
 app.get('/programadors', (req, res) => {
   try{
