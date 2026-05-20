@@ -8,34 +8,44 @@
     {{> navbar}}
 
 <main class="container animate-fade">
-        <h1>Civilization Resources</h1>
+        <h1>Civilization Resources({{civ.name}})</h1>
         <p>Production statistics and current warehouse capacity.</p>
 
         <div class="resources-grid">
             <div class="card">
-                <h3>🌾 FOOD</h3>
-                <div class="value">4,870,000</div>
+                <h3>🥖 FOOD</h3>
+                <div class="value">{{civ.food_amount}}</div>
             </div>
             <div class="card">
                 <h3>🪵 WOOD</h3>
-                <div class="value">45,000</div>
+                <div class="value">{{civ.wood_amount}}</div>
             </div>
             <div class="card">
-                <h3>🪙 IRON</h3>
-                <div class="value">429,000</div>
+                <h3>🪨 IRON</h3>
+                <div class="value">{{civ.iron_amount}}</div>
             </div>
             <div class="card">
-                <h3>✨ MANA</h3>
-                <div class="value">0</div>
+                <h3>💠 MANA</h3>
+                <div class="value">{{civ.mana_amount}}</div>
             </div>
         </div>
 
         <h2 style="margin-top: 3rem; color: var(--gold);">Constructed Buildings and Buffs</h2>
-        <ul>
-            <li><strong>Farms:</strong> 2 complete units (+20% global food).</li>
-            <li><strong>Carpentry:</strong> 1 complete unit (+10% global wood).</li>
-            <li><strong>Blacksmith:</strong> 1 complete unit (+10% global iron).</li>
-            <li><strong>Mage Tower:</strong> 0 units (No active mana generation).</li>
+        <ul class="ul_edificio">
+            <li><strong>Farm:</strong> {{civ.farm_counter}} unit (+10% global food per unit).</li>
+            <li><strong>Carpentry:</strong> {{civ.carpentry_counter}} unit (+10% global wood per unit).</li>
+            <li><strong>Smithy:</strong> {{civ.smithy_counter}} unit (+10% global iron per unit).</li>
+            <li><strong>Magic Tower:</strong> {{civ.magicTower_counter}} unit (+10 mana every 5 seconds per unit).</li>
+            <li><strong>Church:</strong> {{civ.church_counter}} unit (1 Church = 1 Priest).</li>
+        </ul>
+
+        <h2 style="margin-top: 3rem; color: var(--gold);">Attack Units</h2>
+        <ul class="ul_unidad_ataque">
+            {{#each attack}}
+                <li>
+                    <strong>{{this.type}}:</strong> {{this.cantidad}} unit(s).
+                </li>
+            {{/each}}
         </ul>
     </main>
   {{> footer}}
