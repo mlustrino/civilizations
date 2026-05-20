@@ -4,19 +4,19 @@ public interface Variables {
 	
 	// resources available to create the first enemy fleet
 	
-	public final int IRON_BASE_ENEMY_ARMY = 26000;
-	public final int WOOD_BASE_ENEMY_ARMY = 180000;
-	public final int FOOD_BASE_ENEMY_ARMY = 70000;
+	public final int IRON_BASE_ENEMY_ARMY = 20000;
+	public final int WOOD_BASE_ENEMY_ARMY = 40000;
+	public final int FOOD_BASE_ENEMY_ARMY = 50000;
 	
 	// percentage increase of resources available to create enemy fleet
-	public final int ENEMY_FLEET_INCREASE = 6;
+	public final int ENEMY_FLEET_INCREASE = 25;
 	
 	
 	// resources increment every minute
 	
-	public final int CIVILIZATION_IRON_GENERATED = 1500;
-	public final int CIVILIZATION_WOOD_GENERATED = 5000;
-	public final int CIVILIZATION_FOOD_GENERATED = 8000;
+	public final int CIVILIZATION_IRON_GENERATED = 3000;
+	public final int CIVILIZATION_WOOD_GENERATED = 8000;
+	public final int CIVILIZATION_FOOD_GENERATED = 12000;
 	
 	public final int CIVILIZATION_IRON_GENERATED_PER_SMITHY = (int) (0.1*CIVILIZATION_IRON_GENERATED);
 	public final int CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY = (int) (0.1*CIVILIZATION_WOOD_GENERATED);
@@ -26,21 +26,20 @@ public interface Variables {
 	
 	// TECHNOLOGY COST
 	
-	public final int UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST = 2000;
-	public final int UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST = 200;
+	public final int UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST = 13000;
+	public final int UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST = 22000;
 	
-	public final int UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST = 2000;
-	public final int UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST = 200;
+	public final int UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST = 13000;
+	public final int UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST = 22000;
 	
 	
-	public final int UPGRADE_PLUS_DEFENSE_TECHNOLOGY_IRON_COST = 20;
-	public final int UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST = 20;
+	public final int UPGRADE_PLUS_DEFENSE_TECHNOLOGY_IRON_COST = 30;
+	public final int UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST = 30;
 	
-	public final int UPGRADE_PLUS_DEFENSE_TECHNOLOGY_WOOD_COST = 20;
-	public final int UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST = 20;
+	public final int UPGRADE_PLUS_DEFENSE_TECHNOLOGY_WOOD_COST = 40;
+	public final int UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST = 40;
 	
-	public final int UPGRADE_PLUS_DEFENSE_TECHNOLOGY_FOOD_COST = 20;
-	public final int UPGRADE_PLUS_ATTACK_TECHNOLOGY_FOOD_COST = 20;
+
 	
 	// COST ATTACK UNITS
 	public final int FOOD_COST_SWORDSMAN = 8000;
@@ -230,7 +229,7 @@ public interface Variables {
 	public final int[] CHANCE_ATTACK_ENEMY_UNITS = {10,20,30,40};
 	
 	// percentage of waste that will be generated with respect to the cost of the units
-	public final int PERCENTATGE_WASTE = 70;
+	public final int PERCENTATGE_WASTE = 30;
 	
 	
     public static final int IDX_UNIT_SWORDSMAN = 0;

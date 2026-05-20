@@ -83,13 +83,15 @@ public class Civilization implements Variables {
 	 * **/
 	private void recalcularTechnologyCosts() {
 		upgradeDefenseTechnologyWoodCost = 
-				UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
+				//return coste_base + (civilizacion.getTechnologyAttack() * suma_porcentaje) * coste_base / 100;
+				UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + (technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST) * UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST / 100;
+				//UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
 		upgradeDefenseTechnologyIronCost = 
-				UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST + technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST;
+				UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST + (technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST) * UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST / 100;
 		upgradeAttackTechnologyWoodCost =
-				UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + technologyAttack * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
+				UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + (technologyAttack * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST) * UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST / 100;
 		upgradeAttackTechnologyIronCost = 
-				UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + technologyAttack * UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST;
+				UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + (technologyAttack * UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST) * UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST / 100;
 			
 	}	
 	
@@ -102,7 +104,7 @@ public class Civilization implements Variables {
 	 * que comentaremos más adelante.
 	 * */
 	public void newChurch() throws ResourceException{
-		if (food < FOOD_COST_CHURCH || wood < WOOD_COST_CHURCH || iron < IRON_COST_CHURCH) {
+		if (food < FOOD_COST_CHURCH || wood < WOOD_COST_CHURCH || iron < IRON_COST_CHURCH || mana < MANA_COST_CHURCH) {
 			throw new ResourceException(String.format("Cannot build Church\n"
 							+ "Missing: Food=%d, Wood=%d, Iron=%d, Mana=%d. \n"
 							+ "Resources on hand: Food=%d, Wood=%d, Iron=%d, Mana=%d.",
@@ -242,9 +244,6 @@ public class Civilization implements Variables {
 		for (int i = 0; i < toAdd; i++) {
 
 			switch (idx_army) {
-//				case IDX_UNIT_SWORDSMAN :
-//					army[IDX_UNIT_SWORDSMAN].add(new Swordsman(technologyDefense,technologyAttack));
-//					break;
 				case IDX_UNIT_SWORDSMAN: //BUG AQUI
 				    armor = ARMOR_SWORDSMAN + (technologyDefense * PLUS_ARMOR_SWORDSMAN_BY_TECHNOLOGY) * ARMOR_SWORDSMAN / 100;
 				    damage = BASE_DAMAGE_SWORDSMAN + (technologyAttack * PLUS_ATTACK_SWORDSMAN_BY_TECHNOLOGY) * BASE_DAMAGE_SWORDSMAN / 100;
