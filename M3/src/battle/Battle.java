@@ -477,6 +477,7 @@ public class Battle implements Variables {
 	        } else {
 	        	turno = 1;
 	        }
+	        
 	    	
 	    	
 	    }
@@ -502,7 +503,6 @@ public class Battle implements Variables {
     	    civilizacion.getArmy()[i].clear();
     	    civilizacion.getArmy()[i].addAll(armies[0][i]);
     	}
-    	
     	
     	informe += "BATTLE NUMBER: "+ civilizacion.getBattles() + "\nBATTLE STATISTICS\n\n";
     	informe += String.format("%-25s %10s %10s    %-25s %10s %10s","Civilization Army", "Units", "Drops", "Enemy Army", "Units", "Drops") + "\n";
