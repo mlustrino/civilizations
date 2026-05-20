@@ -429,8 +429,8 @@ public class Battle implements Variables {
 	    			battleDevelopment += unidad_defensora.getClass().getSimpleName() + " stays with armor = " + unidad_defensora.getActualArmor() + "\n";
 		    		if (unidad_defensora.getActualArmor() <= 0) {
 		    			if ((int)(Math.random() * 100) < unidad_defensora.getChanceGeneratingWaste()) {
-			    			residuos_madera += unidad_defensora.getWoodCost()*(PERCENTATGE_WASTE*0.1);
-			    			residuos_hierro += unidad_defensora.getIronCost()*(PERCENTATGE_WASTE*0.1);
+		    				residuos_madera += (unidad_defensora.getWoodCost() * PERCENTATGE_WASTE) / 100;
+		    				residuos_hierro += (unidad_defensora.getIronCost() * PERCENTATGE_WASTE) / 100;
 			    		}
 	                    armies[ejercito_defensor][grupo_defensor].remove(unidad_defensora);
 	                    
@@ -490,7 +490,7 @@ public class Battle implements Variables {
 	    	
 	    }
 	    
-    	if (resourcesLooses[0][3] < resourcesLooses[1][3]) {
+    	if (remainderPercentageFleet(armies[0]) > remainderPercentageFleet(armies[1])) {
             JOptionPane.showMessageDialog(null, 
                     "Ha ganado el ejercito de la civilization", 
                     "Winner", 
@@ -499,13 +499,14 @@ public class Battle implements Variables {
     	    civilizacion.setIron(civilizacion.getIron() + wasteWoodIron[1]);
     	    incrementExperience();
     	    
-    	    civilizacion.incrementBattles();
 	    } else {
             JOptionPane.showMessageDialog(null, 
                     "Ha ganado el ejercito enemigo", 
                     "Loser", 
                     JOptionPane.WARNING_MESSAGE);
 	    }
+    	
+    	civilizacion.incrementBattles();
     	
     	for (int i = 0; i < 9; i++) {
     	    civilizacion.getArmy()[i].clear();

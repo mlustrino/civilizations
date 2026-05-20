@@ -680,19 +680,6 @@ class PanelJuego extends JPanel implements Variables {
 					batallaEnCurso = false;
 				}
 			}		
-//			public void run() {				
-//				ArrayList<MilitaryUnit> enemyArmy = createEnemyArmy();
-//				
-//				ArrayList<MilitaryUnit> civilizationArmy = new ArrayList<>();
-//				for (int i = 0; i < civilizacion.getArmy().length; i++) {
-//				    for (int j = 0; j < civilizacion.getArmy()[i].size(); j++) {
-//				        civilizationArmy.add(civilizacion.getArmy()[i].get(j));
-//				    }
-//				}
-//				Battle batalla = new Battle(civilizationArmy, enemyArmy, civilizacion);
-//				new Frame_batalla(civilizacion, batalla);
-//				
-//			}
 		};
 		timer_batalla.schedule(task_batalla, 180000, 180000); // Cada 3 minutos
     }
@@ -798,7 +785,7 @@ class PanelJuego extends JPanel implements Variables {
         label_food_gen.setText("You make " + (CIVILIZATION_FOOD_GENERATED + CIVILIZATION_FOOD_GENERATED_PER_FARM*civilizacion.getFarm()) + " food/5sec");
         label_wood_gen.setText("You make "+ (CIVILIZATION_WOOD_GENERATED + CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY*civilizacion.getCarpentry()) + " wood/5sec");
         label_iron_gen.setText("You make " + (CIVILIZATION_IRON_GENERATED + CIVILIZATION_IRON_GENERATED_PER_SMITHY*civilizacion.getSmithy()) + " iron/5sec");
-        
+        label_mana_gen.setText("You make " + (CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER*civilizacion.getMagicTower())+  " mana/5sec");
         
         
         cant_farm.setText("Farm: " + civilizacion.getFarm());

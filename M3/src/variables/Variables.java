@@ -4,9 +4,9 @@ public interface Variables {
 	
 	// resources available to create the first enemy fleet
 	
-	public final int IRON_BASE_ENEMY_ARMY = 20000;
-	public final int WOOD_BASE_ENEMY_ARMY = 40000;
-	public final int FOOD_BASE_ENEMY_ARMY = 50000;
+	public final int IRON_BASE_ENEMY_ARMY = 200000; // 20000
+	public final int WOOD_BASE_ENEMY_ARMY = 400000; // 40000
+	public final int FOOD_BASE_ENEMY_ARMY = 500000; // 50000
 	
 	// percentage increase of resources available to create enemy fleet
 	public final int ENEMY_FLEET_INCREASE = 25;
