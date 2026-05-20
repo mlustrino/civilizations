@@ -288,8 +288,10 @@ public class Battle implements Variables {
     }
 	
 	public void resetArmyArmor() {
-		for (int i = 0; i < civilizationArmy.size();i++) {
-			civilizationArmy.get(i).resetArmor();
+		for (int i = 0; i < armies[0].length;i++) {
+			for (MilitaryUnit unit : armies[0][i]) {
+				unit.resetArmor();
+			}
 		}
 	}
 	
@@ -344,6 +346,7 @@ public class Battle implements Variables {
     	informe = "";
     	
     	battleDevelopment = "Battle Number: " + civilizacion.getBattles() + "\n";
+    	resetArmyArmor();
     	
     	while (remainderPercentageFleet(armies[0]) > 20 && remainderPercentageFleet(armies[1]) > 20) {
 	    	MilitaryUnit unidad_atacante, unidad_defensora;
