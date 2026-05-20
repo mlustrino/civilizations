@@ -164,9 +164,15 @@ public class Battle implements Variables {
 		initialArmies = new int [2][9];
 		for (int i = 0; i < 9; i++) {
 			initialArmies[0][i] = armies[0][i].size();
+		}
+		for (int i = 0; i < 4; i++) {
 			initialArmies[1][i] = armies[1][i].size();
 		}
  	}
+
+	public int[] getWasteWoodIron() {
+		return wasteWoodIron;
+	}
 	
 	public void updateResourcesLooses() {
 		resourcesLooses = new int [2][4];
@@ -334,8 +340,8 @@ public class Battle implements Variables {
     	int turno = startArmy(); // Un 0 es que empieza la civilizacion, un 1 es que empiezan los enemigos
     	int residuos_madera = 0;
     	int residuos_hierro = 0;
+    	int numTurno = 0;
     	informe = "";
-    	Scanner sc = new Scanner(System.in);
     	
     	battleDevelopment = "Battle Number: " + civilizacion.getBattles() + "\n";
     	
@@ -470,7 +476,6 @@ public class Battle implements Variables {
 	    	
 	        wasteWoodIron[0] = residuos_madera;
 	        wasteWoodIron[1] = residuos_hierro;	
-	        
 	        
 	        if (turno == 1) {
 	        	turno = 0;

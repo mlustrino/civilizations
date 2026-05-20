@@ -1,6 +1,13 @@
 package Main;
 
-import civilizations.*;
+import dao.BattleLogDAO;
+import dao.BattleStatsDAO;
+import dao.CivilizationDAO;
+import dao.impl.BattleLogDAOImpl;
+import dao.impl.BattleStatsDAOImpl;
+import dao.impl.CivilizationDAOImpl;
+import database.DBConnection;
+
 import exceptions.BuildingException;
 import exceptions.ResourceException;
 import militaryUnit.MilitaryUnit;
@@ -40,6 +47,8 @@ import Attack.Spearman;
 import Attack.Swordsman;
 import battle.Battle;
 
+import music.*;
+
 public class Civilizations extends JFrame {
 
     private PanelInicio panel_inicio;
@@ -62,16 +71,39 @@ public class Civilizations extends JFrame {
 		setTitle("Civilizations");
 		setIconImage(icono_juego);
 		
+		DBConnection.getInstance();
 		panel_inicio = new PanelInicio(this);
-		panel_juego = new PanelJuego(this);
+		//panel_juego = new PanelJuego(this);
 		add(panel_inicio);
 		setVisible(true);
 	}
 	
+	public void mostrarJuego(String nombreCivilizacion) {
+	    Civilization civ = new Civilization(3000, 3000, 3000, 3000);
+	    civ.setName(nombreCivilizacion);
+	    new CivilizationDAOImpl().insertCivilization(civ);
+	    iniciarJuego(civ);
+	}
 	public void mostrarJuego() {
 	    remove(panel_inicio);
 	    add(panel_juego);
+	    // Esto es para que comience a sonar la musica
+	    Reproductor musica = new Reproductor();
+        musica.iniciarMusica("Main/song/musica_de_fondo.wav");
 	    revalidate(); // El revalidate nos sirve para que el JFrame recalcule el layout, de la misma manera que repaint sirve para decirle que vuelva a pintar
+	    repaint();
+	}
+	
+	public void mostrarJuegoExistente(int civilizationId) {
+	    Civilization civ = new CivilizationDAOImpl().loadCivilization(civilizationId);
+	    if (civ != null) iniciarJuego(civ);
+	}
+
+	private void iniciarJuego(Civilization civ) {
+	    panel_juego = new PanelJuego(this, civ);
+	    remove(panel_inicio);
+	    add(panel_juego);
+	    revalidate();
 	    repaint();
 	}
 	
@@ -93,10 +125,6 @@ class Frame_unidades extends JFrame {
         
         setVisible(true);
 	}
-	
-	
-    
-    
 }
 class PanelInicio extends JPanel {
 	private BufferedImage fondo_inicio;
@@ -111,18 +139,58 @@ class PanelInicio extends JPanel {
         }
         
         JPanel panelBotones = new JPanel();
-        panelBotones.setLayout(new GridLayout(2, 1));
+        panelBotones.setLayout(new GridLayout(3, 1));
         
         JButton button_inicio_start = new JButton("Start New Game");
+        JButton button_inicio_load = new JButton("Load Game");
         JButton button_inicio_exit = new JButton("Exit");
         
         button_inicio_start.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				ventana.mostrarJuego();
-				
+				String nombre = JOptionPane.showInputDialog(
+				    ventana,
+				    "Enter your civilization name:",
+				    "New Game",
+				    JOptionPane.QUESTION_MESSAGE);
+				if (nombre != null && !nombre.trim().isEmpty()) {
+				    ventana.mostrarJuego(nombre.trim());
+				}
 			}
 		});
+
+        button_inicio_load.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<Civilization> lista = new CivilizationDAOImpl().getAllCivilizations();
+                if (lista.isEmpty()) {
+                    JOptionPane.showMessageDialog(ventana,
+                        "No saved civilizations found.",
+                        "Load Game", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                String[] opciones = new String[lista.size()];
+                for (int i = 0; i < lista.size(); i++) {
+                    Civilization c = lista.get(i);
+                    opciones[i] = c.getName() + " [ID: " + c.getCivilization_id() + "]";
+                }
+                String seleccion = (String) JOptionPane.showInputDialog(
+                    ventana,
+                    "Select a civilization to load:",
+                    "Load Game",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]);
+                if (seleccion != null) {
+                    for (int i = 0; i < opciones.length; i++) {
+                        if (opciones[i].equals(seleccion)) {
+                            ventana.mostrarJuegoExistente(lista.get(i).getCivilization_id());
+                            break;
+                        }
+                    }
+                }
+            }
+        });
         
         button_inicio_exit.addActionListener(new ActionListener() {
 			
@@ -130,10 +198,15 @@ class PanelInicio extends JPanel {
 				System.exit(0);
 				// Hace que acabe el programa
 				
+				/*
+				 * Gurdar todo lo que esté abierto.
+				 * */
+				
 			}
 		});
         
         panelBotones.add(button_inicio_start);
+        panelBotones.add(button_inicio_load);
         panelBotones.add(button_inicio_exit);
         
         add(panelBotones, BorderLayout.SOUTH);
@@ -149,7 +222,8 @@ class PanelJuego extends JPanel implements Variables {
 	private ImageIcon icono_madera, icono_comida, icono_hierro, icono_mana, icono_tech_att, icono_tech_def;
 	private ImageIcon icono_farm, icono_carpentry, icono_smithy, icono_magictower, icono_church;
 	private ImageIcon icono_boton;
-    private Civilization civilizacion;          
+    private Civilization civilizacion;   
+    private CivilizationDAO civilDao;   
     private JLabel comida, madera, hierro, mana; 
     private JLabel lvl_tech_attack, lvl_tech_defense; 
     private JLabel coste_tech_attack, coste_tech_defense;
@@ -159,12 +233,17 @@ class PanelJuego extends JPanel implements Variables {
     private JLabel civilization_arrowtower, civilization_catapult, civilization_rocketlauncher;
     private JLabel civilization_magician, civilization_priest;
     private Timer timer, timer_batalla;
+    
+    private boolean batallaEnCurso = false;  
 	
 	
-    public PanelJuego(Civilizations ventana) {
+//    public PanelJuego(Civilizations ventana) {
+    public PanelJuego(Civilizations ventana, Civilization civilizacion) {
     	
+    	this.civilizacion = civilizacion;
+    	civilDao = new CivilizationDAOImpl();
     	setLayout(new BorderLayout());
-    	civilizacion = new Civilization(3000,3000,3000,3000);
+    	
         try {
         	// Imagenes que usaremos en la interficie grafica
             fondo_juego = ImageIO.read(new File("./M3/src/Main/img/fondo_ciudad.png"));
@@ -576,20 +655,37 @@ class PanelJuego extends JPanel implements Variables {
     private void battleStarts() { // Metodo para empezar la batalla
     	timer_batalla = new Timer();
     	TimerTask task_batalla = new TimerTask() {
-			
-			public void run() {				
-				ArrayList<MilitaryUnit> enemyArmy = createEnemyArmy();
-				
-				ArrayList<MilitaryUnit> civilizationArmy = new ArrayList<>();
-				for (int i = 0; i < civilizacion.getArmy().length; i++) {
-				    for (int j = 0; j < civilizacion.getArmy()[i].size(); j++) {
-				        civilizationArmy.add(civilizacion.getArmy()[i].get(j));
-				    }
+			public void run() {
+				if (batallaEnCurso) return;
+				batallaEnCurso = true;
+				try {
+					ArrayList<MilitaryUnit> enemyArmy = createEnemyArmy();
+
+					ArrayList<MilitaryUnit> civilizationArmy = new ArrayList<>();
+					for (int i = 0; i < civilizacion.getArmy().length; i++) {
+					    for (int j = 0; j < civilizacion.getArmy()[i].size(); j++) {
+					        civilizationArmy.add(civilizacion.getArmy()[i].get(j));
+					    }
+					}
+					Battle batalla = new Battle(civilizationArmy, enemyArmy, civilizacion);
+					new Frame_batalla(civilizacion, batalla);
+				} finally {
+					batallaEnCurso = false;
 				}
-				Battle batalla = new Battle(civilizationArmy, enemyArmy, civilizacion);
-				new Frame_batalla(civilizacion, batalla);
-				
-			}
+			}		
+//			public void run() {				
+//				ArrayList<MilitaryUnit> enemyArmy = createEnemyArmy();
+//				
+//				ArrayList<MilitaryUnit> civilizationArmy = new ArrayList<>();
+//				for (int i = 0; i < civilizacion.getArmy().length; i++) {
+//				    for (int j = 0; j < civilizacion.getArmy()[i].size(); j++) {
+//				        civilizationArmy.add(civilizacion.getArmy()[i].get(j));
+//				    }
+//				}
+//				Battle batalla = new Battle(civilizationArmy, enemyArmy, civilizacion);
+//				new Frame_batalla(civilizacion, batalla);
+//				
+//			}
 		};
 		timer_batalla.schedule(task_batalla, 30000, 30000); // Cada 30 segundos
     }
@@ -726,6 +822,8 @@ class PanelJuego extends JPanel implements Variables {
         
         lvl_tech_attack.setText("Att Level: " + civilizacion.getTechnologyAttack());
         lvl_tech_defense.setText("Def Level: " + civilizacion.getTechnologyDefense());
+        
+        //civilDao.updateCivilization(civilizacion);
     }
 	
 }
@@ -744,7 +842,7 @@ class PanelCreacionTropas extends JPanel implements Variables {
         setLayout(new BorderLayout());
         
         try {
-//        	fondo_juego = ImageIO.read(new File("./M3/src/Main/img/fondo_ciudad.png"));
+
 			BufferedImage imgcannon = ImageIO.read(new File("./M3/src/Main/img/Cannon.png"));
 	        BufferedImage imgcrossbow = ImageIO.read(new File("./M3/src/Main/img/Crossbow.png"));
 	        BufferedImage imgspearman = ImageIO.read(new File("./M3/src/Main/img/Spearman.png"));
@@ -1232,16 +1330,54 @@ class PanelBatalla extends JPanel implements Variables {
 	//private BufferedImage fondo_batalla;
 	private Battle batalla;
 	
-	public PanelBatalla(Civilization ventana, Battle batalla) {
+	
+	public PanelBatalla(Civilization civilizacion, Battle batalla) {
 		this.batalla = batalla;
+		
+		
+		/// CODI NOU
+		BattleStatsDAO  battleStatsDao = new BattleStatsDAOImpl();
+		BattleLogDAO    battleLogDao   = new BattleLogDAOImpl();
+		CivilizationDAO civilDao       = new CivilizationDAOImpl();
+
+		int civId     = civilizacion.getCivilization_id();
+		//int numBattle = civilizacion.getBattles() + 1;
+		int numBattle = battleStatsDao.getNextBattleNum(civId);
+
+		String[] tiposAtaque   = {"Swordsman", "Spearman", "Crossbow", "Cannon"};
+		String[] tiposDefensa  = {"ArrowTower", "Catapult", "RocketLauncherTower"};
+		String[] tiposEspecial = {"Magician", "Priest"};
+
+		// ======== ANTES DE LA BATALLA ========
+		
+
+		//civilDao.updateCivilization(civilizacion);
+		
+		battleStatsDao.insertBattleStats(civId, numBattle, 0, 0);
+
+		for (int i = 0; i < tiposAtaque.length; i++)
+			battleStatsDao.insertStatsAttakCivilization(civId, numBattle,
+				tiposAtaque[i], batalla.getArmies()[0][i].size(), 0);
+		for (int i = 0; i < tiposDefensa.length; i++)
+			battleStatsDao.insertStatsDefenseCivilization(civId, numBattle,
+				tiposDefensa[i], batalla.getArmies()[0][4+i].size(), 0);
+		for (int i = 0; i < tiposEspecial.length; i++)
+			battleStatsDao.insertStatsSpecialCivilization(civId, numBattle,
+				tiposEspecial[i], batalla.getArmies()[0][7+i].size(), 0);
+		for (int i = 0; i < tiposAtaque.length; i++)
+			battleStatsDao.insertStatsEnemiAttak(civId, numBattle,
+				tiposAtaque[i], batalla.getArmies()[1][i].size(), 0);
+
+		// ======== LA BATALLA ========
 		batalla.startBattle();
+		
+		/// FIN CODI NOU
+		
+		
 		setLayout(new BorderLayout());
-//		try {
-//			fondo_batalla = ImageIO.read(new File("./M3/src/Main/img/fondo_batalla.png"));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		setBackground(Color.BLACK);
+
+        
+        setBackground(Color.BLACK);
         JTextArea consola = new JTextArea();
         consola.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
         consola.setEditable(false);
@@ -1260,15 +1396,50 @@ class PanelBatalla extends JPanel implements Variables {
         //        button_priest.addActionListener(new ActionListener() {
         show_battle_development.addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				consola.setText(batalla.getBattleDevelopment());
-				
-			}
-		});
+            public void actionPerformed(ActionEvent e) {
+                consola.setText(batalla.getBattleDevelopment());
+                
+            }
+        });
+        
+        System.out.println("dsfasf");
         
         add(show_battle_development, BorderLayout.SOUTH);
+
+
+
+
+		// ======== DESPUÉS DE LA BATALLA ========
+		for (int i = 0; i < tiposAtaque.length; i++) {
+			int drops = batalla.getInitialArmies()[0][i] - batalla.getArmies()[0][i].size();
+			battleStatsDao.updateDropsAttakCivilization(civId, numBattle, tiposAtaque[i], drops);
+		}
+		for (int i = 0; i < tiposDefensa.length; i++) {
+			int drops = batalla.getInitialArmies()[0][4+i] - batalla.getArmies()[0][4+i].size();
+			battleStatsDao.updateDropsDefenseCivilization(civId, numBattle, tiposDefensa[i], drops);
+		}
+		for (int i = 0; i < tiposEspecial.length; i++) {
+			int drops = batalla.getInitialArmies()[0][7+i] - batalla.getArmies()[0][7+i].size();
+			battleStatsDao.updateDropsSpecialCivilization(civId, numBattle, tiposEspecial[i], drops);
+		}
+		for (int i = 0; i < tiposAtaque.length; i++) {
+			int drops = batalla.getInitialArmies()[1][i] - batalla.getArmies()[1][i].size();
+			battleStatsDao.updateDropsEnemyAttak(civId, numBattle, tiposAtaque[i], drops);
+		}
+
+		int woodAdquired = batalla.getWasteWoodIron()[0];
+		int ironAdquired = batalla.getWasteWoodIron()[1];
+		battleStatsDao.updateBattleStats(civId, numBattle, woodAdquired, ironAdquired);
+		battleLogDao.insert(civId, numBattle, batalla.getInforme());
 		
+
+		civilDao.updateCivilization(civilizacion);
 	}
+	
+	
+    public void actualizarEstadisticas() {
+    	
+    }
 	
     protected void paintComponent(Graphics g2d) { 
         super.paintComponent(g2d);
