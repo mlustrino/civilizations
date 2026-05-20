@@ -31,35 +31,36 @@ public class AttackUnitDAOImpl implements AttackUnitDAO, Variables {
         this.conexion = DBConnection.getInstance();
     }
 
-
     public void insertUnits(int civilizationId, ArrayList<MilitaryUnit>[] army) {
-    	deleteUnits(civilizationId);
-
         String sql = "INSERT INTO attack_units_stats " +
                      "(civilization_id, unit_id, type, armor, base_damage, experience, sanctified) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            int unitId = 0;
-            // Iteramos por cada tipo de unidad de ataque según su posición en army[]
-            for (int k = 0; k < INDICES.length; k++) {
-                for (MilitaryUnit m : army[INDICES[k]]) {
-                    attackUnit u = (attackUnit) m; // El cast es seguro: army[0-3] solo tiene attackUnits
-                    ps.setInt(1, civilizationId);
-                    ps.setInt(2, unitId++);
-                    ps.setString(3, TIPOS[k]);
-                    ps.setInt(4, u.getActualArmor());
-                    ps.setInt(5, u.getBaseDamage());
-                    ps.setInt(6, u.getExperience());
-                    ps.setBoolean(7, u.isSanctified());
-                    ps.addBatch(); // addBatch acumula las inserciones para ejecutarlas todas de golpe
+        synchronized (conexion) {
+            try {
+                deleteUnits(civilizationId);
+                try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+                    int unitId = 0;
+                    for (int k = 0; k < INDICES.length; k++) {
+                        for (MilitaryUnit m : army[INDICES[k]]) {
+                            attackUnit u = (attackUnit) m;
+                            ps.setInt(1, civilizationId);
+                            ps.setInt(2, unitId++);
+                            ps.setString(3, TIPOS[k]);
+                            ps.setInt(4, u.getActualArmor());
+                            ps.setInt(5, u.getBaseDamage());
+                            ps.setInt(6, u.getExperience());
+                            ps.setBoolean(7, u.isSanctified());
+                            ps.addBatch();
+                        }
+                    }
+                    ps.executeBatch();
                 }
+            } catch (SQLException e) {
+                System.err.println("Error al guardar unidades de ataque: " + e.getMessage());
             }
-            ps.executeBatch();
-        } catch (SQLException e) {
-            System.err.println("Error al guardar unidades de ataque: " + e.getMessage());
         }
     }
-
+    
     public ArrayList<MilitaryUnit> loadUnits(int civilizationId) {
         ArrayList<MilitaryUnit> lista = new ArrayList<>();
         String sql = "SELECT * FROM attack_units_stats WHERE civilization_id=? ORDER BY unit_id";

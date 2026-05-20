@@ -103,11 +103,15 @@ public class Civilization implements Variables {
 	 * */
 	public void newChurch() throws ResourceException{
 		if (food < FOOD_COST_CHURCH || wood < WOOD_COST_CHURCH || iron < IRON_COST_CHURCH) {
-			throw new ResourceException("Church", FOOD_COST_CHURCH, WOOD_COST_CHURCH, IRON_COST_CHURCH, food, wood, iron);
+			throw new ResourceException(String.format("Cannot build Church\n"
+							+ "Missing: Food=%d, Wood=%d, Iron=%d, Mana=%d. \n"
+							+ "Resources on hand: Food=%d, Wood=%d, Iron=%d, Mana=%d.",
+							FOOD_COST_CHURCH, WOOD_COST_CHURCH, IRON_COST_CHURCH, MANA_COST_CHURCH, food, wood, iron, mana));
 		}
 		food -= FOOD_COST_CHURCH;
 		wood -= WOOD_COST_CHURCH;
 		iron -= IRON_COST_CHURCH;
+		mana -= MANA_COST_CHURCH;
 		church++;		
 	}
 	
@@ -145,6 +149,8 @@ public class Civilization implements Variables {
 		if (food < FOOD_COST_SMITHY || wood < WOOD_COST_SMITHY || iron < IRON_COST_SMITHY) {
 			throw new ResourceException("smithy",  FOOD_COST_SMITHY, WOOD_COST_SMITHY, IRON_COST_SMITHY, food, wood, iron);
 		}		
+		
+		
 		food -= FOOD_COST_SMITHY;
 		wood -= WOOD_COST_SMITHY;
 		iron -= IRON_COST_SMITHY;

@@ -66,6 +66,56 @@ public class BattleStatsDAOImpl implements BattleStatsDAO {
         insertStats(sql, civId, numBattle, unitType, initialArmy, drops);
     }
 
+    public void updateBattleStats(int civilizationId, int numBattle, int woodAcquired, int ironAcquired) {
+        String sql = "UPDATE battle_stats SET wood_acquired=?, iron_acquired=? " +
+                     "WHERE civilization_id=? AND num_battle=?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, woodAcquired);
+            ps.setInt(2, ironAcquired);
+            ps.setInt(3, civilizationId);
+            ps.setInt(4, numBattle);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar battle_stats: " + e.getMessage());
+        }
+    }
+
+    public void updateDropsAttakCivilization(int civId, int numBattle, String unitType, int drops) {
+        updateDrops("UPDATE civilization_attack_stats SET drops=? " +
+                    "WHERE civilization_id=? AND num_battle=? AND unit_type=?",
+                    civId, numBattle, unitType, drops);
+    }
+
+    public void updateDropsDefenseCivilization(int civId, int numBattle, String unitType, int drops) {
+        updateDrops("UPDATE civilization_defense_stats SET drops=? " +
+                    "WHERE civilization_id=? AND num_battle=? AND unit_type=?",
+                    civId, numBattle, unitType, drops);
+    }
+
+    public void updateDropsSpecialCivilization(int civId, int numBattle, String unitType, int drops) {
+        updateDrops("UPDATE civilization_special_stats SET drops=? " +
+                    "WHERE civilization_id=? AND num_battle=? AND unit_type=?",
+                    civId, numBattle, unitType, drops);
+    }
+
+    public void updateDropsEnemyAttak(int civId, int numBattle, String unitType, int drops) {
+        updateDrops("UPDATE enemy_attack_stats SET drops=? " +
+                    "WHERE civilization_id=? AND num_battle=? AND unit_type=?",
+                    civId, numBattle, unitType, drops);
+    }
+
+    private void updateDrops(String sql, int civId, int numBattle, String unitType, int drops) {
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, drops);
+            ps.setInt(2, civId);
+            ps.setInt(3, numBattle);
+            ps.setString(4, unitType);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar drops (" + unitType + "): " + e.getMessage());
+        }
+    }
+
     public ArrayList<BattleResumen> battleListByCivilization(int civilizationId) {
         ArrayList<BattleResumen> lista = new ArrayList<>();
         String sql = "SELECT * FROM battle_stats WHERE civilization_id=? ORDER BY num_battle";
@@ -87,6 +137,18 @@ public class BattleStatsDAOImpl implements BattleStatsDAO {
     }
 
 
+    public int getNextBattleNum(int civilizationId) {
+        String sql = "SELECT COALESCE(MAX(num_battle), 0) + 1 FROM battle_stats WHERE civilization_id=?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, civilizationId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("Error al obtener siguiente num_battle: " + e.getMessage());
+        }
+        return 1;
+    }
+    
     public void deleteBattleByCivilization(int civilizationId) {
         // Borramos solo battle_stats; el CASCADE elimina las demás tablas de stats automáticamente
         String sql = "DELETE FROM battle_stats WHERE civilization_id=?";

@@ -29,32 +29,35 @@ public class DefenseUnitDAOImpl implements DefenseUnitDAO, Variables {
     }
 
     public void insertUnits(int civilizationId, ArrayList<MilitaryUnit>[] army) {
-        deleteUnits(civilizationId);
-
         String sql = "INSERT INTO defense_units_stats " +
                      "(civilization_id, unit_id, type, armor, base_damage, experience, sanctified) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            int unitId = 0;
-            for (int k = 0; k < INDICES.length; k++) {
-                for (MilitaryUnit m : army[INDICES[k]]) {
-                    DefenseUnit u = (DefenseUnit) m;
-                    ps.setInt(1, civilizationId);
-                    ps.setInt(2, unitId++);
-                    ps.setString(3, TIPOS[k]);
-                    ps.setInt(4, u.getActualArmor());
-                    ps.setInt(5, u.getBaseDamage());
-                    ps.setInt(6, u.getExperience());
-                    ps.setBoolean(7, u.isSanctified());
-                    ps.addBatch();
+        synchronized (conexion) {
+            try {
+                deleteUnits(civilizationId);
+                try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+                    int unitId = 0;
+                    for (int k = 0; k < INDICES.length; k++) {
+                        for (MilitaryUnit m : army[INDICES[k]]) {
+                            DefenseUnit u = (DefenseUnit) m;
+                            ps.setInt(1, civilizationId);
+                            ps.setInt(2, unitId++);
+                            ps.setString(3, TIPOS[k]);
+                            ps.setInt(4, u.getActualArmor());
+                            ps.setInt(5, u.getBaseDamage());
+                            ps.setInt(6, u.getExperience());
+                            ps.setBoolean(7, u.isSanctified());
+                            ps.addBatch();
+                        }
+                    }
+                    ps.executeBatch();
                 }
+            } catch (SQLException e) {
+                System.err.println("Error al guardar unidades de defensa: " + e.getMessage());
             }
-            ps.executeBatch();
-        } catch (SQLException e) {
-            System.err.println("Error al guardar unidades de defensa: " + e.getMessage());
         }
     }
-
+    
     @Override
     public ArrayList<MilitaryUnit> loadUnits(int civilizationId) {
         ArrayList<MilitaryUnit> lista = new ArrayList<>();
