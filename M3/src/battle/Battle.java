@@ -535,7 +535,7 @@ public class Battle implements Variables {
     	informe += String.format("%-15s %-15s %-15s %-15s","Iron:",resourcesLooses[0][2],"Iron:",resourcesLooses[1][2]) + "\n" + "*".repeat(85) + "\n";
     	
     	informe += String.format("%-30s","Waste Generated: " ) + "\n";
-    	informe += String.format("%-15s %-15s %-15s %-15s","Iron:",residuos_madera,"Iron:",residuos_hierro) + "\n" + "*".repeat(85) + "\n";
+    	informe += String.format("%-15s %-15s %-15s %-15s","Wood:",residuos_madera,"Iron:",residuos_hierro) + "\n" + "*".repeat(85) + "\n";
     	
     	
     	
