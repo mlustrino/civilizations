@@ -39,7 +39,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import Attack.Cannon;
 import Attack.Crossbow;
@@ -62,6 +61,7 @@ public class Civilizations extends JFrame {
 	public Civilizations(){
 		try {
 			icono_juego = ImageIO.read(new File("./M3/src/Main/img/logo_civilizations.png"));
+					    
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,7 +117,7 @@ class Frame_unidades extends JFrame {
     private PanelCreacionTropas panel_creacion_tropas;
     
     public Frame_unidades(Civilization civilizacion, PanelJuego panel_juego) {
-		setTitle("Creacion de Tropas");
+		setTitle("Create units");
         setBounds(800, 0, 750, 600);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
@@ -134,6 +134,7 @@ class PanelInicio extends JPanel {
     	
         try {
             fondo_inicio = ImageIO.read(new File("./M3/src/Main/img/civilization_portada.png"));
+            
         } catch (IOException e) {
             System.out.println("No se pudo cargar la imagen: " + e.getMessage());
         }
@@ -221,7 +222,7 @@ class PanelJuego extends JPanel implements Variables {
 	private BufferedImage fondo_juego;
 	private ImageIcon icono_madera, icono_comida, icono_hierro, icono_mana, icono_tech_att, icono_tech_def;
 	private ImageIcon icono_farm, icono_carpentry, icono_smithy, icono_magictower, icono_church;
-	private ImageIcon icono_boton;
+	private ImageIcon icono_boton;  
     private Civilization civilizacion;   
     private CivilizationDAO civilDao;   
     private JLabel comida, madera, hierro, mana; 
@@ -277,8 +278,7 @@ class PanelJuego extends JPanel implements Variables {
             icono_magictower = new ImageIcon(imgmagictower.getScaledInstance(55, 55, Image.SCALE_SMOOTH));
             icono_church = new ImageIcon(imgchurch.getScaledInstance(55, 55, Image.SCALE_SMOOTH));
             
-            icono_boton = new ImageIcon(imgboton);
-                        
+            icono_boton = new ImageIcon(imgboton);        
             
             
         } catch (IOException e) {
@@ -373,8 +373,9 @@ class PanelJuego extends JPanel implements Variables {
 					civilizacion.newFarm();
 					actualizarRecursos();
 				} catch (ResourceException e1) {
+					actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Farm!\n" + e1, 
+		                    "Not enough resources to build a Farm!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -389,8 +390,9 @@ class PanelJuego extends JPanel implements Variables {
 					civilizacion.newCarpentry();
 					actualizarRecursos();
 				} catch (ResourceException e1) {
+					actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Carpentry!\n" + e1, 
+		                    "Not enough resources to build a Carpentry!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -405,8 +407,9 @@ class PanelJuego extends JPanel implements Variables {
 					civilizacion.newSmithy();
 					actualizarRecursos();
 				} catch (ResourceException e1) {
+					actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Smithy!\n" + e1, 
+		                    "Not enough resources to build a Smithy!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -421,8 +424,9 @@ class PanelJuego extends JPanel implements Variables {
 					civilizacion.newMagicTower();
 					actualizarRecursos();
 				} catch (ResourceException e1) {
+					actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Magic Tower!\n" + e1, 
+		                    "Not enough resources to build a Magic Tower!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -437,8 +441,9 @@ class PanelJuego extends JPanel implements Variables {
 					civilizacion.newChurch();
 					actualizarRecursos();
 				} catch (ResourceException e1) {
+					actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Church!\n" + e1, 
+		                    "Not enough resources to build a Church!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -496,8 +501,9 @@ class PanelJuego extends JPanel implements Variables {
 					civilizacion.upgradeTechnologyAttack();
 					actualizarRecursos();
 				} catch (ResourceException e1) {
+					actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-                    "Not enough resources to upgrade Technology Attack!\n" + e1, 
+                    "Not enough resources to upgrade Technology Attack!\n" + e1.getMessage(), 
                     "Error", 
                     JOptionPane.ERROR_MESSAGE);
 				}
@@ -513,8 +519,9 @@ class PanelJuego extends JPanel implements Variables {
 					civilizacion.upgradeTechnologyDefense();
 					actualizarRecursos();
 				} catch (ResourceException e1) {
+					actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-                    "Not enough resources to upgrade Technology Defense!\n" + e1, 
+                    "Not enough resources to upgrade Technology Defense!\n" + e1.getMessage(), 
                     "Error", 
                     JOptionPane.ERROR_MESSAGE);
 				}
@@ -559,10 +566,10 @@ class PanelJuego extends JPanel implements Variables {
         panel_tech_info.setBackground(Color.LIGHT_GRAY);
         panel_tech_info.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2),"Production "));
         
-        label_food_gen = new JLabel("You make " + (CIVILIZATION_FOOD_GENERATED + CIVILIZATION_FOOD_GENERATED_PER_FARM*civilizacion.getFarm()) + " food/min", JLabel.CENTER);
-        label_wood_gen = new JLabel("You make "+ (CIVILIZATION_WOOD_GENERATED + CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY*civilizacion.getCarpentry()) + " wood/min", JLabel.CENTER);
-        label_iron_gen = new JLabel("You make " + (CIVILIZATION_IRON_GENERATED + CIVILIZATION_IRON_GENERATED_PER_SMITHY*civilizacion.getSmithy()) + " iron/min", JLabel.CENTER);
-        label_mana_gen = new JLabel("You make " + (CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER*civilizacion.getMagicTower())+  " mana/min", JLabel.CENTER);
+        label_food_gen = new JLabel("You make " + (CIVILIZATION_FOOD_GENERATED + CIVILIZATION_FOOD_GENERATED_PER_FARM*civilizacion.getFarm()) + " food/5sec", JLabel.CENTER);
+        label_wood_gen = new JLabel("You make "+ (CIVILIZATION_WOOD_GENERATED + CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY*civilizacion.getCarpentry()) + " wood/5sec", JLabel.CENTER);
+        label_iron_gen = new JLabel("You make " + (CIVILIZATION_IRON_GENERATED + CIVILIZATION_IRON_GENERATED_PER_SMITHY*civilizacion.getSmithy()) + " iron/5sec", JLabel.CENTER);
+        label_mana_gen = new JLabel("You make " + (CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER*civilizacion.getMagicTower())+  " mana/5sec", JLabel.CENTER);
         
 
         
@@ -594,7 +601,7 @@ class PanelJuego extends JPanel implements Variables {
         
 
         
-        JButton boton_crear_tropas = new JButton("Crear Tropas") {
+        JButton boton_crear_tropas = new JButton("Create Units") {
             protected void paintComponent(Graphics g) {
                 g.drawImage(icono_boton.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, this);
                 super.paintComponent(g);
@@ -626,7 +633,7 @@ class PanelJuego extends JPanel implements Variables {
         
         
        
-        
+        actualizarRecursos();
         startTimer();
         battleStarts();
         
@@ -648,7 +655,7 @@ class PanelJuego extends JPanel implements Variables {
 			}
 		};
 		//timer.schedule(task_recursos, 60000, 60000); // cada 60 segundos
-		timer.schedule(task_recursos, 1000, 1000);
+		timer.schedule(task_recursos, 5000, 5000); // cada 5 segundos
     }
     
     
@@ -673,21 +680,8 @@ class PanelJuego extends JPanel implements Variables {
 					batallaEnCurso = false;
 				}
 			}		
-//			public void run() {				
-//				ArrayList<MilitaryUnit> enemyArmy = createEnemyArmy();
-//				
-//				ArrayList<MilitaryUnit> civilizationArmy = new ArrayList<>();
-//				for (int i = 0; i < civilizacion.getArmy().length; i++) {
-//				    for (int j = 0; j < civilizacion.getArmy()[i].size(); j++) {
-//				        civilizationArmy.add(civilizacion.getArmy()[i].get(j));
-//				    }
-//				}
-//				Battle batalla = new Battle(civilizationArmy, enemyArmy, civilizacion);
-//				new Frame_batalla(civilizacion, batalla);
-//				
-//			}
 		};
-		timer_batalla.schedule(task_batalla, 30000, 30000); // Cada 30 segundos
+		timer_batalla.schedule(task_batalla, 180000, 180000); // Cada 3 minutos
     }
     
     private ArrayList<MilitaryUnit> createEnemyArmy() { 
@@ -773,6 +767,7 @@ class PanelJuego extends JPanel implements Variables {
     }
     
     public int calcularCosteAtaque(int coste_base, int suma_porcentaje) {
+    	//UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + technologyDefense * UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST
     	return coste_base + (civilizacion.getTechnologyAttack() * suma_porcentaje) * coste_base / 100;
     }
     
@@ -787,11 +782,10 @@ class PanelJuego extends JPanel implements Variables {
         hierro.setText("Iron: " + civilizacion.getIron());
         mana.setText("Mana: " + civilizacion.getMana());
         
-        label_food_gen.setText("You make " + (CIVILIZATION_FOOD_GENERATED + CIVILIZATION_FOOD_GENERATED_PER_FARM*civilizacion.getFarm()) + " food/min");
-        label_wood_gen.setText("You make "+ (CIVILIZATION_WOOD_GENERATED + CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY*civilizacion.getCarpentry()) + " wood/min");
-        label_iron_gen.setText("You make " + (CIVILIZATION_IRON_GENERATED + CIVILIZATION_IRON_GENERATED_PER_SMITHY*civilizacion.getSmithy()) + " iron/min");
-        label_mana_gen.setText("You make " + (CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER*civilizacion.getMagicTower())+  " mana/min");
-        
+        label_food_gen.setText("You make " + (CIVILIZATION_FOOD_GENERATED + CIVILIZATION_FOOD_GENERATED_PER_FARM*civilizacion.getFarm()) + " food/5sec");
+        label_wood_gen.setText("You make "+ (CIVILIZATION_WOOD_GENERATED + CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY*civilizacion.getCarpentry()) + " wood/5sec");
+        label_iron_gen.setText("You make " + (CIVILIZATION_IRON_GENERATED + CIVILIZATION_IRON_GENERATED_PER_SMITHY*civilizacion.getSmithy()) + " iron/5sec");
+        label_mana_gen.setText("You make " + (CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER*civilizacion.getMagicTower())+  " mana/5sec");
         
         
         cant_farm.setText("Farm: " + civilizacion.getFarm());
@@ -883,7 +877,7 @@ class PanelCreacionTropas extends JPanel implements Variables {
         panel_ofensivas.setOpaque(false);
         panel_ofensivas.setPreferredSize(new Dimension(200,500));
         
-        JLabel ataque = new JLabel("Tropas ofensivas");
+        JLabel ataque = new JLabel("Attack Units");
         ataque.setHorizontalAlignment(JLabel.CENTER);
         ataque.setForeground(Color.BLACK);
         
@@ -941,8 +935,9 @@ class PanelCreacionTropas extends JPanel implements Variables {
 		                    JOptionPane.INFORMATION_MESSAGE);
 		            
 				} catch (ResourceException e1) {
+					paneljuego.actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Cannon!\n" + e1, 
+		                    "Not enough resources to build a Cannon!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -970,8 +965,9 @@ class PanelCreacionTropas extends JPanel implements Variables {
 		                    JOptionPane.INFORMATION_MESSAGE);
 					
 				} catch (ResourceException e1) {
+					paneljuego.actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Crossbow!\n" + e1, 
+		                    "Not enough resources to build a Crossbow!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -998,8 +994,9 @@ class PanelCreacionTropas extends JPanel implements Variables {
 		                    "Unidad creada", 
 		                    JOptionPane.INFORMATION_MESSAGE);
 				} catch (ResourceException e1) {
+					paneljuego.actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Spearman!\n" + e1, 
+		                    "Not enough resources to build a Spearman!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -1026,8 +1023,9 @@ class PanelCreacionTropas extends JPanel implements Variables {
 		                    "Unidad creada", 
 		                    JOptionPane.INFORMATION_MESSAGE);
 				} catch (ResourceException e1) {
+					paneljuego.actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Swordsman!\n" + e1, 
+		                    "Not enough resources to build a Swordsman!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -1051,7 +1049,7 @@ class PanelCreacionTropas extends JPanel implements Variables {
         panel_defensivas.setOpaque(false);
         panel_defensivas.setPreferredSize(new Dimension(200,500));
         
-        JLabel defensa = new JLabel("Tropas defensivas");
+        JLabel defensa = new JLabel("Defense Units");
         defensa.setHorizontalAlignment(JLabel.CENTER);
         defensa.setForeground(Color.BLACK);
         
@@ -1100,8 +1098,9 @@ class PanelCreacionTropas extends JPanel implements Variables {
 		                    JOptionPane.INFORMATION_MESSAGE);
 		            
 				} catch (ResourceException e1) {
+					paneljuego.actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Arrow Tower!\n" + e1, 
+		                    "Not enough resources to build a Arrow Tower!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -1128,8 +1127,9 @@ class PanelCreacionTropas extends JPanel implements Variables {
 		                    "Unidad creada", 
 		                    JOptionPane.INFORMATION_MESSAGE);
 				} catch (ResourceException e1) {
+					paneljuego.actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Catapult!\n" + e1, 
+		                    "Not enough resources to build a Catapult!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -1156,8 +1156,9 @@ class PanelCreacionTropas extends JPanel implements Variables {
 		                    "Unidad creada", 
 		                    JOptionPane.INFORMATION_MESSAGE);
 				} catch (ResourceException e1) {
+					paneljuego.actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Rocket Launcher Tower!\n" + e1, 
+		                    "Not enough resources to build a Rocket Launcher Tower!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -1179,7 +1180,7 @@ class PanelCreacionTropas extends JPanel implements Variables {
         panel_especiales.setOpaque(false);
         panel_especiales.setPreferredSize(new Dimension(200,500));
         
-        JLabel especiales = new JLabel("Tropas especiales");
+        JLabel especiales = new JLabel("Special Units");
         especiales.setHorizontalAlignment(JLabel.CENTER);
         especiales.setForeground(Color.BLACK);
         
@@ -1220,12 +1221,13 @@ class PanelCreacionTropas extends JPanel implements Variables {
 		                    JOptionPane.INFORMATION_MESSAGE);
 				} catch (BuildingException e1) {
 		            JOptionPane.showMessageDialog(null, 
-		                    "You need to build a Magic Tower first!\n" + e1, 
+		                    "You need to build a Magic Tower first!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				} catch (ResourceException e1) {
+					paneljuego.actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Magician!\n" + e1, 
+		                    "Not enough resources to build a Magician!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -1253,12 +1255,13 @@ class PanelCreacionTropas extends JPanel implements Variables {
 		                    JOptionPane.INFORMATION_MESSAGE);
 				} catch (BuildingException e1) {
 		            JOptionPane.showMessageDialog(null, 
-		                    "You need to build a church first!\n" + e1, 
+		                    "You need to build a church first!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				} catch (ResourceException e1) {
+					paneljuego.actualizarRecursos();
 		            JOptionPane.showMessageDialog(null, 
-		                    "Not enough resources to build a Priest!\n" + e1, 
+		                    "Not enough resources to build a Priest!\n" + e1.getMessage(), 
 		                    "Error", 
 		                    JOptionPane.ERROR_MESSAGE);
 				}
@@ -1273,7 +1276,7 @@ class PanelCreacionTropas extends JPanel implements Variables {
         panel_especiales.add(button_priest);
         
         JPanel crear = new JPanel();
-        JLabel cantidad_tropas = new JLabel("Cantidad: ");
+        JLabel cantidad_tropas = new JLabel("Quantity: ");
         cantidad_textfield = new JTextField("1", 5); // El 5 es para limitar el ancho
         crear.add(cantidad_tropas);
         crear.add(cantidad_textfield);
@@ -1311,7 +1314,7 @@ class Frame_batalla extends JFrame {
     public Frame_batalla(Civilization civilizacion, Battle batalla) {
     	this.batalla = batalla;
     	
-    	setTitle("¡ALERTA: Batalla Inminente!");
+    	setTitle("Battle report");
         setBounds(400, 200, 800, 600);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
@@ -1319,6 +1322,9 @@ class Frame_batalla extends JFrame {
         add(this.panel_batalla);
         
         setVisible(true);
+        
+        panel_batalla.ejecutarBatalla();
+        
 	}
 	
 	
@@ -1329,13 +1335,52 @@ class Frame_batalla extends JFrame {
 class PanelBatalla extends JPanel implements Variables {
 	//private BufferedImage fondo_batalla;
 	private Battle batalla;
+    private JTextArea consola;
+    private Civilization civilizacion;
 	
 	
 	public PanelBatalla(Civilization civilizacion, Battle batalla) {
 		this.batalla = batalla;
+		this.civilizacion = civilizacion;
 		
+		setLayout(new BorderLayout());
 		
-		/// CODI NOU
+        setBackground(Color.BLACK);
+        consola = new JTextArea();
+        consola.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+        consola.setEditable(false);
+        consola.setOpaque(false);
+        consola.setForeground(Color.WHITE);
+        consola.setText("Calculating battle...");
+        
+        JScrollPane scroll = new JScrollPane(consola);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+
+        add(scroll, BorderLayout.CENTER);
+        
+        JButton show_battle_development = new JButton("Show Battle Development");
+        
+        show_battle_development.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                consola.setText(batalla.getBattleDevelopment());
+                
+            }
+        });
+        
+        
+        add(show_battle_development, BorderLayout.SOUTH);
+	}
+	
+    public void ejecutarBatalla() {
+    	//Primero ejecutamos la batalla 
+        batalla.startBattle();
+        
+        //Mostramos el informe 
+        consola.setText(batalla.getInforme());
+        
+		// A partir de aqui guardamos en la base de datos
 		BattleStatsDAO  battleStatsDao = new BattleStatsDAOImpl();
 		BattleLogDAO    battleLogDao   = new BattleLogDAOImpl();
 		CivilizationDAO civilDao       = new CivilizationDAOImpl();
@@ -1351,7 +1396,7 @@ class PanelBatalla extends JPanel implements Variables {
 		// ======== ANTES DE LA BATALLA ========
 		
 
-		//civilDao.updateCivilization(civilizacion);
+		civilDao.updateCivilization(civilizacion);
 		
 		battleStatsDao.insertBattleStats(civId, numBattle, 0, 0);
 
@@ -1369,42 +1414,12 @@ class PanelBatalla extends JPanel implements Variables {
 				tiposAtaque[i], batalla.getArmies()[1][i].size(), 0);
 
 		// ======== LA BATALLA ========
-		batalla.startBattle();
+		
 		
 		/// FIN CODI NOU
 		
 		
-		setLayout(new BorderLayout());
 
-        
-        setBackground(Color.BLACK);
-        JTextArea consola = new JTextArea();
-        consola.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
-        consola.setEditable(false);
-        consola.setOpaque(false);
-        consola.setForeground(Color.WHITE);
-        consola.setText(batalla.getInforme());
-        
-        JScrollPane scroll = new JScrollPane(consola);
-        scroll.setOpaque(false);
-        scroll.getViewport().setOpaque(false);
-
-        add(scroll, BorderLayout.CENTER);
-        
-        JButton show_battle_development = new JButton("Show Battle Development");
-        
-        //        button_priest.addActionListener(new ActionListener() {
-        show_battle_development.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                consola.setText(batalla.getBattleDevelopment());
-                
-            }
-        });
-        
-        System.out.println("dsfasf");
-        
-        add(show_battle_development, BorderLayout.SOUTH);
 
 
 
@@ -1434,12 +1449,11 @@ class PanelBatalla extends JPanel implements Variables {
 		
 
 		civilDao.updateCivilization(civilizacion);
-	}
-	
-	
-    public void actualizarEstadisticas() {
-    	
+        
     }
+	
+	
+	
 	
     protected void paintComponent(Graphics g2d) { 
         super.paintComponent(g2d);

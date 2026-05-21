@@ -50,6 +50,10 @@ app.set('view engine', 'hbs');
 // Registrar "Helpers .hbs" aquí
 hbs.registerHelper('eq', (a, b) => a == b);
 hbs.registerHelper('gt', (a, b) => a > b);
+hbs.registerHelper('formatNumber', (n) => {
+  if (n === null || n === undefined) return '0';
+  return Number(n).toLocaleString('en-US');
+});
 
 // Partials de Handlebars
 hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
@@ -86,21 +90,77 @@ hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
   }
 });*/
 
-// Ruta para la página de batallas
-app.get('/civilitzacio', (req, res) => {
-  try{
-            // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
-    const commonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
-    );
+app.get('/civilitzacio', async (req, res) => {
+  try {
+    const civRows = await db.query(`
+      SELECT civilization_id, name, wood_amount, iron_amount, food_amount, mana_amount,
+        magicTower_counter, church_counter, farm_counter, smithy_counter, carpentry_counter,
+        technology_defense_level, technology_attack_level, battles_counter
+      FROM civilization_stats LIMIT 1
+    `);
 
-    // Construir l'objecte de dades per a la plantilla
-    const data = {
-      common: commonData
-    };
-    res.render('civilitzacio',data); 
+    const civList = civRows && civRows.length > 0
+      ? db.table_to_json(civRows, {
+          civilization_id: 'number', name: 'string', wood_amount: 'number',
+          iron_amount: 'number', food_amount: 'number', mana_amount: 'number',
+          magicTower_counter: 'number', church_counter: 'number', farm_counter: 'number',
+          smithy_counter: 'number', carpentry_counter: 'number',
+          technology_defense_level: 'number', technology_attack_level: 'number',
+          battles_counter: 'number'
+        })
+      : [];
+    
+    const civ = civList[0] || null;
 
-  }catch (err) {
+    // 2. Obtener la cantidad de CADA tipo de unidad para esta civilización
+    let unidadesAtaque = [];
+    if (civ) {
+      const unitsAtRows = await db.query(
+        `SELECT type, COUNT(*) as cantidad 
+         FROM attack_units_stats 
+         WHERE civilization_id = ${civ.civilization_id} 
+         GROUP BY type`
+      );
+    
+          // Esto genera un array de objetos: [{type: 'Swordsman', cantidad: 14}, {type: 'Archer', cantidad: 5}]
+      unidadesAtaque = db.table_to_json(unitsAtRows, { type: 'string', cantidad: 'number' });
+    }
+
+    let unidadesDefensa = [];
+    if (civ) {
+      const unitsDeRows = await db.query(
+        `SELECT type, COUNT(*) as cantidad 
+         FROM defense_units_stats 
+         WHERE civilization_id = ${civ.civilization_id} 
+         GROUP BY type`
+      );
+    
+      unidadesDefensa = db.table_to_json(unitsDeRows, { type: 'string', cantidad: 'number' });
+    }
+
+    let unidadesEspecial = [];
+    if (civ) {
+      const unitsEsRows = await db.query(
+        `SELECT type, COUNT(*) as cantidad 
+         FROM special_units_stats 
+         WHERE civilization_id = ${civ.civilization_id} 
+         GROUP BY type`
+      );
+    
+          // Esto genera un array de objetos: [{type: 'Swordsman', cantidad: 14}, {type: 'Archer', cantidad: 5}]
+      unidadesEspecial = db.table_to_json(unitsEsRows, { type: 'string', cantidad: 'number' });
+    }
+
+    const commonData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8'));
+        // 3. Enviamos los datos a la vista
+    res.render('civilitzacio', { 
+      civ, 
+      attack: unidadesAtaque, 
+      defense: unidadesDefensa, 
+      special: unidadesEspecial,
+      common: commonData 
+    });
+  } catch (err) {
     console.error(err);
     res.status(500).send('Error consultant la base de dades');
   }
@@ -125,21 +185,22 @@ app.get('/programadors', (req, res) => {
   }
 });
 
-// Ruta para la página de batallas
-app.get('/batalles', (req, res) => {
-  try{
-            // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
-    const commonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
-    );
+app.get('/batalles', async (req, res) => {
+  try {
+    const battleRows = await db.query(`
+      SELECT battle_id, civilization_id, num_battle, wood_acquired, iron_acquired
+      FROM battle_stats
+    `);
 
-    // Construir l'objecte de dades per a la plantilla
-    const data = {
-      common: commonData
-    };
-    res.render('batalles',data); 
+    const battles = db.table_to_json(battleRows, {
+      battle_id: 'number', civilization_id: 'number', num_battle: 'number',
+      wood_acquired: 'number', iron_acquired: 'number'
+    });
 
-  }catch (err) {
+    const commonData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8'));
+    
+    res.render('batalles', { battles, total: battles.length, common: commonData });
+  } catch (err) {
     console.error(err);
     res.status(500).send('Error consultant la base de dades');
   }
@@ -147,39 +208,75 @@ app.get('/batalles', (req, res) => {
 
 app.get('/', async (req, res) => {
   try {
+    const battleRows = await db.query(`
+      SELECT battle_id, civilization_id, num_battle, wood_acquired, iron_acquired
+      FROM battle_stats
+      ORDER BY battle_id DESC
+      LIMIT 2
+    `);
 
-        // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
-    const commonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
-    );
+    const battles = db.table_to_json(battleRows, {
+      battle_id: 'number', civilization_id: 'number', num_battle: 'number',
+      wood_acquired: 'number', iron_acquired: 'number'
+    });
 
-    // Construir l'objecte de dades per a la plantilla
-    const data = {
-      common: commonData
-    };
-
-    // Renderitzar la plantilla amb les dades
-    res.render('index', data);
+    const commonData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8'));
+    res.render('index', { battles, common: commonData });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error consultant la base de dades');
   }
 });
 
-app.get('/informes', (req, res) => {
-  try{
-            // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
-    const commonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
-    );
+app.get('/informes', async (req, res) => {
+  try {
+    const battleId = parseInt(req.query.informe, 10);
+    if (!Number.isInteger(battleId) || battleId <= 0) {
+      return res.redirect('/batalles');
+    }
 
-    // Construir l'objecte de dades per a la plantilla
-    const data = {
-      common: commonData
-    };
-    res.render('informes',data); 
+    const battleRows = await db.query(`
+      SELECT battle_id, civilization_id, num_battle, wood_acquired, iron_acquired
+      FROM battle_stats WHERE battle_id = ${battleId} LIMIT 1
+    `);
 
-  }catch (err) {
+    if (!battleRows || battleRows.length === 0) {
+      return res.status(404).send('Batalla no trobada');
+    }
+
+
+
+    const battle = db.table_to_json(battleRows, {
+      battle_id: 'number', civilization_id: 'number', num_battle: 'number',
+      wood_acquired: 'number', iron_acquired: 'number'
+    })[0];
+
+    const logRows = await db.query(`
+      SELECT bl.civilization_id, bl.num_battle, bl.num_line, bl.log_entry
+      FROM battle_log bl
+      JOIN battle_stats bs ON bs.civilization_id = bl.civilization_id AND bs.num_battle = bl.num_battle
+      WHERE bs.battle_id = ${battleId}
+      ORDER BY bl.num_line ASC
+    `);
+
+    const logs = db.table_to_json(logRows, {
+      num_line: 'number', log_entry: 'string'
+    });
+
+    const logsProcesados = logs.map(log => {
+    if (log.log_entry) {
+      log.log_entry = log.log_entry.replace(/\n/g, '<br>');
+    }
+    return log;
+    });
+
+    /*if (logs.log_entry) {
+      logs.log_entry = logs.log_entry.replace(/\n/g, '<br>');
+    }*/
+
+    const commonData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8'));
+    res.render('informes', { battle, logs: logsProcesados, common: commonData });
+  } catch (err) {
     console.error(err);
     res.status(500).send('Error consultant la base de dades');
   }

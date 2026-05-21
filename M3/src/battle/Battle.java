@@ -288,8 +288,10 @@ public class Battle implements Variables {
     }
 	
 	public void resetArmyArmor() {
-		for (int i = 0; i < civilizationArmy.size();i++) {
-			civilizationArmy.get(i).resetArmor();
+		for (int i = 0; i < armies[0].length;i++) {
+			for (MilitaryUnit unit : armies[0][i]) {
+				unit.resetArmor();
+			}
 		}
 	}
 	
@@ -344,6 +346,7 @@ public class Battle implements Variables {
     	informe = "";
     	
     	battleDevelopment = "Battle Number: " + civilizacion.getBattles() + "\n";
+    	resetArmyArmor();
     	
     	while (remainderPercentageFleet(armies[0]) > 20 && remainderPercentageFleet(armies[1]) > 20) {
 	    	MilitaryUnit unidad_atacante, unidad_defensora;
@@ -426,8 +429,8 @@ public class Battle implements Variables {
 	    			battleDevelopment += unidad_defensora.getClass().getSimpleName() + " stays with armor = " + unidad_defensora.getActualArmor() + "\n";
 		    		if (unidad_defensora.getActualArmor() <= 0) {
 		    			if ((int)(Math.random() * 100) < unidad_defensora.getChanceGeneratingWaste()) {
-			    			residuos_madera += unidad_defensora.getWoodCost()*(PERCENTATGE_WASTE*0.1);
-			    			residuos_hierro += unidad_defensora.getIronCost()*(PERCENTATGE_WASTE*0.1);
+		    				residuos_madera += (unidad_defensora.getWoodCost() * PERCENTATGE_WASTE) / 100;
+		    				residuos_hierro += (unidad_defensora.getIronCost() * PERCENTATGE_WASTE) / 100;
 			    		}
 	                    armies[ejercito_defensor][grupo_defensor].remove(unidad_defensora);
 	                    
@@ -482,11 +485,12 @@ public class Battle implements Variables {
 	        } else {
 	        	turno = 1;
 	        }
+	        
 	    	
 	    	
 	    }
 	    
-    	if (resourcesLooses[0][3] < resourcesLooses[1][3]) {
+    	if (remainderPercentageFleet(armies[0]) > remainderPercentageFleet(armies[1])) {
             JOptionPane.showMessageDialog(null, 
                     "Ha ganado el ejercito de la civilization", 
                     "Winner", 
@@ -495,7 +499,6 @@ public class Battle implements Variables {
     	    civilizacion.setIron(civilizacion.getIron() + wasteWoodIron[1]);
     	    incrementExperience();
     	    
-    	    civilizacion.incrementBattles();
 	    } else {
             JOptionPane.showMessageDialog(null, 
                     "Ha ganado el ejercito enemigo", 
@@ -503,11 +506,12 @@ public class Battle implements Variables {
                     JOptionPane.WARNING_MESSAGE);
 	    }
     	
+    	civilizacion.incrementBattles();
+    	
     	for (int i = 0; i < 9; i++) {
     	    civilizacion.getArmy()[i].clear();
     	    civilizacion.getArmy()[i].addAll(armies[0][i]);
     	}
-    	
     	
     	informe += "BATTLE NUMBER: "+ civilizacion.getBattles() + "\nBATTLE STATISTICS\n\n";
     	informe += String.format("%-25s %10s %10s    %-25s %10s %10s","Civilization Army", "Units", "Drops", "Enemy Army", "Units", "Drops") + "\n";
@@ -532,7 +536,7 @@ public class Battle implements Variables {
     	informe += String.format("%-15s %-15s %-15s %-15s","Iron:",resourcesLooses[0][2],"Iron:",resourcesLooses[1][2]) + "\n" + "*".repeat(85) + "\n";
     	
     	informe += String.format("%-30s","Waste Generated: " ) + "\n";
-    	informe += String.format("%-15s %-15s %-15s %-15s","Iron:",residuos_madera,"Iron:",residuos_hierro) + "\n" + "*".repeat(85) + "\n";
+    	informe += String.format("%-15s %-15s %-15s %-15s","Wood:",residuos_madera,"Iron:",residuos_hierro) + "\n" + "*".repeat(85) + "\n";
     	
     	
     	
