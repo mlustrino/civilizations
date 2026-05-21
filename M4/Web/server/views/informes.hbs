@@ -2,57 +2,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   {{> header}}
-  <title>Civilizations - Battle Report #1</title>
-  <!-- Enlace a tu archivo CSS medieval limpio -->
+  <title>Civilizations - Battle Report #{{battle.battle_id}}</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     {{> navbar}}
 
   <main class="container report-page animate-fade">
-        <h1>BATTLE STATISTICS (Report #1)</h1>
-        
+        <h1>BATTLE STATISTICS (Report #{{battle.battle_id}})</h1>
+
         <div class="counter-box civilization">
-            ⚔️ Battle Won by Civilization, Rubble Collected
+            ⚔️ Battle #{{battle.num_battle}} — Civilization ID: {{battle.civilization_id}}
         </div>
 
-        <h3>Weighted Resource Losses</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Army</th>
-                    <th>🌾 Food (Lost)</th>
-                    <th>🪵 Wood (Lost)</th>
-                    <th>🪙 Iron (Lost)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Civilization</strong></td>
-                    <td>52,000</td>
-                    <td>950</td>
-                    <td>23,000</td>
-                </tr>
-                <tr>
-                    <td><strong>Enemy Army</strong></td>
-                    <td>128,500</td>
-                    <td>8,100</td>
-                    <td>29,000</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h3 style="margin-top: 2rem;">Total Rubble Generated</h3>
+        <h3 style="margin-top: 2rem;">Total Resources Generated</h3>
         <div class="resources-grid">
             <div class="card">
                 <h3>🪵 WOOD GENERATED</h3>
-                <div class="value">22,150</div>
+                <div class="value">{{formatNumber battle.wood_acquired}}</div>
             </div>
             <div class="card">
-                <h3>🪙 IRON GENERATED</h3>
-                <div class="value">12,000</div>
+                <h3>🪨 IRON GENERATED</h3>
+                <div class="value">{{formatNumber battle.iron_acquired}}</div>
             </div>
         </div>
+
+        <h3 style="margin-top: 2rem;">Battle Log</h3>
+        <ul class="ul">
+            <div class="log-container">
+            {{#each logs}}
+                <div class="log-entry" style="white-space: pre-line; font-family: monospace;">
+                    {{{this.log_entry}}}
+                </div>
+            {{else}}
+            <p>No log entries found for this battle.</p>
+            {{/each}}
+        </div>
+        </ul>
 
         <p style="margin-top: 2rem;"><a href="/batalles" class="btn">⬅️ Back to Battles</a></p>
     </main>

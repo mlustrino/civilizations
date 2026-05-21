@@ -232,12 +232,47 @@ tr:nth-child(even) {
 }
 
 /* LISTAS DE LOGROS/MISIONES */
-ul {
+.ul {
+    background: var(--panel-parchment);
+    padding: 1.5rem 1.5rem 1.5rem 2.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-iron);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.ul_edificio {
+    background: var(--panel-parchment);
+    padding: 1.5rem 1.5rem 1.5rem 2.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-iron);
+    list-style-type: '🔨 ';
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.ul_unidad_ataque {
     background: var(--panel-parchment);
     padding: 1.5rem 1.5rem 1.5rem 2.5rem;
     border-radius: 4px;
     border: 1px solid var(--border-iron);
     list-style-type: '⚔️ ';
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.ul_unidad_defensa {
+    background: var(--panel-parchment);
+    padding: 1.5rem 1.5rem 1.5rem 2.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-iron);
+    list-style-type: '🛡️ ';
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.ul_unidad_especial {
+    background: var(--panel-parchment);
+    padding: 1.5rem 1.5rem 1.5rem 2.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-iron);
+    list-style-type: '✨ ';
     box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
@@ -527,9 +562,8 @@ footer {
     
     /* Títulos para la Página de Historial de Guerres (batalles.hbs) */
     .war-history-page td:nth-of-type(1):before { content: "ID:"; }
-    .war-history-page td:nth-of-type(2):before { content: "Result:"; }
-    .war-history-page td:nth-of-type(3):before { content: "Allied Losses:"; }
-    .war-history-page td:nth-of-type(4):before { content: "Enemy Losses:"; }
+    .war-history-page td:nth-of-type(2):before { content: "🪵 Wood Acquired:"; }
+    .war-history-page td:nth-of-type(3):before { content: "🪨 Iron Acquired:"; }
     .war-history-page td:nth-of-type(5):before { content: "Link:"; }
 
     /* Títulos para la Página de Estadísticas (informes.hbs) */
