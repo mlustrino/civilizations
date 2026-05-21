@@ -8,30 +8,40 @@
     {{> navbar}}
 
 <main class="container animate-fade">
-        <h1>Civilization Resources({{civ.name}})</h1>
+    {{#if civ}}
+        <h1>{{civ.name}}</h1>
         <p>Production statistics and current warehouse capacity.</p>
 
         <div class="resources-grid">
             <div class="card">
                 <h3>🥖 FOOD</h3>
-                <div class="value">{{civ.food_amount}}</div>
+                <div class="value">{{formatNumber civ.food_amount}}</div>
             </div>
             <div class="card">
                 <h3>🪵 WOOD</h3>
-                <div class="value">{{civ.wood_amount}}</div>
+                <div class="value">{{formatNumber civ.wood_amount}}</div>
             </div>
             <div class="card">
                 <h3>🪨 IRON</h3>
-                <div class="value">{{civ.iron_amount}}</div>
+                <div class="value">{{formatNumber civ.iron_amount}}</div>
             </div>
             <div class="card">
                 <h3>💠 MANA</h3>
-                <div class="value">{{civ.mana_amount}}</div>
+                <div class="value">{{formatNumber civ.mana_amount}}</div>
             </div>
         </div>
 
-        <h2 style="margin-top: 3rem; color: var(--gold);">Constructed Buildings and Buffs</h2>
-        <ul class="ul_edificio">
+        <h2 style="margin-top: 2rem; color: var(--gold);">Battle Statistics</h2>
+        <p><strong>Total Battles:</strong> {{civ.battles_counter}}</p>
+
+        <h2 style="margin-top: 2rem; color: var(--gold);">Technology</h2>
+        <ul>
+            <li><strong>Defense Level:</strong> {{civ.technology_defense_level}}</li>
+            <li><strong>Attack Level:</strong> {{civ.technology_attack_level}}</li>
+        </ul>
+
+        <h2 style="margin-top: 3rem; color: var(--gold);">Constructed Buildings</h2>
+        <ul class = "ul_edificio">
             <li><strong>Farm:</strong> {{civ.farm_counter}} unit (+10% global food per unit).</li>
             <li><strong>Carpentry:</strong> {{civ.carpentry_counter}} unit (+10% global wood per unit).</li>
             <li><strong>Smithy:</strong> {{civ.smithy_counter}} unit (+10% global iron per unit).</li>
@@ -45,8 +55,37 @@
                 <li>
                     <strong>{{this.type}}:</strong> {{this.cantidad}} unit(s).
                 </li>
+            {{else}}
+            <p>No attack unit data found.</p>
             {{/each}}
         </ul>
+
+        <h2 style="margin-top: 3rem; color: var(--gold);">Defense Units</h2>
+        <ul class="ul_unidad_defensa">
+            {{#each defense}}
+                <li>
+                    <strong>{{this.type}}:</strong> {{this.cantidad}} unit(s).
+                </li>
+            {{else}}
+            <p>No defense unit data found.</p>
+            {{/each}}
+        </ul>
+
+        <h2 style="margin-top: 3rem; color: var(--gold);">Special Units</h2>
+        <ul class="ul_unidad_especial">
+            {{#each special}}
+                <li>
+                    <strong>{{this.type}}:</strong> {{this.cantidad}} unit(s).
+                </li>
+            {{else}}
+            <p>No special unit data found.</p>
+            {{/each}}
+        </ul>
+
+    {{else}}
+        <h1>Civilization Resources</h1>
+        <p>No civilization data found.</p>
+    {{/if}}
     </main>
   {{> footer}}
 </body>
