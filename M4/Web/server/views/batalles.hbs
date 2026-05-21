@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  {{> header}}
+  <title>Civilizations - War History</title>
+</head>
+<body>
+    {{> navbar}}
+
+  <main class="container war-history-page animate-fade">
+
+        <h1>War History</h1>
+
+        <div class="counter-box">
+            TOTAL BATTLES PLAYED: {{total}}
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>🪵 Wood Acquired</th>
+                    <th>🪨 Iron Acquired</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each battles}}
+                <tr>
+                    <td>#{{this.battle_id}}</td>
+                    <td>{{formatNumber this.wood_acquired}}</td>
+                    <td>{{formatNumber this.iron_acquired}}</td>
+                    <td><a href="/informes?informe={{this.battle_id}}" class="btn">Report #{{this.battle_id}}</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+  </main>
+
+  {{> footer}}
+</body>
+</html>

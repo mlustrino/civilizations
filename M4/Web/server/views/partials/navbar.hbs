@@ -1,0 +1,40 @@
+<header>
+    {{>logo}} 
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav id="navLinks">
+        <a href="/">Main</a>
+        <a href="/batalles">Battles</a>
+        <a href="/civilitzacio">Civilization</a>
+        <a href="/programadors">Developers</a>
+    </nav>
+</header>
+
+<script>
+  (() => {
+    const initMenu = () => {
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.getElementById('navLinks');
+
+      if (menuToggle && navLinks) {
+        const toggleAction = (e) => {
+          e.preventDefault();
+          navLinks.classList.toggle('active');
+        };
+
+        menuToggle.onclick = toggleAction;
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMenu);
+    } else {
+      initMenu();
+    }
+  })();
+</script>
