@@ -103,6 +103,9 @@ public class Civilizations extends JFrame {
 	    panel_juego = new PanelJuego(this, civ);
 	    remove(panel_inicio);
 	    add(panel_juego);
+	    // Esto es para que comience a sonar la musica
+	    Reproductor musica = new Reproductor();
+        musica.iniciarMusica("Main/song/musica_de_fondo.wav");
 	    revalidate();
 	    repaint();
 	}
